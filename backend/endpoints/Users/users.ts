@@ -5,15 +5,23 @@ import getUuidByString from "uuid-by-string";
 
 export function usersRouter(app: Application) {
   app.post("/sign-in", async (req, res) => {
-    const user = await dbConnection<Users>(Table.Users)
-      .upsert({
+    const users = await dbConnection<Users>(Table.Users)
+      .insert({
         id: getUuidByString(req.user.uid),
         firebase_uid: req.user.uid,
         email: req.user.email,
         photo: req.user.picture,
+        updated_at: new Date(),
       })
+      .onConflict("id")
+      .merge()
       .returning("*");
-    res.send(user.at(0));
+
+    const user = users.at(0);
+    if (!user) {
+      throw Error("no user");
+    }
+    res.send(user);
   });
 
   app.get("/user", async (req, res) => {

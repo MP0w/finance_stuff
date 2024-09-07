@@ -36,15 +36,18 @@ export function entriesRouter(app: Application) {
       throw Error("Invalid params");
     }
 
-    await dbConnection<Entries>(Table.Entries).upsert({
-      id,
-      account_id,
-      accounting_entry_id,
-      user_id: req.userId,
-      value: value.toString(),
-      invested: invested?.toString(),
-      updated_at: new Date(),
-    });
+    await dbConnection<Entries>(Table.Entries)
+      .insert({
+        id,
+        account_id,
+        accounting_entry_id,
+        user_id: req.userId,
+        value: value.toString(),
+        invested: invested?.toString(),
+        updated_at: new Date(),
+      })
+      .onConflict("id")
+      .merge();
 
     res.send({});
   }

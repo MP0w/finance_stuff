@@ -34,13 +34,16 @@ export function accountsRouter(app: Application) {
       throw Error("Invalid params");
     }
 
-    await dbConnection<Accounts>(Table.Accounts).upsert({
-      id,
-      user_id: req.userId,
-      name,
-      type,
-      updated_at: new Date(),
-    });
+    await dbConnection<Accounts>(Table.Accounts)
+      .insert({
+        id,
+        user_id: req.userId,
+        name,
+        type,
+        updated_at: new Date(),
+      })
+      .onConflict("id")
+      .merge();
 
     res.send({});
   }

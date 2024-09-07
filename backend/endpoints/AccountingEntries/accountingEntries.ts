@@ -34,12 +34,15 @@ export function accountingEntriesRouter(app: Application) {
       throw Error("Invalid params");
     }
 
-    await dbConnection<AccountingEntries>(Table.AccountingEntries).upsert({
-      id,
-      date,
-      user_id: req.userId,
-      updated_at: new Date(),
-    });
+    await dbConnection<AccountingEntries>(Table.AccountingEntries)
+      .insert({
+        id,
+        date,
+        user_id: req.userId,
+        updated_at: new Date(),
+      })
+      .onConflict("id")
+      .merge();
 
     res.send({});
   }

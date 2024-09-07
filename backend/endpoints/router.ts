@@ -6,7 +6,7 @@ import { accountingEntriesRouter } from "./AccountingEntries/accountingEntries";
 import { verifyToken } from "./auth";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import getUuidByString from "uuid-by-string";
-
+import cors from "cors";
 declare global {
   namespace Express {
     interface Request {
@@ -17,12 +17,14 @@ declare global {
 }
 
 export function router(app: Application) {
+  app.use(cors());
+
   app.get("/", (_, res) => {
     res.send("simplefi");
   });
 
   app.use(async (req, res, next) => {
-    const token = req.headers["x-fi-token"];
+    const token = req.headers.authorization;
 
     if (!token) {
       res.status(401).send({ error: "UNAUTHORIZED" });
