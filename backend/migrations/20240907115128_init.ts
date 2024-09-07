@@ -21,7 +21,9 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete("CASCADE")
       .index("accounts_user_id");
     table.string("name").notNullable();
+    table.enum("type", ["fiat", "investment"]).notNullable();
     table.timestamps(true, true);
+    table.unique(["user_id", "name"]);
   });
 
   await knex.schema.createTable("accounting_entries", (table) => {
@@ -40,6 +42,13 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable("entries", (table) => {
     table.uuid("id").primary();
     table
+      .uuid("account_id")
+      .notNullable()
+      .references("id")
+      .inTable("accounts")
+      .onDelete("CASCADE")
+      .index("entries_account_id");
+    table
       .uuid("accounting_entry_id")
       .notNullable()
       .references("id")
@@ -47,7 +56,9 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete("CASCADE")
       .index("entries_accounting_entries_id");
     table.bigInteger("value").notNullable();
+    table.bigInteger("invested");
     table.timestamps(true, true);
+    table.unique(["accounting_entry_id", "account_id"]);
   });
 }
 
