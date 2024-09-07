@@ -38,6 +38,7 @@ export type Accounts = {
 
 export type Entries = {
   id: string;
+  user_id: string;
   account_id: string;
   accounting_entry_id: string;
   value: string;

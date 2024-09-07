@@ -43,6 +43,12 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable(Table.Entries, (table) => {
     table.uuid("id").primary();
     table
+      .uuid("user_id")
+      .notNullable()
+      .references("id")
+      .inTable(Table.Users)
+      .onDelete("CASCADE");
+    table
       .uuid("account_id")
       .notNullable()
       .references("id")

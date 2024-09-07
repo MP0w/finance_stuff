@@ -1,52 +1,23 @@
 import { Application, Request, Response } from "express";
 import { dbConnection, generateUUID } from "../../dbConnection";
-import { AccountingEntries, Accounts, Entries, Table } from "../../types";
-
-async function validateAccount(userId: string, accountId: string) {
-  const account = await dbConnection<Accounts>(Table.Accounts)
-    .select()
-    .where({ id: accountId, user_id: userId })
-    .limit(1);
-
-  if (!account) {
-    throw Error("Invalid account for user");
-  }
-}
-
-async function validateAccountingEntry(
-  accountingEntryId: string,
-  userId: string
-) {
-  const entry = await dbConnection<AccountingEntries>(Table.AccountingEntries)
-    .select()
-    .where({ id: accountingEntryId, user_id: userId })
-    .limit(1);
-
-  if (!entry) {
-    throw Error("Invalid accounting entry for user");
-  }
-}
+import { Entries, Table } from "../../types";
 
 export function entriesRouter(app: Application) {
   app.get("/entries/:account_id", async (req, res) => {
     const account_id = req.params.account_id;
 
-    await validateAccount(req.userId, account_id);
-
     const entries = await dbConnection<Entries>(Table.Entries)
       .select()
-      .where({ account_id })
+      .where({ account_id, user_id: req.userId })
       .limit(1000);
 
     res.send(entries);
   });
 
   app.get("/entry/:id", async (req, res) => {
-    await validateAccount(req.userId, req.params.id);
-
     const entries = await dbConnection<Entries>(Table.Entries)
       .select()
-      .where({ account_id: req.params.id })
+      .where({ account_id: req.params.id, user_id: req.userId })
       .limit(1);
 
     const entry = entries.at(0);
@@ -65,13 +36,11 @@ export function entriesRouter(app: Application) {
       throw Error("Invalid params");
     }
 
-    await validateAccount(req.userId, account_id);
-    await validateAccountingEntry(accounting_entry_id, req.userId);
-
     await dbConnection<Entries>(Table.Entries).upsert({
       id,
       account_id,
       accounting_entry_id,
+      user_id: req.userId,
       value: value.toString(),
       invested: invested?.toString(),
       updated_at: new Date(),
@@ -92,40 +61,17 @@ export function entriesRouter(app: Application) {
         .limit(1)
     ).at(0);
 
-    if (!entry) {
+    if (!entry || entry.user_id !== req.userId) {
       throw Error("invalid entry");
     }
-
-    const account = (
-      await dbConnection<Accounts>(Table.Entries)
-        .select()
-        .where({ id: entry.account_id })
-        .limit(1)
-    ).at(0);
-
-    if (!account) {
-      throw Error("no account for entry found");
-    }
-    await validateAccount(req.userId, account.id);
 
     upsertEntry(req.params.id, req, res);
   });
 
   app.delete("/entry/:id", async (req, res) => {
-    await dbConnection.transaction(async (trx) => {
-      const result = await trx<Entries>(Table.Entries)
-        .delete()
-        .where({ id: req.params.id })
-        .returning("account_id");
-
-      const accountId = result.at(0)?.account_id;
-
-      if (!accountId) {
-        throw Error("Entry not found");
-      }
-
-      await validateAccount(req.userId, accountId);
-    });
+    await dbConnection<Entries>(Table.Entries)
+      .delete()
+      .where({ id: req.params.id, user_id: req.userId });
 
     res.send({});
   });
