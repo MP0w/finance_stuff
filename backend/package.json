@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.ts",
   "license": "MIT",
-  "type": "module",
   "scripts": {
-    "start": "ts-node index.ts",
+    "compile": "tsc",
+    "dev": "tsc && npx nodemon -x ts-node -e ts .",
     "knex": "NODE_ENV=development NODE_OPTIONS='--import tsx/esm' knex",
     "migrate": "yarn knex migrate:latest"
   },
@@ -19,7 +19,9 @@
     "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "knex-types": "^0.5.0",
+    "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.0"
   }

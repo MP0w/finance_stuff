@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "ES2020", // Specify ECMAScript target version: ES5, ES6/ES2015, ES2020, etc.
+    "module": "commonjs", // Node.js uses commonjs module system.
+    "lib": ["ES2020"], // Specify library files to include in the compilation.
+    "allowJs": true, // Allow JavaScript files to be compiled.
+    "outDir": "./dist", // Redirect output structure to the "dist" directory.
+    "rootDir": "./", // Specify the root directory of input files.
+    "strict": true, // Enable all strict type-checking options.
+
+    /* Module Resolution Options */
+    "moduleResolution": "node", // Use Node.js module resolution strategy.
+    "esModuleInterop": true, // Enable interop between CommonJS and ES6 modules.
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in module imports.
+    "skipLibCheck": true, // Skip type checking of declaration files.
+
+    /* Source Map Options */
+    "sourceMap": true, // Generates corresponding .map files.
+
+    /* Type Checking */
+    "noImplicitAny": true, // Raise error on expressions and declarations with an implied 'any' type.
+    "strictNullChecks": true, // Ensure strict null checks.
+    "strictFunctionTypes": true, // Ensure that functions have the correct parameter and return types.
+    "strictBindCallApply": true, // Ensure strict checking of `bind`, `call`, and `apply`.
+    "strictPropertyInitialization": true, // Ensure class properties are initialized correctly.
+    "noImplicitThis": true, // Ensure `this` is correctly typed in functions.
+    "alwaysStrict": true, // Always emit "use strict" for each source file.
+
+    /* Additional Options */
+    "resolveJsonModule": true, // Include modules imported with `.json` extension.
+    "isolatedModules": true, // Ensure each file can be transpiled without depending on other files.
+    "noUnusedLocals": true, // Report errors on unused locals.
+    "noUnusedParameters": true, // Report errors on unused parameters.
+    "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statements.
+    "noImplicitReturns": true // Report errors when not all code paths in a function return a value.
+  },
+  "include": ["./**/*.ts", "index.ts", "knexfile.ts"], // Include all TypeScript files in the "src" folder.
+  "exclude": ["node_modules", "dist"] // Exclude "node_modules" and output directory.
+}

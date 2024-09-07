@@ -4,6 +4,6 @@ import * as config from "./knexfile";
 
 const db = knex((config as any).default.development);
 
-updateTypes(db, { output: "./types.ts" }).catch((err) => {
+updateTypes(db, { output: "./types.ts" }).catch(() => {
   process.exit(1);
 });
