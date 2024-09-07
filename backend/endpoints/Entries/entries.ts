@@ -17,7 +17,7 @@ export function entriesRouter(app: Application) {
   app.get("/entry/:id", async (req, res) => {
     const entries = await dbConnection<Entries>(Table.Entries)
       .select()
-      .where({ account_id: req.params.id, user_id: req.userId })
+      .where({ id: req.params.id, user_id: req.userId })
       .limit(1);
 
     const entry = entries.at(0);

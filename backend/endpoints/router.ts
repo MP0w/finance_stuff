@@ -2,6 +2,7 @@ import { Application } from "express";
 import { usersRouter } from "./Users/users";
 import { accountsRouter } from "./Accounts/accounts";
 import { entriesRouter } from "./Entries/entries";
+import { accountingEntriesRouter } from "./AccountingEntries/accountingEntries";
 
 declare global {
   namespace Express {
@@ -32,5 +33,6 @@ export function router(app: Application) {
 
   usersRouter(app);
   accountsRouter(app);
+  accountingEntriesRouter(app);
   entriesRouter(app);
 }
