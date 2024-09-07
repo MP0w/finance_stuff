@@ -559,6 +559,14 @@ is-core-module@^2.13.0:
   dependencies:
     hasown "^2.0.2"
 
+knex-types@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/knex-types/-/knex-types-0.5.0.tgz#7104c7b652654550fcc7bf72c6844e5b12728bb1"
+  integrity sha512-RC+cNjbfNOLbsxTU+JuNTLpCg7Nfh2KdcjBu1+YbiEHcTX0dtCpB/0GV5MMKkxeTr3Mnc5jOXlb/i2ONXDQ5Mg==
+  dependencies:
+    lodash "^4.17.21"
+    pg "^8.8.0"
+
 knex@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/knex/-/knex-3.1.0.tgz#b6ddd5b5ad26a6315234a5b09ec38dc4a370bd8c"
@@ -721,7 +729,7 @@ pg-types@^2.1.0:
     postgres-date "~1.0.4"
     postgres-interval "^1.1.0"
 
-pg@^8.12.0:
+pg@^8.12.0, pg@^8.8.0:
   version "8.12.0"
   resolved "https://registry.yarnpkg.com/pg/-/pg-8.12.0.tgz#9341724db571022490b657908f65aee8db91df79"
   integrity sha512-A+LHUSnwnxrnL/tZ+OLfqR1SxLN3c/pgDztZ47Rpbsd4jUytsTtwQo/TLPRzPJMp/1pbhYVhH9cuSZLAajNfjQ==

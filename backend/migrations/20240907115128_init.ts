@@ -1,7 +1,8 @@
 import type { Knex } from "knex";
+import { Table } from "../types";
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable("users", (table) => {
+  await knex.schema.createTable(Table.Users, (table) => {
     table.uuid("id").primary();
     table.string("email");
     table.string("username");
@@ -11,13 +12,13 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamps(true, true);
   });
 
-  await knex.schema.createTable("accounts", (table) => {
+  await knex.schema.createTable(Table.Accounts, (table) => {
     table.uuid("id").primary();
     table
       .uuid("user_id")
       .notNullable()
       .references("id")
-      .inTable("users")
+      .inTable(Table.Users)
       .onDelete("CASCADE")
       .index("accounts_user_id");
     table.string("name").notNullable();
@@ -26,33 +27,33 @@ export async function up(knex: Knex): Promise<void> {
     table.unique(["user_id", "name"]);
   });
 
-  await knex.schema.createTable("accounting_entries", (table) => {
+  await knex.schema.createTable(Table.AccountingEntries, (table) => {
     table.uuid("id").primary();
     table
       .uuid("user_id")
       .notNullable()
       .references("id")
-      .inTable("users")
+      .inTable(Table.Users)
       .onDelete("CASCADE")
       .index("accounting_entries_user_id");
     table.date("date").notNullable();
     table.timestamps(true, true);
   });
 
-  await knex.schema.createTable("entries", (table) => {
+  await knex.schema.createTable(Table.Entries, (table) => {
     table.uuid("id").primary();
     table
       .uuid("account_id")
       .notNullable()
       .references("id")
-      .inTable("accounts")
+      .inTable(Table.Accounts)
       .onDelete("CASCADE")
       .index("entries_account_id");
     table
       .uuid("accounting_entry_id")
       .notNullable()
       .references("id")
-      .inTable("accounting_entries")
+      .inTable(Table.AccountingEntries)
       .onDelete("CASCADE")
       .index("entries_accounting_entries_id");
     table.bigInteger("value").notNullable();
@@ -63,8 +64,8 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.dropTable("entries");
-  await knex.schema.dropTable("accounting_entries");
-  await knex.schema.dropTable("accounts");
-  await knex.schema.dropTable("users");
+  await knex.schema.dropTable(Table.Entries);
+  await knex.schema.dropTable(Table.AccountingEntries);
+  await knex.schema.dropTable(Table.Accounts);
+  await knex.schema.dropTable(Table.Users);
 }
