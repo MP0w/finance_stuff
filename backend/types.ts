@@ -61,6 +61,7 @@ export type KnexMigrationsLock = {
 
 export type Users = {
   id: string;
+  firebase_uid: string;
   email: string | null;
   username: string | null;
   name: string | null;

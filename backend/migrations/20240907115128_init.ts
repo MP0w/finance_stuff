@@ -4,6 +4,7 @@ import { Table } from "../types";
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable(Table.Users, (table) => {
     table.uuid("id").primary();
+    table.string("firebase_uid").notNullable();
     table.string("email");
     table.string("username");
     table.string("name");

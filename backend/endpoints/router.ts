@@ -3,11 +3,15 @@ import { usersRouter } from "./Users/users";
 import { accountsRouter } from "./Accounts/accounts";
 import { entriesRouter } from "./Entries/entries";
 import { accountingEntriesRouter } from "./AccountingEntries/accountingEntries";
+import { verifyToken } from "./auth";
+import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
+import getUuidByString from "uuid-by-string";
 
 declare global {
   namespace Express {
     interface Request {
       userId: string;
+      user: DecodedIdToken;
     }
   }
 }
@@ -17,16 +21,17 @@ export function router(app: Application) {
     res.send("simplefi");
   });
 
-  app.use((req, res, next) => {
+  app.use(async (req, res, next) => {
     const token = req.headers["x-fi-token"];
 
-    // todo actual auth
     if (!token) {
       res.status(401).send({ error: "UNAUTHORIZED" });
       return;
     }
 
-    req.userId = token as string; // TODO: get the user based on auth
+    const user = await verifyToken(token as string);
+    req.userId = getUuidByString(user.uid);
+    req.user = user;
 
     next();
   });
