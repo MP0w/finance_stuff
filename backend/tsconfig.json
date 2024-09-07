@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "ES2020", // Specify ECMAScript target version: ES5, ES6/ES2015, ES2020, etc.
+    "target": "ES2023", // Specify ECMAScript target version: ES5, ES6/ES2015, ES2020, etc.
     "module": "commonjs", // Node.js uses commonjs module system.
-    "lib": ["ES2020"], // Specify library files to include in the compilation.
+    "lib": ["ES2023"], // Specify library files to include in the compilation.
     "allowJs": true, // Allow JavaScript files to be compiled.
     "outDir": "./dist", // Redirect output structure to the "dist" directory.
     "rootDir": "./", // Specify the root directory of input files.

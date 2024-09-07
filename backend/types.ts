@@ -11,12 +11,12 @@ export enum Table {
 }
 
 export type Tables = {
-  accounting_entries: AccountingEntries;
-  accounts: Accounts;
-  entries: Entries;
-  knex_migrations: KnexMigrations;
-  knex_migrations_lock: KnexMigrationsLock;
-  users: Users;
+  "accounting_entries": AccountingEntries,
+  "accounts": Accounts,
+  "entries": Entries,
+  "knex_migrations": KnexMigrations,
+  "knex_migrations_lock": KnexMigrationsLock,
+  "users": Users,
 };
 
 export type AccountingEntries = {
@@ -68,3 +68,4 @@ export type Users = {
   created_at: Date;
   updated_at: Date;
 };
+

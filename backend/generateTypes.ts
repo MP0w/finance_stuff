@@ -1,9 +1,6 @@
-import knex from "knex";
 import { updateTypes } from "knex-types";
-import * as config from "./knexfile";
+import { dbConnection } from "./dbConnection";
 
-const db = knex((config as any).default.development);
-
-updateTypes(db, { output: "./types.ts" }).catch(() => {
+updateTypes(dbConnection, { output: "./types.ts" }).catch(() => {
   process.exit(1);
 });

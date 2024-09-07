@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 router(app);
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
