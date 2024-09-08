@@ -29,11 +29,13 @@ export type AccountingEntries = {
 
 export type AccountingEntriesDTO = AccountingEntries & { entries: Entries[] };
 
+export type AccountType = "fiat" | "investment";
+
 export type Accounts = {
   id: string;
   user_id: string;
   name: string;
-  type: string;
+  type: AccountType;
   created_at: Date;
   updated_at: Date;
 };

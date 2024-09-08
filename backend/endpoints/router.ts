@@ -7,6 +7,8 @@ import { verifyToken } from "./auth";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import getUuidByString from "uuid-by-string";
 import cors from "cors";
+import expressAsyncHandler from "express-async-handler";
+
 declare global {
   namespace Express {
     interface Request {
@@ -23,20 +25,31 @@ export function router(app: Application) {
     res.send("simplefi");
   });
 
-  app.use(async (req, res, next) => {
-    const token = req.headers.authorization;
+  app.use(
+    expressAsyncHandler(async (req, res, next) => {
+      const token = req.headers.authorization;
 
-    if (!token) {
-      res.status(401).send({ error: "UNAUTHORIZED" });
-      return;
-    }
+      if (!token) {
+        res.status(401).send({ error: "UNAUTHORIZED" });
+        return;
+      }
 
-    const user = await verifyToken(token as string);
-    req.userId = getUuidByString(user.uid);
-    req.user = user;
+      try {
+        const user = await verifyToken(token as string);
+        req.userId = getUuidByString(user.uid);
+        req.user = user;
+      } catch (error) {
+        const err = error as Error;
+        console.error(
+          `verify token error ${req.method} ${req.path}\n\n ${err.stack}\n-----`
+        );
+        res.status(401).send({ error: err.message, code: "INVALID_TOKEN" });
+        return;
+      }
 
-    next();
-  });
+      next();
+    })
+  );
 
   usersRouter(app);
   accountsRouter(app);

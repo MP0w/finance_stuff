@@ -1,4 +1,4 @@
-import { Accounts } from "../../../backend/types"; // Assuming you have a types file
+import { Accounts, AccountType } from "../../../backend/types"; // Assuming you have a types file
 import apiClient, { useApiCall } from "../apiClient";
 
 const api = apiClient;
@@ -15,14 +15,14 @@ export const useGetAccount = () => {
 
 // Create a new account
 export const useCreateAccount = () => {
-  return useApiCall((name: string, type: "fiat" | "investment") =>
+  return useApiCall((name: string, type: AccountType) =>
     api.post<void>("/account", { name, type })
   );
 };
 
 // Update an existing account
 export const useUpdateAccount = () => {
-  return useApiCall((id: string, name: string, type: "fiat" | "investment") =>
+  return useApiCall((id: string, name: string, type: AccountType) =>
     api.put<void>(`/account/${id}`, { name, type })
   );
 };

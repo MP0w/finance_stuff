@@ -9,7 +9,11 @@ import {
   useCreateAccountingEntry,
 } from "./accountingEntriesAPIs";
 import { useCreateEntry, useUpdateEntry } from "./entriesAPIs";
-import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
+import {
+  AccountingEntriesDTO,
+  Accounts,
+  AccountType,
+} from "../../../backend/types";
 
 interface HomePageProps {
   signOut: () => void;
@@ -18,6 +22,9 @@ interface HomePageProps {
 const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { userId, email } = useUserState();
   const [showSettings, setShowSettings] = useState(false);
+  const [newAccountName, setNewAccountName] = useState("");
+  const [newAccountType, setNewAccountType] = useState<AccountType>("fiat");
+
   const {
     data: accounts,
     loading: accountsLoading,
@@ -34,7 +41,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { execute: createAccountingEntry } = useCreateAccountingEntry();
   const { execute: createEntry } = useCreateEntry();
   const { execute: updateEntry } = useUpdateEntry();
-  const [newAccountName, setNewAccountName] = useState("");
 
   useEffect(() => {
     fetchAccounts();
@@ -48,9 +54,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const handleCreateAccount = useCallback(async () => {
     if (newAccountName) {
       try {
-        await createAccount(newAccountName, "fiat");
+        await createAccount(newAccountName, newAccountType);
         fetchAccounts();
         setNewAccountName("");
+        setNewAccountType("fiat");
         toast.success("Account created successfully");
       } catch (error) {
         console.error("Error creating account:", error);
@@ -59,7 +66,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         });
       }
     }
-  }, [newAccountName, createAccount, fetchAccounts]);
+  }, [newAccountName, newAccountType, createAccount, fetchAccounts]);
 
   const handleCreateAccountingEntry = useCallback(async () => {
     try {
@@ -179,6 +186,14 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             placeholder="New account name"
             className="border rounded px-2 py-1 mr-2"
           />
+          <select
+            value={newAccountType}
+            onChange={(e) => setNewAccountType(e.target.value as AccountType)}
+            className="border rounded px-2 py-1 mr-2 text-gray-700"
+          >
+            <option value="fiat">Fiat</option>
+            <option value="investment">Investment</option>
+          </select>
           <button
             onClick={handleCreateAccount}
             className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2"

@@ -1,30 +1,38 @@
 import { Application, Request, Response } from "express";
 import { Accounts, Table } from "../../types";
 import { dbConnection, generateUUID } from "../../dbConnection";
+import expressAsyncHandler from "express-async-handler";
 
 export function accountsRouter(app: Application) {
-  app.get("/accounts", async (req, res) => {
-    const accounts = await dbConnection<Accounts>(Table.Accounts)
-      .select()
-      .where({ user_id: req.userId })
-      .limit(1000);
+  app.get(
+    "/accounts",
+    expressAsyncHandler(async (req, res) => {
+      const accounts = await dbConnection<Accounts>(Table.Accounts)
+        .select()
+        .where({ user_id: req.userId })
+        .limit(1000);
 
-    res.send(accounts);
-  });
+      res.send(accounts);
+    })
+  );
 
-  app.get("/account/:id", async (req, res) => {
-    const accounts = await dbConnection<Accounts>(Table.Accounts)
-      .select()
-      .where({ id: req.params.id, user_id: req.userId })
-      .limit(1);
+  app.get(
+    "/account/:id",
+    expressAsyncHandler(async (req, res) => {
+      const accounts = await dbConnection<Accounts>(Table.Accounts)
+        .select()
+        .where({ id: req.params.id, user_id: req.userId })
+        .limit(1);
 
-    const account = accounts.at(0);
-    if (!account) {
-      return res.status(404);
-    }
+      const account = accounts.at(0);
+      if (!account) {
+        res.status(404);
+        return;
+      }
 
-    return res.send(account);
-  });
+      res.send(account);
+    })
+  );
 
   async function upsertAccount(id: string, req: Request, res: Response) {
     const name = req.body.name;
@@ -48,30 +56,39 @@ export function accountsRouter(app: Application) {
     res.send({});
   }
 
-  app.post("/account", async (req, res) => {
-    await upsertAccount(generateUUID(), req, res);
-  });
+  app.post(
+    "/account",
+    expressAsyncHandler(async (req, res) => {
+      await upsertAccount(generateUUID(), req, res);
+    })
+  );
 
-  app.put("/account/:id", async (req, res) => {
-    const account = (
+  app.put(
+    "/account/:id",
+    expressAsyncHandler(async (req, res) => {
+      const account = (
+        await dbConnection<Accounts>(Table.Accounts)
+          .select()
+          .where({ id: req.params.id })
+          .limit(1)
+      ).at(0);
+
+      if (!account || account.user_id !== req.userId) {
+        throw Error("invalid account");
+      }
+
+      await upsertAccount(req.params.id, req, res);
+    })
+  );
+
+  app.delete(
+    "/account/:id",
+    expressAsyncHandler(async (req, res) => {
       await dbConnection<Accounts>(Table.Accounts)
-        .select()
-        .where({ id: req.params.id })
-        .limit(1)
-    ).at(0);
+        .delete()
+        .where({ id: req.params.id, user_id: req.userId });
 
-    if (!account || account.user_id !== req.userId) {
-      throw Error("invalid account");
-    }
-
-    await upsertAccount(req.params.id, req, res);
-  });
-
-  app.delete("/account/:id", async (req, res) => {
-    await dbConnection<Accounts>(Table.Accounts)
-      .delete()
-      .where({ id: req.params.id, user_id: req.userId });
-
-    res.send({});
-  });
+      res.send({});
+    })
+  );
 }
