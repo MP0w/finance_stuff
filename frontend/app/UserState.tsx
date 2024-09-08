@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { auth } from "./firebase";
+import { clearAuthToken, setAuthToken } from "./apiClient";
 
 export type UserStateContextType = {
   idToken?: string;
@@ -76,6 +77,7 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
         localStorage.removeItem("user");
         setIdToken(undefined);
         setUser(undefined);
+        clearAuthToken();
       } else {
         const token = await user.getIdToken();
         localStorage.setItem("idToken", token);
@@ -84,9 +86,11 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
         if (userResult) {
           setIdToken(token);
           setUser(userResult);
+          setAuthToken(token);
         } else {
           setIdToken(undefined);
           setUser(undefined);
+          clearAuthToken();
         }
       }
     });
