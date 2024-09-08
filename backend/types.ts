@@ -27,6 +27,8 @@ export type AccountingEntries = {
   updated_at: Date;
 };
 
+export type AccountingEntriesDTO = AccountingEntries & { entries: Entries[] };
+
 export type Accounts = {
   id: string;
   user_id: string;

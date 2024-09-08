@@ -84,9 +84,9 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
 
         const userResult = await login(token, user.uid);
         if (userResult) {
+          setAuthToken(token);
           setIdToken(token);
           setUser(userResult);
-          setAuthToken(token);
         } else {
           setIdToken(undefined);
           setUser(undefined);

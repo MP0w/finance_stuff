@@ -32,7 +32,7 @@ export function entriesRouter(app: Application) {
     const value: number | undefined = req.body.value;
     const invested: number | undefined = req.body.value;
 
-    if (!account_id || !accounting_entry_id || !value) {
+    if (!account_id || !accounting_entry_id || value === undefined) {
       throw Error("Invalid params");
     }
 

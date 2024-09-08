@@ -15,14 +15,14 @@ export const useGetAccount = () => {
 
 // Create a new account
 export const useCreateAccount = () => {
-  return useApiCall((name: string, type: string) =>
+  return useApiCall((name: string, type: "fiat" | "investment") =>
     api.post<void>("/account", { name, type })
   );
 };
 
 // Update an existing account
 export const useUpdateAccount = () => {
-  return useApiCall((id: string, name: string, type: string) =>
+  return useApiCall((id: string, name: string, type: "fiat" | "investment") =>
     api.put<void>(`/account/${id}`, { name, type })
   );
 };

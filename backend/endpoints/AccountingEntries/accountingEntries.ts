@@ -1,30 +1,72 @@
 import { Application, Request, Response } from "express";
 import { dbConnection, generateUUID } from "../../dbConnection";
-import { AccountingEntries, Table } from "../../types";
+import {
+  AccountingEntries,
+  AccountingEntriesDTO,
+  Entries,
+  Table,
+} from "../../types";
 
 export function accountingEntriesRouter(app: Application) {
   app.get("/accounting_entries", async (req, res) => {
-    const entries = await dbConnection<AccountingEntries>(
+    const accountingEntries = await dbConnection<AccountingEntries>(
       Table.AccountingEntries
     )
       .select()
       .where({ user_id: req.userId })
+      .orderBy("date", "desc")
       .limit(1000);
 
-    res.send(entries);
+    const allEntries = await dbConnection<Entries>(Table.Entries)
+      .select()
+      .whereIn(
+        "accounting_entry_id",
+        accountingEntries.map((entry) => entry.id)
+      )
+      .andWhere({ user_id: req.userId });
+
+    const entriesByAccountingEntryId = allEntries.reduce((acc, entry) => {
+      if (!acc[entry.accounting_entry_id]) {
+        acc[entry.accounting_entry_id] = [];
+      }
+      acc[entry.accounting_entry_id].push(entry);
+      return acc;
+    }, {} as Record<string, Entries[]>);
+
+    const accountingEntriesDTO: AccountingEntriesDTO[] = accountingEntries.map(
+      (entry) => ({
+        ...entry,
+        entries: entriesByAccountingEntryId[entry.id] || [],
+      })
+    );
+
+    res.send(accountingEntriesDTO);
   });
 
   app.get("/accounting_entry/:id", async (req, res) => {
-    const entries = await dbConnection<AccountingEntries>(
+    const accountingEntries = await dbConnection<AccountingEntries>(
       Table.AccountingEntries
     )
       .select()
       .where({ id: req.params.id, user_id: req.userId })
       .limit(1);
 
-    const entry = entries.at(0);
+    const accountingEntry = accountingEntries.at(0);
 
-    res.status(entry ? 200 : 401).send(entry);
+    if (!accountingEntry) {
+      return res.status(404).send({ message: "Accounting entry not found" });
+    }
+
+    const entries = await dbConnection<Entries>(Table.Entries)
+      .select()
+      .where({ accounting_entry_id: accountingEntry.id, user_id: req.userId });
+
+    const accountingEntryDTO: AccountingEntriesDTO = {
+      ...accountingEntry,
+      entries,
+    };
+
+    return res.status(200).send(accountingEntryDTO);
   });
 
   async function upsertEntry(id: string, req: Request, res: Response) {
