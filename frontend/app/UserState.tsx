@@ -8,17 +8,24 @@ import React, {
 import { auth } from "./firebase";
 
 export type UserStateContextType = {
-  idToken: string | undefined;
-  userId: string | undefined;
+  idToken?: string;
+  userId?: string;
+  email?: string;
+};
+
+export type User = {
+  id: string | undefined;
+  firebase_uid: string | undefined;
+  email: string | undefined;
 };
 
 const UserStateContext = createContext<UserStateContextType | undefined>(
   undefined
 );
 
-function getCachedUser(): { id: string; firebase_uid: string } | undefined {
+function getCachedUser() {
   const cachedUser = localStorage.getItem("user");
-  return cachedUser ? JSON.parse(cachedUser) : undefined;
+  return cachedUser ? (JSON.parse(cachedUser) as User) : undefined;
 }
 
 const login = async (token: string, firebaseUid: string) => {
@@ -57,18 +64,18 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [idToken, setIdToken] = useState<string | undefined>(undefined);
-  const [userId, setUserId] = useState<string | undefined>(undefined);
+  const [user, setUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
     setIdToken(localStorage.getItem("idToken") ?? undefined);
-    setUserId(getCachedUser()?.id);
+    setUser(getCachedUser());
 
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) {
         localStorage.removeItem("idToken");
         localStorage.removeItem("user");
         setIdToken(undefined);
-        setUserId(undefined);
+        setUser(undefined);
       } else {
         const token = await user.getIdToken();
         localStorage.setItem("idToken", token);
@@ -76,10 +83,10 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
         const userResult = await login(token, user.uid);
         if (userResult) {
           setIdToken(token);
-          setUserId(userResult.id);
+          setUser(userResult);
         } else {
           setIdToken(undefined);
-          setUserId(undefined);
+          setUser(undefined);
         }
       }
     });
@@ -88,7 +95,11 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
   }, []); // Dependency array is empty to run the effect only once on mount
 
   return (
-    <UserStateContext.Provider value={{ idToken, userId }}>
+    <UserStateContext.Provider
+      value={
+        idToken && user ? { idToken, userId: user?.id, email: user?.email } : {}
+      }
+    >
       {children}
     </UserStateContext.Provider>
   );

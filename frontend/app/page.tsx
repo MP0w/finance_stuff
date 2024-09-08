@@ -6,11 +6,11 @@ import LoginPage from "./Login/LoginPage";
 import { UserStateProvider } from "./UserState";
 
 export default function Home() {
-  const signIn = async () => {
+  const signIn = async (email: string, password: string) => {
     if (auth.currentUser) {
       await auth.signOut();
     }
-    await signInWithEmailAndPassword(auth, "m@mpow.dev", "TestTest2");
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
   const signOut = async () => {
