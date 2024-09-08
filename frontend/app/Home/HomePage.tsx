@@ -162,11 +162,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           </div>
         </header>
 
-        {(accountsLoading || entriesLoading) && <p>Loading...</p>}
+        {(accountsLoading || (entriesLoading && !accountingEntries)) && (
+          <p>Loading...</p>
+        )}
         {(accountsError || entriesError) && <p>Error loading data</p>}
 
         {accounts && accounts.length === 0 && (
-          <p>No accounts found. Create your first account below.</p>
+          <p>No accounts found. Create your first account.</p>
         )}
 
         <div className="mb-4 flex">
