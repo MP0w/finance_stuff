@@ -117,7 +117,9 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   ): TableRowCell[] {
     const entries = accounts.map((account) => ({
       value: getEntryValue(entry, account.id),
-      editable: true,
+      onValueChange: (value: string) => {
+        return handleCellChange(entry.id, account.id, value);
+      },
     }));
 
     const sum = entries.reduce((acc, curr) => acc + parseFloat(curr.value), 0);
@@ -125,12 +127,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     return [
       {
         value: new Date(entry.date).toLocaleDateString(),
-        editable: false,
       },
       ...entries,
       {
         value: sum.toString(),
-        editable: false,
       },
     ];
   }
@@ -199,21 +199,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               <TableHeader headers={headers} />
               <tbody>
                 {accountingEntries.map((entry) => (
-                  <TableRow
-                    key={entry.id}
-                    cells={getCells(entry, accounts)}
-                    onValueChange={(index, value) => {
-                      if (index > 0 && accounts) {
-                        return handleCellChange(
-                          entry.id,
-                          accounts[index - 1].id,
-                          value
-                        );
-                      }
-
-                      return Promise.resolve();
-                    }}
-                  />
+                  <TableRow key={entry.id} cells={getCells(entry, accounts)} />
                 ))}
               </tbody>
             </table>

@@ -19,15 +19,14 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => (
 
 export interface TableRowCell {
   value: string | number;
-  editable: boolean;
+  onValueChange?: (value: string) => Promise<void>;
 }
 
 interface TableRowProps {
   cells: TableRowCell[];
-  onValueChange?: (index: number, value: string) => Promise<void>;
 }
 
-export const TableRow: React.FC<TableRowProps> = ({ cells, onValueChange }) => {
+export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
   const [editingValues, setEditingValues] = useState<string[]>(
     cells.map((cell) => cell.value.toString())
   );
@@ -41,10 +40,11 @@ export const TableRow: React.FC<TableRowProps> = ({ cells, onValueChange }) => {
   }, []);
 
   const handleInputBlur = useCallback(
-    async (index: number) => {
+    async (index: number, value: string) => {
+      const onValueChange = cells[index].onValueChange;
       if (onValueChange) {
         try {
-          await onValueChange(index, editingValues[index]);
+          await onValueChange(value);
         } catch (error) {
           console.error("Error updating value:", error);
           // Revert the value to the original
@@ -60,7 +60,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells, onValueChange }) => {
         }
       }
     },
-    [onValueChange, editingValues, cells]
+    [cells, setEditingValues]
   );
 
   const handleKeyDown = useCallback(
@@ -78,17 +78,17 @@ export const TableRow: React.FC<TableRowProps> = ({ cells, onValueChange }) => {
         <td
           key={index}
           className={`px-4 py-2 text-gray-800 ${
-            !value.editable ? "bg-gray-100" : ""
+            !value.onValueChange ? "bg-gray-100" : ""
           }`}
         >
-          {!value.editable ? (
+          {!value.onValueChange ? (
             value.value
           ) : (
             <input
               type="text"
               value={editingValues[index]}
               onChange={(e) => handleInputChange(index, e.target.value)}
-              onBlur={() => handleInputBlur(index)}
+              onBlur={(e) => handleInputBlur(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
               className="w-full bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
             />
