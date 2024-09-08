@@ -147,16 +147,20 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       <div className="mx-auto">
         <header className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-semibold text-gray-800">SimpleFi</h1>
-          <div className="relative">
-            <button
-              className="px-3 py-2 text-gray-600 hover:text-gray-800 transition duration-200"
-              onMouseEnter={() => setShowSettings(true)}
-              onMouseLeave={() => setShowSettings(false)}
-            >
+          <div
+            className="relative"
+            onMouseEnter={() => setShowSettings(true)}
+            onClick={() => setShowSettings(!showSettings)}
+          >
+            <button className="px-3 py-2 text-gray-600 hover:text-gray-800 transition duration-200">
               <SettingsIcon />
             </button>
             {showSettings && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+              <div
+                className="absolute right-0  mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+                onMouseLeave={() => setShowSettings(false)}
+                onClick={() => setShowSettings(false)}
+              >
                 <p className="px-4 py-2 text-sm text-gray-700">{email}</p>
                 <button
                   className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100"

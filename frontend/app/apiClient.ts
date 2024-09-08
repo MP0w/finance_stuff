@@ -31,7 +31,7 @@ export const useApiCall = <T, P extends unknown[]>(
     async (...args: P) => {
       setLoading(true);
       setError(null);
-      apiClient.defaults.headers.common["Authorization"] = idToken;
+      if (idToken) setAuthToken(idToken);
 
       try {
         const response = await apiFunctionRef.current(...args);

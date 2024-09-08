@@ -71,7 +71,7 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
     setIdToken(localStorage.getItem("idToken") ?? undefined);
     setUser(getCachedUser());
 
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    const unsubscribe = auth.onIdTokenChanged(async (user) => {
       if (!user) {
         localStorage.removeItem("idToken");
         localStorage.removeItem("user");
