@@ -22,18 +22,22 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 overflow-x-auto mt-4 relative">
-      {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
-
-      <table className="w-full shadow-md">
-        <TableHeader headers={headers} />
-        <tbody>
-          {rows.map((row, index) => (
-            <TableRow key={index} cells={row} />
-          ))}
-        </tbody>
-      </table>
-
+    <div>
+      {title && (
+        <h2 className="text-lg text-gray-600 font-semibold mb-2 mt-4">
+          {title}
+        </h2>
+      )}
+      <div className="overflow-x-auto mt-4 relative shadow-xl rounded-lg border border-gray-200">
+        <table className="w-full">
+          <TableHeader headers={headers} />
+          <tbody>
+            {rows.map((row, index) => (
+              <TableRow key={index} cells={row} />
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div>
         <div className="flex items-center mt-2 relative group">
           <button
@@ -62,7 +66,7 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
             />
             <div className="mt-4">
               <button
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
+                className="bg-gray-300 text-gray-600 px-4 py-2 rounded mr-2"
                 onClick={() => setShowDatePicker(false)}
               >
                 Cancel
@@ -170,11 +174,11 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
   };
 
   return (
-    <tr className="border-t border-gray-200">
+    <tr className="border-t border-gray-300">
       {cells.map((value, index) => (
         <td
           key={index}
-          className={`px-4 py-2 text-gray-800 ${
+          className={`px-4 py-2 text-gray-600 ${
             !value.onValueChange ? value.color ?? `bg-gray-100` : ""
           }`}
         >

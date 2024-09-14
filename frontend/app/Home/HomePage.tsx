@@ -217,16 +217,16 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-50 p-8">
       <div className="mx-auto">
         <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-semibold text-gray-800">SimpleFi</h1>
+          <h1 className="text-3xl font-semibold text-gray-600">SimpleFi</h1>
           <div
             className="relative"
             onMouseEnter={() => setShowSettings(true)}
             onClick={() => setShowSettings(!showSettings)}
           >
-            <button className="px-3 py-2 text-gray-600 hover:text-gray-800 transition duration-200">
+            <button className="px-3 py-2 text-gray-600 hover:text-gray-600 transition duration-200">
               <SettingsIcon />
             </button>
             {showSettings && (

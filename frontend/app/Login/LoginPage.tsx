@@ -25,9 +25,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ signIn, signOut }) => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">
+        <h1 className="text-3xl font-semibold text-center text-gray-600 mb-6">
           SimpleFi
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -36,7 +36,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ signIn, signOut }) => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-800 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-600 placeholder-gray-400"
             required
           />
           <input
@@ -44,7 +44,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ signIn, signOut }) => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-800 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-600 placeholder-gray-400"
             required
           />
           <button
