@@ -20,7 +20,9 @@ export const useGetAccountingEntry = () => {
 // Create a new accounting entry
 export const useCreateAccountingEntry = () => {
   return useApiCall((date: Date) =>
-    api.post<void>("/accounting_entry", { date })
+    api.post<void>("/accounting_entry", {
+      date: date.toLocaleDateString("en-US"),
+    })
   );
 };
 

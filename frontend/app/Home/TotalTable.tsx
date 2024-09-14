@@ -1,5 +1,5 @@
 import React from "react";
-import { TableHeader, TableRow, TableRowCell } from "./Table";
+import Table, { TableHeader, TableRow, TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 import { colorForValue, stringForPercentage } from "./InvestmentTable";
 
@@ -8,6 +8,7 @@ interface TotalTableProps {
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
+  onAddEntry: (date: Date) => void;
 }
 
 type Summary = {
@@ -38,6 +39,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
   fiatAccounts,
   investmentAccounts,
   accountingEntries,
+  onAddEntry,
 }) => {
   const headers = [
     "Date",
@@ -88,7 +90,8 @@ const TotalTable: React.FC<TotalTableProps> = ({
   });
 
   const summaryCells: SummaryCell[] = summaries.map((summary, index) => {
-    const previous = index > 0 ? summaries.at(index - 1) : undefined;
+    const previous =
+      index < summaries.length - 1 ? summaries.at(index + 1) : undefined;
     const change = previous ? summary.total - previous.total : undefined;
     let savings = undefined;
 
@@ -165,19 +168,12 @@ const TotalTable: React.FC<TotalTableProps> = ({
   };
 
   return (
-    accountingEntries.length > 0 && (
-      <div className="bg-white shadow-md rounded-lg p-6 overflow-x-auto mt-4">
-        {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
-        <table className="w-full">
-          <TableHeader headers={headers.filter((h) => h !== undefined)} />
-          <tbody>
-            {summaryCells.map((entry) => (
-              <TableRow key={entry.id} cells={getCells(entry)} />
-            ))}
-          </tbody>
-        </table>
-      </div>
-    )
+    <Table
+      title={title}
+      headers={headers.filter((h) => h !== undefined)}
+      rows={summaryCells.map((entry) => getCells(entry))}
+      onAddEntry={onAddEntry}
+    />
   );
 };
 

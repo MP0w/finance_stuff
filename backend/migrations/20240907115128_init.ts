@@ -39,6 +39,7 @@ export async function up(knex: Knex): Promise<void> {
       .index("accounting_entries_user_id");
     table.date("date").notNullable();
     table.timestamps(true, true);
+    table.unique(["user_id", "date"]);
   });
 
   await knex.schema.createTable(Table.Entries, (table) => {

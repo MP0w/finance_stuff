@@ -22,7 +22,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { userId, email } = useUserState();
   const [showSettings, setShowSettings] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
-  const [newAccountType, setNewAccountType] = useState<AccountType>("fiat");
   const [activeTab, setActiveTab] = useState("fiat");
 
   const {
@@ -56,35 +55,43 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     throw Error("invalid state");
   }
 
-  const handleCreateAccount = useCallback(async () => {
-    if (newAccountName) {
-      try {
-        await createAccount(newAccountName, newAccountType);
-        fetchAccounts();
-        setNewAccountName("");
-        setNewAccountType("fiat");
-        toast.success("Account created", { position: "bottom-right" });
-      } catch (error) {
-        console.error("Error creating account:", error);
-        toast.error("Failed to create account. Please try again.", {
-          position: "bottom-right",
-        });
+  const handleCreateAccount = useCallback(
+    async (type: AccountType) => {
+      if (newAccountName.length > 0) {
+        try {
+          await createAccount(newAccountName, type);
+          fetchAccounts();
+          setNewAccountName("");
+          toast.success("Account created", { position: "bottom-right" });
+        } catch (error) {
+          console.error("Error creating account:", error);
+          toast.error("Failed to create account. Please try again.", {
+            position: "bottom-right",
+          });
+        }
       }
-    }
-  }, [newAccountName, newAccountType, createAccount, fetchAccounts]);
+    },
+    [newAccountName, createAccount, fetchAccounts]
+  );
 
-  const handleCreateAccountingEntry = useCallback(async () => {
-    try {
-      await createAccountingEntry(new Date());
-      fetchAccountingEntries();
-      toast.success("new entry created", { position: "bottom-right" });
-    } catch (error) {
-      console.error("Error creating accounting entry:", error);
-      toast.error("Failed to create accounting entry. Please try again.", {
-        position: "bottom-right",
-      });
-    }
-  }, [createAccountingEntry, fetchAccountingEntries]);
+  const handleCreateAccountingEntry = useCallback(
+    async (date: Date) => {
+      try {
+        await createAccountingEntry(date);
+        fetchAccountingEntries();
+        toast.success("new entry created", { position: "bottom-right" });
+      } catch (error) {
+        console.error("Error creating accounting entry:", error);
+        toast.error(
+          "Failed to create accounting entry. Make sure to pick a new date.",
+          {
+            position: "bottom-right",
+          }
+        );
+      }
+    },
+    [createAccountingEntry, fetchAccountingEntries]
+  );
 
   const handleCellChange = useCallback(
     async (
@@ -138,20 +145,56 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
 
   const tabContent = {
     fiat: (
-      <AccountsTable
-        accounts={fiatAccounts}
-        accountingEntries={accountingEntries ?? []}
-        handleCellChange={handleCellChange}
-      />
+      <div>
+        <div className="mb-4 flex">
+          <input
+            type="text"
+            value={newAccountName}
+            onChange={(e) => setNewAccountName(e.target.value)}
+            placeholder="Fiat account name"
+            className="border rounded px-2 py-1 mr-2"
+          />
+          <button
+            onClick={() => handleCreateAccount("fiat")}
+            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={newAccountName.length === 0}
+          >
+            Add Account
+          </button>
+        </div>
+        <AccountsTable
+          accounts={fiatAccounts}
+          accountingEntries={accountingEntries ?? []}
+          handleCellChange={handleCellChange}
+          onAddEntry={handleCreateAccountingEntry}
+        />
+      </div>
     ),
     investments: (
       <>
+        <div className="mb-4 flex">
+          <input
+            type="text"
+            value={newAccountName}
+            onChange={(e) => setNewAccountName(e.target.value)}
+            placeholder="Investment account name"
+            className="border rounded px-2 py-1 mr-2"
+          />
+          <button
+            onClick={() => handleCreateAccount("investment")}
+            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={newAccountName.length === 0}
+          >
+            Add Account
+          </button>
+        </div>
         {investmentAccounts.map((account) => (
           <InvestmentTable
             key={account.id}
             account={account}
             accountingEntries={accountingEntries ?? []}
             handleCellChange={handleCellChange}
+            onAddEntry={handleCreateAccountingEntry}
           />
         ))}
         <TotalTable
@@ -159,6 +202,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           fiatAccounts={[]}
           investmentAccounts={investmentAccounts}
           accountingEntries={accountingEntries ?? []}
+          onAddEntry={handleCreateAccountingEntry}
         />
       </>
     ),
@@ -167,6 +211,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         fiatAccounts={fiatAccounts}
         investmentAccounts={investmentAccounts}
         accountingEntries={accountingEntries ?? []}
+        onAddEntry={handleCreateAccountingEntry}
       />
     ),
   };
@@ -205,38 +250,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           <p>Loading...</p>
         )}
         {(accountsError || entriesError) && <p>Error loading data</p>}
-        {accounts && accounts.length === 0 && (
-          <p>No accounts found. Create your first account.</p>
-        )}
-        <div className="mb-4 flex">
-          <input
-            type="text"
-            value={newAccountName}
-            onChange={(e) => setNewAccountName(e.target.value)}
-            placeholder="New account name"
-            className="border rounded px-2 py-1 mr-2"
-          />
-          <select
-            value={newAccountType}
-            onChange={(e) => setNewAccountType(e.target.value as AccountType)}
-            className="border rounded px-2 py-1 mr-2 text-gray-700"
-          >
-            <option value="fiat">Fiat</option>
-            <option value="investment">Investment</option>
-          </select>
-          <button
-            onClick={handleCreateAccount}
-            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2"
-          >
-            Add Account
-          </button>
-          <button
-            onClick={handleCreateAccountingEntry}
-            className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
-          >
-            Add Accounting Entry
-          </button>
-        </div>
         <TabView
           tabs={[
             { id: "fiat", label: "Fiat Accounts" },
@@ -246,7 +259,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             { id: "projections", label: "Projections" },
           ]}
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={(tabId) => {
+            setActiveTab(tabId);
+            setNewAccountName("");
+          }}
         >
           {tabContent[activeTab as keyof typeof tabContent]}
         </TabView>

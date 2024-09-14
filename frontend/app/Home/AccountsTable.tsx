@@ -1,5 +1,5 @@
 import React from "react";
-import { TableHeader, TableRow, TableRowCell } from "./Table";
+import Table, { TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 
 interface AccountsTableProps {
@@ -11,12 +11,14 @@ interface AccountsTableProps {
     value: number,
     invested: boolean
   ) => Promise<void>;
+  onAddEntry: (date: Date) => void;
 }
 
 const AccountsTable: React.FC<AccountsTableProps> = ({
   accounts,
   accountingEntries,
   handleCellChange,
+  onAddEntry,
 }) => {
   const headers = ["Date", ...accounts.map((account) => account.name), "Total"];
 
@@ -50,19 +52,11 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
   }
 
   return (
-    accounts.length > 0 &&
-    accountingEntries.length > 0 && (
-      <div className="bg-white shadow-md rounded-lg p-6 overflow-x-auto mt-4">
-        <table className="w-full">
-          <TableHeader headers={headers} />
-          <tbody>
-            {accountingEntries.map((entry) => (
-              <TableRow key={entry.id} cells={getCells(entry, accounts)} />
-            ))}
-          </tbody>
-        </table>
-      </div>
-    )
+    <Table
+      headers={headers}
+      rows={accountingEntries.map((entry) => getCells(entry, accounts))}
+      onAddEntry={onAddEntry}
+    />
   );
 };
 

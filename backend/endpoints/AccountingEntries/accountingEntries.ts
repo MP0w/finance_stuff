@@ -86,17 +86,28 @@ export function accountingEntriesRouter(app: Application) {
       throw Error("Invalid params");
     }
 
-    await dbConnection<AccountingEntries>(Table.AccountingEntries)
-      .insert({
-        id,
-        date,
-        user_id: req.userId,
-        updated_at: new Date(),
-      })
-      .onConflict("id")
-      .merge();
+    try {
+      await dbConnection<AccountingEntries>(Table.AccountingEntries)
+        .insert({
+          id,
+          date,
+          user_id: req.userId,
+          updated_at: new Date(),
+        })
+        .onConflict("id")
+        .merge();
 
-    res.send({});
+      res.send({});
+    } catch (error) {
+      const isDupe = (error as Error).message.includes(
+        `duplicate key value violates unique constraint "accounting_entries_user_id_date_unique"`
+      );
+      res.status(500).send({
+        message: isDupe
+          ? "You cannot create two entries for the same date"
+          : "Failed to create entry",
+      });
+    }
   }
 
   app.post(

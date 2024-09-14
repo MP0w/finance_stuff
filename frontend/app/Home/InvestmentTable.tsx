@@ -1,5 +1,5 @@
 import React from "react";
-import { TableHeader, TableRow, TableRowCell } from "./Table";
+import Table, { TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 
 interface InvestmentTableProps {
@@ -11,6 +11,7 @@ interface InvestmentTableProps {
     value: number,
     invested: boolean
   ) => Promise<void>;
+  onAddEntry: (date: Date) => void;
 }
 
 export function colorForValue(value: number | undefined): string | undefined {
@@ -33,6 +34,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
   account,
   accountingEntries,
   handleCellChange,
+  onAddEntry,
 }) => {
   const headers = [
     "Date",
@@ -82,21 +84,12 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
   }
 
   return (
-    accountingEntries.length > 0 && (
-      <div className="bg-white shadow-md rounded-lg p-6 overflow-x-auto mt-4">
-        <h2 className="text-lg font-semibold mb-4 text-gray-800">
-          {account.name}
-        </h2>
-        <table className="w-full">
-          <TableHeader headers={headers} />
-          <tbody>
-            {accountingEntries.map((entry) => (
-              <TableRow key={entry.id} cells={getCells(entry, account)} />
-            ))}
-          </tbody>
-        </table>
-      </div>
-    )
+    <Table
+      title={account.name}
+      headers={headers}
+      rows={accountingEntries.map((entry) => getCells(entry, account))}
+      onAddEntry={onAddEntry}
+    />
   );
 };
 
