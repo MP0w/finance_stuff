@@ -19,7 +19,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => (
 
 export interface TableRowCell {
   value: string | number;
-  onValueChange?: (value: string) => Promise<void>;
+  onValueChange?: (value: number) => Promise<void>;
 }
 
 interface TableRowProps {
@@ -44,7 +44,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
       const onValueChange = cells[index].onValueChange;
       if (onValueChange) {
         try {
-          await onValueChange(value);
+          await onValueChange(parseFloat(value));
         } catch (error) {
           console.error("Error updating value:", error);
           // Revert the value to the original

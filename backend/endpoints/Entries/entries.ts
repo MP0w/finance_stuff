@@ -36,8 +36,16 @@ export function entriesRouter(app: Application) {
     const account_id: string | undefined = req.body.account_id;
     const accounting_entry_id: string | undefined =
       req.body.accounting_entry_id;
-    const value: number | undefined = req.body.value;
-    const invested: number | undefined = req.body.value;
+    const value = parseFloat(req.body.value);
+    const invested = req.body.invested ? parseFloat(req.body.invested) : null;
+
+    if (isNaN(value)) {
+      throw Error("Invalid value");
+    }
+
+    if (invested && isNaN(invested)) {
+      throw Error("Invalid invested value");
+    }
 
     if (!account_id || !accounting_entry_id || value === undefined) {
       throw Error("Invalid params");
@@ -49,8 +57,8 @@ export function entriesRouter(app: Application) {
         account_id,
         accounting_entry_id,
         user_id: req.userId,
-        value: value.toString(),
-        invested: invested?.toString(),
+        value: value,
+        invested: invested,
         updated_at: new Date(),
       })
       .onConflict("id")

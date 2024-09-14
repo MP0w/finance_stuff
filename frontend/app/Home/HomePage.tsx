@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { useUserState } from "../UserState";
-import { TableHeader, TableRow, TableRowCell } from "./Table";
+import { TableRowCell } from "./Table";
 import SettingsIcon from "./SettingsIcon";
 import { useGetAccounts, useCreateAccount } from "./accountsAPIs";
 import {
@@ -14,6 +14,10 @@ import {
   Accounts,
   AccountType,
 } from "../../../backend/types";
+import AccountsTable from "./AccountsTable";
+import InvestmentTable from "./InvestmentTable";
+import TotalTable from "./TotalTable";
+import { validateHeaderName } from "http";
 
 interface HomePageProps {
   signOut: () => void;
@@ -41,6 +45,11 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { execute: createAccountingEntry } = useCreateAccountingEntry();
   const { execute: createEntry } = useCreateEntry();
   const { execute: updateEntry } = useUpdateEntry();
+
+  const fiatAccounts =
+    accounts?.filter((account) => account.type === "fiat") ?? [];
+  const investmentAccounts =
+    accounts?.filter((account) => account.type === "investment") ?? [];
 
   useEffect(() => {
     fetchAccounts();
@@ -82,65 +91,54 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   }, [createAccountingEntry, fetchAccountingEntries]);
 
   const handleCellChange = useCallback(
-    async (accountingEntryId: string, accountId: string, value: string) => {
-      const numericValue = parseFloat(value);
-      if (!isNaN(numericValue)) {
-        const existingEntry = accountingEntries
-          ?.find((ae) => ae.id === accountingEntryId)
-          ?.entries.find((e) => e.account_id === accountId);
-
-        if (existingEntry && existingEntry.value === numericValue.toString()) {
-          return;
-        }
-
-        if (existingEntry) {
-          await updateEntry(
-            existingEntry.id,
-            accountId,
-            accountingEntryId,
-            numericValue
-          );
-        } else {
-          await createEntry(accountId, accountingEntryId, numericValue);
-        }
-        fetchAccountingEntries();
+    async (
+      accountingEntryId: string,
+      accountId: string,
+      cellValue: number,
+      invested: boolean
+    ) => {
+      if (Number.isNaN(cellValue)) {
+        toast.error("Invalid value", {
+          position: "bottom-right",
+        });
+        return;
       }
+
+      const existingEntry = accountingEntries
+        ?.find((ae) => ae.id === accountingEntryId)
+        ?.entries.find((e) => e.account_id === accountId);
+
+      const isUpToDate = invested
+        ? existingEntry?.invested === cellValue
+        : existingEntry?.value === cellValue;
+
+      if (existingEntry && isUpToDate) {
+        return;
+      }
+
+      if (existingEntry) {
+        const investmentValue = invested ? cellValue : existingEntry.invested;
+        const value = invested ? existingEntry.value : cellValue;
+
+        await updateEntry(
+          existingEntry.id,
+          accountId,
+          accountingEntryId,
+          value,
+          investmentValue ?? undefined
+        );
+      } else {
+        await createEntry(
+          accountId,
+          accountingEntryId,
+          invested ? 0 : cellValue,
+          invested ? cellValue : undefined
+        );
+      }
+      fetchAccountingEntries();
     },
     [accountingEntries, updateEntry, createEntry, fetchAccountingEntries]
   );
-
-  const headers = accounts
-    ? ["Date", ...accounts.map((account) => account.name), "Total"]
-    : ["Date"];
-
-  const getEntryValue = (entry: AccountingEntriesDTO, accountId: string) => {
-    const matchingEntry = entry.entries.find((e) => e.account_id === accountId);
-    return matchingEntry ? matchingEntry.value : "0";
-  };
-
-  function getCells(
-    entry: AccountingEntriesDTO,
-    accounts: Accounts[]
-  ): TableRowCell[] {
-    const entries = accounts.map((account) => ({
-      value: getEntryValue(entry, account.id),
-      onValueChange: (value: string) => {
-        return handleCellChange(entry.id, account.id, value);
-      },
-    }));
-
-    const sum = entries.reduce((acc, curr) => acc + parseFloat(curr.value), 0);
-
-    return [
-      {
-        value: new Date(entry.date).toLocaleDateString(),
-      },
-      ...entries,
-      {
-        value: sum.toString(),
-      },
-    ];
-  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -172,16 +170,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             )}
           </div>
         </header>
-
         {(accountsLoading || (entriesLoading && !accountingEntries)) && (
           <p>Loading...</p>
         )}
         {(accountsError || entriesError) && <p>Error loading data</p>}
-
         {accounts && accounts.length === 0 && (
           <p>No accounts found. Create your first account.</p>
         )}
-
         <div className="mb-4 flex">
           <input
             type="text"
@@ -211,19 +206,24 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             Add Accounting Entry
           </button>
         </div>
-
-        {accounts && accounts.length > 0 && accountingEntries && (
-          <div className="bg-white shadow-md rounded-lg p-6 overflow-x-auto">
-            <table className="w-full">
-              <TableHeader headers={headers} />
-              <tbody>
-                {accountingEntries.map((entry) => (
-                  <TableRow key={entry.id} cells={getCells(entry, accounts)} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <AccountsTable
+          accounts={fiatAccounts}
+          accountingEntries={accountingEntries ?? []}
+          handleCellChange={handleCellChange}
+        />
+        {investmentAccounts.map((account) => (
+          <InvestmentTable
+            key={account.id}
+            account={account}
+            accountingEntries={accountingEntries ?? []}
+            handleCellChange={handleCellChange}
+          />
+        ))}
+        <TotalTable
+          fiatAccounts={fiatAccounts}
+          investmentAccounts={investmentAccounts}
+          accountingEntries={accountingEntries ?? []}
+        />
       </div>
     </div>
   );

@@ -63,8 +63,8 @@ export async function up(knex: Knex): Promise<void> {
       .inTable(Table.AccountingEntries)
       .onDelete("CASCADE")
       .index("entries_accounting_entries_id");
-    table.bigInteger("value").notNullable();
-    table.bigInteger("invested");
+    table.double("value").notNullable();
+    table.double("invested");
     table.timestamps(true, true);
     table.unique(["accounting_entry_id", "account_id"]);
   });

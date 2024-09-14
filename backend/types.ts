@@ -45,8 +45,8 @@ export type Entries = {
   user_id: string;
   account_id: string;
   accounting_entry_id: string;
-  value: string;
-  invested: string | null;
+  value: number;
+  invested: number | null;
   created_at: Date;
   updated_at: Date;
 };
