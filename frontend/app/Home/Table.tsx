@@ -25,7 +25,7 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
     <div className="bg-white shadow-md rounded-lg p-6 overflow-x-auto mt-4 relative">
       {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
 
-      <table className="w-full">
+      <table className="w-full shadow-md">
         <TableHeader headers={headers} />
         <tbody>
           {rows.map((row, index) => (
@@ -162,6 +162,13 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
     []
   );
 
+  const formattedValue = (value: string | number) => {
+    if (typeof value === "number") {
+      return `$ ${value}`;
+    }
+    return value;
+  };
+
   return (
     <tr className="border-t border-gray-200">
       {cells.map((value, index) => (
@@ -172,16 +179,19 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
           }`}
         >
           {!value.onValueChange ? (
-            value.value
+            <span>{formattedValue(value.value)}</span>
           ) : (
-            <input
-              type="text"
-              value={editingValues[index] ?? value.value}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-              onBlur={(e) => handleInputBlur(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(e)}
-              className="w-full bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-            />
+            <span className="flex items-center">
+              <span className="mr-1">$</span>
+              <input
+                type="text"
+                value={editingValues[index] ?? value.value}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                onBlur={(e) => handleInputBlur(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e)}
+                className="w-full bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+              />
+            </span>
           )}
         </td>
       ))}
