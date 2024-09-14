@@ -53,9 +53,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
     accounts.length > 0 &&
     accountingEntries.length > 0 && (
       <div className="bg-white shadow-md rounded-lg p-6 overflow-x-auto mt-4">
-        <h2 className="text-lg font-semibold mb-4 text-gray-800">
-          Fiat Accounts
-        </h2>
         <table className="w-full">
           <TableHeader headers={headers} />
           <tbody>

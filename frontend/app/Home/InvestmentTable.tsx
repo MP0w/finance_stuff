@@ -13,6 +13,22 @@ interface InvestmentTableProps {
   ) => Promise<void>;
 }
 
+export function colorForValue(value: number | undefined): string | undefined {
+  if (!value || value === 0) {
+    return undefined;
+  }
+
+  return value > 0 ? "bg-green-100" : "bg-red-100";
+}
+
+export function stringForPercentage(profit: number): string {
+  if (isNaN(profit)) {
+    return "";
+  }
+
+  return `${(profit * 100).toFixed(1)}%`;
+}
+
 const InvestmentTable: React.FC<InvestmentTableProps> = ({
   account,
   accountingEntries,
@@ -20,8 +36,8 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
 }) => {
   const headers = [
     "Date",
-    `${account.name} Invested`,
-    `${account.name} Value`,
+    `Initial investment`,
+    `Investment Value`,
     "Profit",
     "%",
   ];
@@ -36,6 +52,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
 
     const value = entry?.value ?? 0;
     const invested = entry?.invested ?? 0;
+    const profits = value - invested;
 
     return [
       {
@@ -54,10 +71,12 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
         },
       },
       {
-        value: value - invested,
+        value: profits,
+        color: colorForValue(profits),
       },
       {
-        value: `${(((value - invested) / value) * 100).toFixed(1)}%`,
+        value: stringForPercentage(profits / value),
+        color: colorForValue(profits),
       },
     ];
   }

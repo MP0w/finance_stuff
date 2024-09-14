@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { useUserState } from "../UserState";
-import { TableRowCell } from "./Table";
 import SettingsIcon from "./SettingsIcon";
 import { useGetAccounts, useCreateAccount } from "./accountsAPIs";
 import {
@@ -9,15 +8,11 @@ import {
   useCreateAccountingEntry,
 } from "./accountingEntriesAPIs";
 import { useCreateEntry, useUpdateEntry } from "./entriesAPIs";
-import {
-  AccountingEntriesDTO,
-  Accounts,
-  AccountType,
-} from "../../../backend/types";
+import { AccountType } from "../../../backend/types";
 import AccountsTable from "./AccountsTable";
 import InvestmentTable from "./InvestmentTable";
 import TotalTable from "./TotalTable";
-import { validateHeaderName } from "http";
+import TabView from "./TabView";
 
 interface HomePageProps {
   signOut: () => void;
@@ -28,6 +23,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
   const [newAccountType, setNewAccountType] = useState<AccountType>("fiat");
+  const [activeTab, setActiveTab] = useState("fiat");
 
   const {
     data: accounts,
@@ -67,7 +63,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         fetchAccounts();
         setNewAccountName("");
         setNewAccountType("fiat");
-        toast.success("Account created successfully");
+        toast.success("Account created", { position: "bottom-right" });
       } catch (error) {
         console.error("Error creating account:", error);
         toast.error("Failed to create account. Please try again.", {
@@ -81,7 +77,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     try {
       await createAccountingEntry(new Date());
       fetchAccountingEntries();
-      toast.success("Accounting entry created successfully");
+      toast.success("new entry created", { position: "bottom-right" });
     } catch (error) {
       console.error("Error creating accounting entry:", error);
       toast.error("Failed to create accounting entry. Please try again.", {
@@ -139,6 +135,41 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     },
     [accountingEntries, updateEntry, createEntry, fetchAccountingEntries]
   );
+
+  const tabContent = {
+    fiat: (
+      <AccountsTable
+        accounts={fiatAccounts}
+        accountingEntries={accountingEntries ?? []}
+        handleCellChange={handleCellChange}
+      />
+    ),
+    investments: (
+      <>
+        {investmentAccounts.map((account) => (
+          <InvestmentTable
+            key={account.id}
+            account={account}
+            accountingEntries={accountingEntries ?? []}
+            handleCellChange={handleCellChange}
+          />
+        ))}
+        <TotalTable
+          title="Investments Total"
+          fiatAccounts={[]}
+          investmentAccounts={investmentAccounts}
+          accountingEntries={accountingEntries ?? []}
+        />
+      </>
+    ),
+    summary: (
+      <TotalTable
+        fiatAccounts={fiatAccounts}
+        investmentAccounts={investmentAccounts}
+        accountingEntries={accountingEntries ?? []}
+      />
+    ),
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -206,24 +237,19 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             Add Accounting Entry
           </button>
         </div>
-        <AccountsTable
-          accounts={fiatAccounts}
-          accountingEntries={accountingEntries ?? []}
-          handleCellChange={handleCellChange}
-        />
-        {investmentAccounts.map((account) => (
-          <InvestmentTable
-            key={account.id}
-            account={account}
-            accountingEntries={accountingEntries ?? []}
-            handleCellChange={handleCellChange}
-          />
-        ))}
-        <TotalTable
-          fiatAccounts={fiatAccounts}
-          investmentAccounts={investmentAccounts}
-          accountingEntries={accountingEntries ?? []}
-        />
+        <TabView
+          tabs={[
+            { id: "fiat", label: "Fiat Accounts" },
+            { id: "investments", label: "Investments" },
+            { id: "summary", label: "Summary" },
+            { id: "graphs", label: "Graphs" },
+            { id: "projections", label: "Projections" },
+          ]}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        >
+          {tabContent[activeTab as keyof typeof tabContent]}
+        </TabView>
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => (
 );
 
 export interface TableRowCell {
+  color?: string;
   value: string | number;
   onValueChange?: (value: number) => Promise<void>;
 }
@@ -84,7 +85,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
         <td
           key={index}
           className={`px-4 py-2 text-gray-800 ${
-            !value.onValueChange ? "bg-gray-100" : ""
+            !value.onValueChange ? value.color ?? `bg-gray-100` : ""
           }`}
         >
           {!value.onValueChange ? (
