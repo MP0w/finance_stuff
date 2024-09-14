@@ -135,7 +135,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           invested ? cellValue : undefined
         );
       }
-      fetchAccountingEntries();
+      await fetchAccountingEntries();
     },
     [accountingEntries, updateEntry, createEntry, fetchAccountingEntries]
   );

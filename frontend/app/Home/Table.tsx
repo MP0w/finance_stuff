@@ -27,8 +27,8 @@ interface TableRowProps {
 }
 
 export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
-  const [editingValues, setEditingValues] = useState<string[]>(
-    cells.map((cell) => cell.value.toString())
+  const [editingValues, setEditingValues] = useState<(string | undefined)[]>(
+    cells.map(() => undefined)
   );
 
   const handleInputChange = useCallback((index: number, value: string) => {
@@ -45,6 +45,12 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
       if (onValueChange) {
         try {
           await onValueChange(parseFloat(value));
+
+          setEditingValues((prev) => {
+            const newValues = [...prev];
+            newValues[index] = undefined;
+            return newValues;
+          });
         } catch (error) {
           console.error("Error updating value:", error);
           // Revert the value to the original
@@ -86,7 +92,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
           ) : (
             <input
               type="text"
-              value={editingValues[index]}
+              value={editingValues[index] ?? value.value}
               onChange={(e) => handleInputChange(index, e.target.value)}
               onBlur={(e) => handleInputBlur(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
