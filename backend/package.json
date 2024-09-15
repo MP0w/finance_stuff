@@ -4,7 +4,8 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "compile": "tsc",
+    "build": "tsc",
+    "start": "node dist/index.js",
     "dev": "tsc && npx nodemon -x ts-node -e ts .",
     "knex": "NODE_ENV=development NODE_OPTIONS='--import tsx/esm' knex",
     "migrate": "yarn knex migrate:latest",

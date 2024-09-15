@@ -1,5 +1,5 @@
 import React from "react";
-import Table, { TableHeader, TableRow, TableRowCell } from "./Table";
+import Table, { TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 import { colorForValue, stringForPercentage } from "./InvestmentTable";
 

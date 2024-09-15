@@ -1,0 +1,14 @@
+{
+  "name": "simplefi",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "cd backend && yarn install && yarn build && cd ../frontend && yarn install && yarn build",
+    "start": "concurrently \"cd backend && yarn start\" \"cd frontend && yarn start\"",
+    "dev": "concurrently \"cd backend && yarn dev\" \"cd frontend && yarn dev\""
+  },
+  "dependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
