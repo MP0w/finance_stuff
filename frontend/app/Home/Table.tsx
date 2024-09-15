@@ -69,7 +69,11 @@ const Table: React.FC<TableProps> = ({
                   <div className="ml-4 mt-2 mb-2">
                     {!showDatePicker && (
                       <AddButton
-                        title="Add entry"
+                        title={
+                          rows.length === 0
+                            ? "Add your first entry. You can also add some for past months and later on new ones each month/week/etc..."
+                            : "Add entry"
+                        }
                         onClick={() => setShowDatePicker(!showDatePicker)}
                       />
                     )}
@@ -84,7 +88,7 @@ const Table: React.FC<TableProps> = ({
                               }
                             }}
                             inline
-                            dayClassName={(date) => "pixel-corners-small"}
+                            dayClassName={() => "pixel-corners-small"}
                           />
                           <div className="mt-4 flex justify-center">
                             <button

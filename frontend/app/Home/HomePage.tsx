@@ -19,6 +19,8 @@ import TotalTable from "./TotalTable";
 import TabView from "./TabView";
 import AddButton from "../components/AddButton";
 import Modal from "react-modal";
+import { ArcherContainer } from "react-archer";
+import OnboardingTips from "./OnboardingTips";
 
 interface HomePageProps {
   signOut: () => void;
@@ -240,13 +242,14 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           title="Add account"
           onClick={() => setExpandedAddAccount(!expandedAddAccount)}
         />
+
         {expandedAddAccount && (
           <div className="mt-4 mb-4 flex">
             <input
               type="text"
               value={newAccountName}
               onChange={(e) => setNewAccountName(e.target.value)}
-              placeholder="Account name"
+              placeholder="Cash, Bank, etc."
               className="border rounded px-2 py-1 mr-2"
             />
             <button
@@ -257,6 +260,14 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               Create
             </button>
           </div>
+        )}
+
+        {fiatAccounts.length === 0 && (
+          <OnboardingTips
+            fiatAccounts={fiatAccounts}
+            investmentAccounts={investmentAccounts}
+            expandedAddAccount={expandedAddAccount}
+          />
         )}
         <AccountsTable
           accounts={fiatAccounts}
@@ -280,7 +291,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               type="text"
               value={newAccountName}
               onChange={(e) => setNewAccountName(e.target.value)}
-              placeholder="Account name"
+              placeholder="Crypto, Stocks, Bonds, etc."
               className="border rounded px-2 py-1 mr-2"
             />
             <button
@@ -291,6 +302,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               Add
             </button>
           </div>
+        )}
+        {investmentAccounts.length === 0 && (
+          <OnboardingTips
+            fiatAccounts={fiatAccounts}
+            investmentAccounts={investmentAccounts}
+            expandedAddAccount={expandedAddAccount}
+          />
         )}
         {investmentAccounts.map((account) => (
           <InvestmentTable
@@ -325,38 +343,65 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           onDeleteAccountingEntry={handleDeleteAccountingEntry}
         />
       ) : (
-        <div>Add some accounts to see the summary</div>
+        <div>Add yours accounts and entries to see the summary</div>
       ),
     projections: <div>Coming soon</div>,
     graphs: <div>Coming soon</div>,
+    coming: (
+      <div>
+        New entry unified UI
+        <br />
+        better onboarding?
+        <br />
+        Sign in with apple?
+        <br />
+        Graphs
+        <br />
+        Projections
+        <br />
+        AI insights
+        <br />
+        monthly reminder (+ add to cal)
+        <br />
+        more insights
+        <br />
+        better support for investments w/ debt
+        <br />
+        more...?
+        <br />
+      </div>
+    ),
   };
 
   return (
     <div className="min-h-screen bg-gray-50 pl-8 pr-8 pt-4 pb-8">
       <div className="mx-auto">
-        <TabView
-          email={email}
-          signOut={signOut}
-          tabs={[
-            { id: "fiat", label: "Bank Accounts" },
-            { id: "investments", label: "Investments" },
-            { id: "summary", label: "Summary" },
-            { id: "graphs", label: "Graphs" },
-            { id: "projections", label: "Projections" },
-          ]}
-          activeTab={activeTab}
-          setActiveTab={(tabId) => {
-            setActiveTab(tabId);
-            setNewAccountName("");
-            setExpandedAddAccount(false);
-          }}
-        >
-          {(accountsLoading || (entriesLoading && !accountingEntries)) && (
-            <p>Loading...</p>
-          )}
-          {(accountsError || entriesError) && <p>Error loading data</p>}
-          {tabContent[activeTab as keyof typeof tabContent]}
-        </TabView>
+        <ArcherContainer strokeColor="gray">
+          <TabView
+            email={email}
+            signOut={signOut}
+            tabs={[
+              { id: "fiat", label: "Bank Accounts" },
+              { id: "investments", label: "Investments" },
+              { id: "summary", label: "Summary" },
+              { id: "graphs", label: "Graphs" },
+              { id: "projections", label: "Projections" },
+              { id: "coming", label: "Upcoming Features" },
+            ]}
+            activeTab={activeTab}
+            setActiveTab={(tabId) => {
+              setActiveTab(tabId);
+              setNewAccountName("");
+              setExpandedAddAccount(false);
+            }}
+          >
+            {(accountsLoading || (entriesLoading && !accountingEntries)) && (
+              <p>Loading...</p>
+            )}
+            {(accountsError || entriesError) && <p>Error loading data</p>}
+            {tabContent[activeTab as keyof typeof tabContent]}
+          </TabView>
+        </ArcherContainer>
         <Modal
           isOpen={isDeleteModalOpen}
           onRequestClose={() => setIsDeleteModalOpen(false)}

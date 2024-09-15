@@ -12,7 +12,9 @@ const AddButton: React.FC<AddButtonProps> = ({ title, onClick }) => {
         <span className="text-lg">+</span>
       </div>
       {title && (
-        <span className="text-gray-600 rounded text-sl ml-2">{title}</span>
+        <span className="text-gray-600 rounded text-sl ml-2 text-left">
+          {title}
+        </span>
       )}
     </button>
   );

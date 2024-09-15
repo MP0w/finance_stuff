@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SettingsIcon from "../components/SettingsIcon";
+import { ArcherElement } from "react-archer";
 
 interface Tab {
   id: string;
@@ -39,7 +40,9 @@ const TabView: React.FC<TabViewProps> = ({
               }`}
               onClick={() => setActiveTab(tab.id)}
             >
-              {tab.label}
+              <ArcherElement id={tab.id}>
+                <div>{tab.label}</div>
+              </ArcherElement>
             </button>
           ))}
         </div>{" "}
