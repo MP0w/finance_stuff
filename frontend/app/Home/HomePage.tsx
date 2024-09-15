@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { useUserState } from "../UserState";
-import SettingsIcon from "../components/SettingsIcon";
 import {
   useGetAccounts,
   useCreateAccount,
@@ -26,7 +25,6 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { userId, email } = useUserState();
-  const [showSettings, setShowSettings] = useState(false);
   const [expandedAddAccount, setExpandedAddAccount] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
   const [activeTab, setActiveTab] = useState("fiat");
@@ -276,43 +274,16 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         onAddEntry={handleCreateAccountingEntry}
       />
     ),
+    projections: <div>Coming soon</div>,
+    graphs: <div>Coming soon</div>,
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 pl-8 pr-8 pt-4 pb-8">
       <div className="mx-auto">
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-semibold text-gray-600">SimpleFi</h1>
-          <div
-            className="relative"
-            onMouseEnter={() => setShowSettings(true)}
-            onClick={() => setShowSettings(!showSettings)}
-          >
-            <button className="px-3 py-2 text-gray-600 hover:text-gray-600 transition duration-200">
-              <SettingsIcon />
-            </button>
-            {showSettings && (
-              <div
-                className="absolute right-0  mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
-                onMouseLeave={() => setShowSettings(false)}
-                onClick={() => setShowSettings(false)}
-              >
-                <p className="px-4 py-2 text-sm text-gray-700">{email}</p>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
-                  onClick={signOut}
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-        </header>
-        {(accountsLoading || (entriesLoading && !accountingEntries)) && (
-          <p>Loading...</p>
-        )}
-        {(accountsError || entriesError) && <p>Error loading data</p>}
         <TabView
+          email={email}
+          signOut={signOut}
           tabs={[
             { id: "fiat", label: "Fiat Accounts" },
             { id: "investments", label: "Investments" },
@@ -327,6 +298,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             setExpandedAddAccount(false);
           }}
         >
+          {(accountsLoading || (entriesLoading && !accountingEntries)) && (
+            <p>Loading...</p>
+          )}
+          {(accountsError || entriesError) && <p>Error loading data</p>}
           {tabContent[activeTab as keyof typeof tabContent]}
         </TabView>
         <Modal
