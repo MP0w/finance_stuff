@@ -17,7 +17,7 @@ export function accountingEntriesRouter(app: Application) {
       )
         .select()
         .where({ user_id: req.userId })
-        .orderBy("date", "desc")
+        .orderBy("date", "asc")
         .limit(1000);
 
       const allEntries = await dbConnection<Entries>(Table.Entries)

@@ -13,6 +13,7 @@ interface TableProps {
 const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isHovering, setIsHovering] = useState(false);
 
   const handleAddEntry = () => {
     if (onAddEntry) {
@@ -22,7 +23,13 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
   };
 
   return (
-    <div>
+    <div
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => {
+        setIsHovering(false);
+        setShowDatePicker(false);
+      }}
+    >
       {title && (
         <h2 className="text-lg text-gray-600 font-semibold mb-2 mt-4">
           {title}
@@ -35,54 +42,58 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
             {rows.map((row, index) => (
               <TableRow key={index} cells={row} />
             ))}
+            {isHovering && (
+              <tr className="bg-gray-100 border-t border-gray-300">
+                <td colSpan={headers.length}>
+                  <div className="ml-4 mt-2 mb-2">
+                    {!showDatePicker && (
+                      <button
+                        className="flex items-center"
+                        onClick={() => setShowDatePicker(true)}
+                      >
+                        <div className="bg-gray-300 text-gray-600 rounded-lg w-6 h-6 flex items-center justify-center">
+                          <span className="text-lg">+</span>
+                        </div>
+                        <span className="text-gray-600 px-2 py-1 rounded text-sl ml-2">
+                          Add entry
+                        </span>
+                      </button>
+                    )}
+                    {showDatePicker && (
+                      <div className="mt-4 mb-4 flex">
+                        <div className="flex flex-col items-center">
+                          <DatePicker
+                            selected={selectedDate}
+                            onChange={(date: Date) => setSelectedDate(date)}
+                            inline
+                            utcOffset={0}
+                          />
+                          <div className="mt-4 flex justify-center">
+                            <button
+                              className="bg-gray-300 text-gray-600 px-4 py-2 rounded"
+                              onClick={() => setShowDatePicker(false)}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              className="bg-blue-500 text-white px-4 py-2 rounded ml-4"
+                              onClick={() => {
+                                setShowDatePicker(false);
+                                handleAddEntry();
+                              }}
+                            >
+                              Add Entry
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
-      </div>
-      <div>
-        <div className="flex items-center mt-2 relative group">
-          <button
-            className="bg-gray-500 text-white rounded-lg w-6 h-6 flex items-center justify-center"
-            onClick={() => setShowDatePicker(!showDatePicker)}
-          >
-            <span className="text-xl">+</span>
-          </button>
-          <span
-            className={`text-gray-500 px-2 py-1 rounded text-sl ml-0 absolute left-8 transition-opacity duration-200 ${
-              showDatePicker
-                ? "opacity-100"
-                : "opacity-0 group-hover:opacity-100"
-            }`}
-          >
-            Add accounting entry
-          </span>
-        </div>
-        {showDatePicker && (
-          <div className="mt-4">
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date: Date) => setSelectedDate(date)}
-              inline
-              utcOffset={0}
-            />
-            <div className="mt-4">
-              <button
-                className="bg-gray-300 text-gray-600 px-4 py-2 rounded mr-2"
-                onClick={() => setShowDatePicker(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={() => {
-                  setShowDatePicker(false);
-                  handleAddEntry();
-                }}
-              >
-                Add Entry
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

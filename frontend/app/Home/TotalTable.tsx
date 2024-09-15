@@ -90,8 +90,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
   });
 
   const summaryCells: SummaryCell[] = summaries.map((summary, index) => {
-    const previous =
-      index < summaries.length - 1 ? summaries.at(index + 1) : undefined;
+    const previous = index > 0 ? summaries.at(index - 1) : undefined;
     const change = previous ? summary.total - previous.total : undefined;
     let savings = undefined;
 
