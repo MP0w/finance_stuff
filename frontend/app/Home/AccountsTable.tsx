@@ -70,11 +70,13 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
   }
 
   return (
-    <Table
-      headers={headers}
-      rows={accountingEntries.map((entry) => getCells(entry, accounts))}
-      onAddEntry={onAddEntry}
-    />
+    accounts.length > 0 && (
+      <Table
+        headers={headers}
+        rows={accountingEntries.map((entry) => getCells(entry, accounts))}
+        onAddEntry={onAddEntry}
+      />
+    )
   );
 };
 

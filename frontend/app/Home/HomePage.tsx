@@ -303,25 +303,30 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             onDeleteAccountingEntry={handleDeleteAccountingEntry}
           />
         ))}
+        {investmentAccounts.length > 0 && (
+          <TotalTable
+            title="Investments Total"
+            fiatAccounts={[]}
+            investmentAccounts={investmentAccounts}
+            accountingEntries={accountingEntries ?? []}
+            onAddEntry={handleCreateAccountingEntry}
+            onDeleteAccountingEntry={handleDeleteAccountingEntry}
+          />
+        )}
+      </>
+    ),
+    summary:
+      fiatAccounts.length > 0 || investmentAccounts.length > 0 ? (
         <TotalTable
-          title="Investments Total"
-          fiatAccounts={[]}
+          fiatAccounts={fiatAccounts}
           investmentAccounts={investmentAccounts}
           accountingEntries={accountingEntries ?? []}
           onAddEntry={handleCreateAccountingEntry}
           onDeleteAccountingEntry={handleDeleteAccountingEntry}
         />
-      </>
-    ),
-    summary: (
-      <TotalTable
-        fiatAccounts={fiatAccounts}
-        investmentAccounts={investmentAccounts}
-        accountingEntries={accountingEntries ?? []}
-        onAddEntry={handleCreateAccountingEntry}
-        onDeleteAccountingEntry={handleDeleteAccountingEntry}
-      />
-    ),
+      ) : (
+        <div>Add some accounts to see the summary</div>
+      ),
     projections: <div>Coming soon</div>,
     graphs: <div>Coming soon</div>,
   };
@@ -333,7 +338,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           email={email}
           signOut={signOut}
           tabs={[
-            { id: "fiat", label: "Fiat Accounts" },
+            { id: "fiat", label: "Bank Accounts" },
             { id: "investments", label: "Investments" },
             { id: "summary", label: "Summary" },
             { id: "graphs", label: "Graphs" },
