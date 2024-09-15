@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: "SimpleFI",
+  title: "finance_stuff",
   description: "Financial accounting made simple for the average person.",
   keywords: [
     "accounting",
@@ -16,7 +16,9 @@ export const metadata: Metadata = {
     "budget",
     "accounting software",
     "personal accounting",
+    "finance_stuff",
     "simplefi",
+    "finance stuff",
     "finance spreadsheet",
   ],
 };

@@ -32,7 +32,7 @@ const TabView: React.FC<TabViewProps> = ({
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`py-2 px-4 font-medium text-md focus:outline-none ${
+              className={`py-4 px-4 font-medium text-md focus:outline-none ${
                 activeTab === tab.id
                   ? "border-b border-gray-800 text-gray-800"
                   : "text-gray-500 hover:text-gray-800"
@@ -43,13 +43,13 @@ const TabView: React.FC<TabViewProps> = ({
             </button>
           ))}
         </div>{" "}
-        <h1 className="text-lg py-1 font-semibold text-gray-600">SimpleFi</h1>
+        <h1 className="py-1 text-gray-600">finance_stuff</h1>
         <div
           className="relative"
           onMouseEnter={() => setShowSettings(true)}
           onClick={() => setShowSettings(!showSettings)}
         >
-          <button className="py-2 ml-4 text-gray-600 hover:text-gray-600 transition duration-200">
+          <button className="py-4 ml-4 text-gray-600 hover:text-gray-600 transition duration-200">
             <SettingsIcon />
           </button>
           {showSettings && (

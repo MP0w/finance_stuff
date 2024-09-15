@@ -22,7 +22,7 @@ export function router(app: Application) {
   app.use(cors());
 
   app.get("/", (_, res) => {
-    res.send("simplefi");
+    res.send("finance_stuff");
   });
 
   app.use(

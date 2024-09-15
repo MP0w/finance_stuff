@@ -27,9 +27,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ signIn, signOut }) => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-semibold text-center text-gray-600 mb-6">
-          SimpleFi
-        </h1>
+        <h1 className="text-center mb-6 text-gray-600">finance_stuff</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
