@@ -9,6 +9,7 @@ interface TotalTableProps {
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
   onAddEntry: (date: Date) => void;
+  onDeleteAccountingEntry: (entryId: string) => void;
 }
 
 type Summary = {
@@ -40,6 +41,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
   investmentAccounts,
   accountingEntries,
   onAddEntry,
+  onDeleteAccountingEntry,
 }) => {
   const headers = [
     "Date",
@@ -112,6 +114,9 @@ const TotalTable: React.FC<TotalTableProps> = ({
     const cells: (TableRowCell | undefined)[] = [
       {
         value: summary.date,
+        onDelete: () => {
+          onDeleteAccountingEntry(summary.id);
+        },
       },
       fiatAccounts.length
         ? {

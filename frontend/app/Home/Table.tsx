@@ -161,6 +161,7 @@ export interface TableRowCell {
   color?: string;
   value: string | number;
   onValueChange?: (value: number) => Promise<void>;
+  onDelete?: () => void;
 }
 
 interface TableRowProps {
@@ -226,6 +227,8 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
     return value;
   };
 
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
     <tr className="border-t border-gray-300">
       {cells.map((value, index) => (
@@ -234,22 +237,36 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
           className={`px-4 py-2 text-gray-600 ${
             !value.onValueChange ? value.color ?? `bg-gray-100` : ""
           }`}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
-          {!value.onValueChange ? (
-            <span>{formattedValue(value.value)}</span>
-          ) : (
-            <span className="flex items-center">
-              <span className="mr-1">$</span>
-              <input
-                type="text"
-                value={editingValues[index] ?? value.value}
-                onChange={(e) => handleInputChange(index, e.target.value)}
-                onBlur={(e) => handleInputBlur(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e)}
-                className="w-full bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-              />
-            </span>
-          )}
+          <div className="flex items-center">
+            {!value.onValueChange ? (
+              <span>{formattedValue(value.value)}</span>
+            ) : (
+              <span className="flex items-center">
+                <span className="mr-1">$</span>
+                <input
+                  type="text"
+                  value={editingValues[index] ?? value.value}
+                  onChange={(e) => handleInputChange(index, e.target.value)}
+                  onBlur={(e) => handleInputBlur(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e)}
+                  className="w-full bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                />
+              </span>
+            )}
+            <div className="w-6 flex-shrink-0">
+              {value.onDelete && (
+                <DeleteIcon
+                  className={`ml-2 transition-opacity duration-200 ${
+                    isHovering ? "opacity-100" : "opacity-0"
+                  }`}
+                  onClick={value.onDelete}
+                />
+              )}
+            </div>
+          </div>
         </td>
       ))}
     </tr>

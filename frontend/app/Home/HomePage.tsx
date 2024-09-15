@@ -9,6 +9,7 @@ import {
 import {
   useGetAccountingEntries,
   useCreateAccountingEntry,
+  useDeleteAccountingEntry,
 } from "./accountingEntriesAPIs";
 import { useCreateEntry, useUpdateEntry } from "./entriesAPIs";
 import { AccountType } from "../../../backend/types";
@@ -33,6 +34,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     id: string;
     name: string;
   } | null>(null);
+  const [isDeleteEntryModalOpen, setIsDeleteEntryModalOpen] = useState(false);
+  const [accountingEntryToDelete, setAccountingEntryToDelete] = useState<
+    string | null
+  >(null);
 
   const {
     data: accounts,
@@ -51,6 +56,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { execute: createEntry } = useCreateEntry();
   const { execute: updateEntry } = useUpdateEntry();
   const { execute: deleteAccount } = useDeleteAccount();
+  const { execute: deleteAccountingEntry } = useDeleteAccountingEntry();
 
   const fiatAccounts =
     accounts?.filter((account) => account.type === "fiat") ?? [];
@@ -170,6 +176,25 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     [accounts]
   );
 
+  const handleDeleteAccountingEntry = useCallback(
+    async (accountingEntryId: string) => {
+      const accountingEntry = accountingEntries?.find(
+        (ae) => ae.id === accountingEntryId
+      );
+
+      if (!accountingEntry) {
+        toast.error("Entry not found. Retry", {
+          position: "bottom-right",
+        });
+        return;
+      }
+
+      setAccountingEntryToDelete(accountingEntryId);
+      setIsDeleteEntryModalOpen(true);
+    },
+    [accountingEntries]
+  );
+
   const confirmDeleteAccount = async () => {
     if (accountToDelete) {
       try {
@@ -187,6 +212,25 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     }
     setIsDeleteModalOpen(false);
     setAccountToDelete(null);
+  };
+
+  const confirmDeleteAccountingEntry = async () => {
+    if (accountingEntryToDelete) {
+      try {
+        await deleteAccountingEntry(accountingEntryToDelete);
+        fetchAccountingEntries();
+        toast.success("Entry deleted successfully", {
+          position: "bottom-right",
+        });
+      } catch (error) {
+        console.error("Error deleting accountingentry:", error);
+        toast.error("Failed to delete entry. Please try again.", {
+          position: "bottom-right",
+        });
+      }
+    }
+    setIsDeleteEntryModalOpen(false);
+    setAccountingEntryToDelete(null);
   };
 
   const tabContent = {
@@ -220,6 +264,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           handleCellChange={handleCellChange}
           onAddEntry={handleCreateAccountingEntry}
           onDeleteAccount={handleDeleteAccount}
+          onDeleteAccountingEntry={handleDeleteAccountingEntry}
         />
       </div>
     ),
@@ -255,6 +300,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             handleCellChange={handleCellChange}
             onAddEntry={handleCreateAccountingEntry}
             onDeleteAccount={handleDeleteAccount}
+            onDeleteAccountingEntry={handleDeleteAccountingEntry}
           />
         ))}
         <TotalTable
@@ -263,6 +309,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           investmentAccounts={investmentAccounts}
           accountingEntries={accountingEntries ?? []}
           onAddEntry={handleCreateAccountingEntry}
+          onDeleteAccountingEntry={handleDeleteAccountingEntry}
         />
       </>
     ),
@@ -272,6 +319,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         investmentAccounts={investmentAccounts}
         accountingEntries={accountingEntries ?? []}
         onAddEntry={handleCreateAccountingEntry}
+        onDeleteAccountingEntry={handleDeleteAccountingEntry}
       />
     ),
     projections: <div>Coming soon</div>,
@@ -326,6 +374,33 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             </button>
             <button
               onClick={confirmDeleteAccount}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
+          </div>
+        </Modal>
+        <Modal
+          isOpen={isDeleteEntryModalOpen}
+          onRequestClose={() => setIsDeleteEntryModalOpen(false)}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <h2 className="text-xl font-semibold mb-4">Confirm Entry Deletion</h2>
+          <p className="mb-6">
+            Are you sure you want to delete the entry? <br />
+            This action cannot be undone and all the values for that date on
+            each account will be removed.
+          </p>
+          <div className="flex justify-end">
+            <button
+              onClick={() => setIsDeleteEntryModalOpen(false)}
+              className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={confirmDeleteAccountingEntry}
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
             >
               Delete

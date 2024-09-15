@@ -13,6 +13,7 @@ interface InvestmentTableProps {
   ) => Promise<void>;
   onAddEntry: (date: Date) => void;
   onDeleteAccount: (accountId: string) => void;
+  onDeleteAccountingEntry: (entryId: string) => void;
 }
 
 export function colorForValue(value: number | undefined): string | undefined {
@@ -37,6 +38,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
   handleCellChange,
   onAddEntry,
   onDeleteAccount,
+  onDeleteAccountingEntry,
 }) => {
   const headers = [
     "Date",
@@ -61,6 +63,9 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
     return [
       {
         value: new Date(accountingEntry.date).toLocaleDateString(),
+        onDelete: () => {
+          onDeleteAccountingEntry(accountingEntry.id);
+        },
       },
       {
         value: invested,

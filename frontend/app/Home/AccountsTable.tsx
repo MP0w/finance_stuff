@@ -13,6 +13,7 @@ interface AccountsTableProps {
   ) => Promise<void>;
   onAddEntry: (date: Date) => void;
   onDeleteAccount: (accountId: string) => void;
+  onDeleteAccountingEntry: (entryId: string) => void;
 }
 
 const AccountsTable: React.FC<AccountsTableProps> = ({
@@ -21,6 +22,7 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
   handleCellChange,
   onAddEntry,
   onDeleteAccount,
+  onDeleteAccountingEntry,
 }) => {
   const headers: TableHeaderContent[] = [
     "Date",
@@ -56,6 +58,9 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
     return [
       {
         value: new Date(entry.date).toLocaleDateString(),
+        onDelete: () => {
+          onDeleteAccountingEntry(entry.id);
+        },
       },
       ...entries,
       {
