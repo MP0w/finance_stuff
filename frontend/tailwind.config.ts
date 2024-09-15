@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         tiny5: ["Tiny5", "sans-serif"],
+        sans: ["Courier New", "monospace"], // Add this line
       },
       colors: {
         background: "var(--background)",

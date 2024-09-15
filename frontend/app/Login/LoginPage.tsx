@@ -47,7 +47,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ signIn, signOut }) => {
           />
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-md transition duration-200"
+            className="w-full py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white font-semibold pixel-corners-small transition duration-200"
           >
             Sign In
           </button>

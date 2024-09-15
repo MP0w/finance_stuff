@@ -251,7 +251,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             />
             <button
               onClick={() => handleCreateAccount("fiat")}
-              className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={newAccountName.length === 0}
             >
               Create
@@ -285,7 +285,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             />
             <button
               onClick={() => handleCreateAccount("investment")}
-              className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={newAccountName.length === 0}
             >
               Add
@@ -368,13 +368,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           <div className="flex justify-end">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-400"
+              className="bg-gray-300 text-gray-800 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
             >
               Cancel
             </button>
             <button
               onClick={confirmDeleteAccount}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="bg-red-500 text-white px-4 py-2 pixel-corners-small hover:bg-red-600"
             >
               Delete
             </button>
@@ -395,13 +395,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           <div className="flex justify-end">
             <button
               onClick={() => setIsDeleteEntryModalOpen(false)}
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-400"
+              className="bg-gray-300 text-gray-800 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
             >
               Cancel
             </button>
             <button
               onClick={confirmDeleteAccountingEntry}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="bg-red-500 text-white px-4 py-2 pixel-corners-small hover:bg-red-600"
             >
               Delete
             </button>

@@ -84,16 +84,17 @@ const Table: React.FC<TableProps> = ({
                               }
                             }}
                             inline
+                            dayClassName={(date) => "pixel-corners-small"}
                           />
                           <div className="mt-4 flex justify-center">
                             <button
-                              className="bg-gray-300 text-gray-600 px-4 py-2 rounded"
+                              className="bg-gray-300 text-gray-600 px-4 py-2 pixel-corners-small"
                               onClick={() => setShowDatePicker(false)}
                             >
                               Cancel
                             </button>
                             <button
-                              className="bg-blue-500 text-white px-4 py-2 rounded ml-4"
+                              className="bg-blue-500 text-white px-4 py-2 pixel-corners-small ml-4"
                               onClick={() => {
                                 setShowDatePicker(false);
                                 handleAddEntry();
