@@ -367,7 +367,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         <br />
         better support for investments w/ debt
         <br />
-        more...?
+        more...? send ideas to support@stuff.finance
         <br />
       </div>
     ),

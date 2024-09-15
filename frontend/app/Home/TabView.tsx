@@ -63,6 +63,14 @@ const TabView: React.FC<TabViewProps> = ({
             >
               <p className="px-4 py-2 text-sm text-gray-700">{email}</p>
               <button
+                className="block w-full text-left px-4 py-2 text-sm text-blue-700 hover:bg-gray-100"
+                onClick={() => {
+                  window.location.href = "mailto:support@stuff.finance";
+                }}
+              >
+                Send Feedback
+              </button>
+              <button
                 className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
                 onClick={signOut}
               >
