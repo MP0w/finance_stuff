@@ -13,7 +13,7 @@ export function usersRouter(app: Application) {
           id: getUuidByString(req.user.uid),
           firebase_uid: req.user.uid,
           email: req.user.email,
-          photo: req.user.picture,
+          photo: null,
           updated_at: new Date(),
         })
         .onConflict("id")
