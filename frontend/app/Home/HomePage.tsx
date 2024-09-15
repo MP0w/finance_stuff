@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { useUserState } from "../UserState";
-import SettingsIcon from "./SettingsIcon";
+import SettingsIcon from "../components/SettingsIcon";
 import { useGetAccounts, useCreateAccount } from "./accountsAPIs";
 import {
   useGetAccountingEntries,
@@ -13,6 +13,7 @@ import AccountsTable from "./AccountsTable";
 import InvestmentTable from "./InvestmentTable";
 import TotalTable from "./TotalTable";
 import TabView from "./TabView";
+import AddButton from "../components/AddButton";
 
 interface HomePageProps {
   signOut: () => void;
@@ -21,6 +22,7 @@ interface HomePageProps {
 const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { userId, email } = useUserState();
   const [showSettings, setShowSettings] = useState(false);
+  const [expandedAddAccount, setExpandedAddAccount] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
   const [activeTab, setActiveTab] = useState("fiat");
 
@@ -146,22 +148,28 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const tabContent = {
     fiat: (
       <div>
-        <div className="mb-4 flex">
-          <input
-            type="text"
-            value={newAccountName}
-            onChange={(e) => setNewAccountName(e.target.value)}
-            placeholder="Fiat account name"
-            className="border rounded px-2 py-1 mr-2"
-          />
-          <button
-            onClick={() => handleCreateAccount("fiat")}
-            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={newAccountName.length === 0}
-          >
-            Add Account
-          </button>
-        </div>
+        <AddButton
+          title="Add account"
+          onClick={() => setExpandedAddAccount(!expandedAddAccount)}
+        />
+        {expandedAddAccount && (
+          <div className="mt-4 mb-4 flex">
+            <input
+              type="text"
+              value={newAccountName}
+              onChange={(e) => setNewAccountName(e.target.value)}
+              placeholder="Account name"
+              className="border rounded px-2 py-1 mr-2"
+            />
+            <button
+              onClick={() => handleCreateAccount("fiat")}
+              className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={newAccountName.length === 0}
+            >
+              Create
+            </button>
+          </div>
+        )}
         <AccountsTable
           accounts={fiatAccounts}
           accountingEntries={accountingEntries ?? []}
@@ -172,22 +180,28 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     ),
     investments: (
       <>
-        <div className="mb-4 flex">
-          <input
-            type="text"
-            value={newAccountName}
-            onChange={(e) => setNewAccountName(e.target.value)}
-            placeholder="Investment account name"
-            className="border rounded px-2 py-1 mr-2"
-          />
-          <button
-            onClick={() => handleCreateAccount("investment")}
-            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={newAccountName.length === 0}
-          >
-            Add Account
-          </button>
-        </div>
+        <AddButton
+          title="Add account"
+          onClick={() => setExpandedAddAccount(!expandedAddAccount)}
+        />
+        {expandedAddAccount && (
+          <div className="mb-4 mt-4 flex">
+            <input
+              type="text"
+              value={newAccountName}
+              onChange={(e) => setNewAccountName(e.target.value)}
+              placeholder="Account name"
+              className="border rounded px-2 py-1 mr-2"
+            />
+            <button
+              onClick={() => handleCreateAccount("investment")}
+              className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={newAccountName.length === 0}
+            >
+              Add
+            </button>
+          </div>
+        )}
         {investmentAccounts.map((account) => (
           <InvestmentTable
             key={account.id}
@@ -262,6 +276,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           setActiveTab={(tabId) => {
             setActiveTab(tabId);
             setNewAccountName("");
+            setExpandedAddAccount(false);
           }}
         >
           {tabContent[activeTab as keyof typeof tabContent]}

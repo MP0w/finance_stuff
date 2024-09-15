@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
+import AddButton from "../components/AddButton";
 
 interface TableProps {
   title?: string;
@@ -13,7 +14,7 @@ interface TableProps {
 const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [isHovering, setIsHovering] = useState(false);
+  const [isHovering] = useState(true);
 
   const handleAddEntry = () => {
     if (onAddEntry) {
@@ -24,11 +25,11 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
 
   return (
     <div
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => {
-        setIsHovering(false);
-        setShowDatePicker(false);
-      }}
+    //   onMouseEnter={() => setIsHovering(true)}
+    //   onMouseLeave={() => {
+    //     setIsHovering(false);
+    //     setShowDatePicker(false);
+    //   }}
     >
       {title && (
         <h2 className="text-lg text-gray-600 font-semibold mb-2 mt-4">
@@ -47,26 +48,22 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
                 <td colSpan={headers.length}>
                   <div className="ml-4 mt-2 mb-2">
                     {!showDatePicker && (
-                      <button
-                        className="flex items-center"
-                        onClick={() => setShowDatePicker(true)}
-                      >
-                        <div className="bg-gray-300 text-gray-600 rounded-lg w-6 h-6 flex items-center justify-center">
-                          <span className="text-lg">+</span>
-                        </div>
-                        <span className="text-gray-600 px-2 py-1 rounded text-sl ml-2">
-                          Add entry
-                        </span>
-                      </button>
+                      <AddButton
+                        title="Add entry"
+                        onClick={() => setShowDatePicker(!showDatePicker)}
+                      />
                     )}
                     {showDatePicker && (
                       <div className="mt-4 mb-4 flex">
                         <div className="flex flex-col items-center">
                           <DatePicker
                             selected={selectedDate}
-                            onChange={(date: Date) => setSelectedDate(date)}
+                            onChange={(date) => {
+                              if (date) {
+                                setSelectedDate(date);
+                              }
+                            }}
                             inline
-                            utcOffset={0}
                           />
                           <div className="mt-4 flex justify-center">
                             <button
