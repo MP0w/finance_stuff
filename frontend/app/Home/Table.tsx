@@ -3,18 +3,31 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import AddButton from "../components/AddButton";
+import DeleteIcon from "../components/DeleteIcon";
+
+export type TableHeaderContent =
+  | string
+  | { title: string; onDelete: () => void };
 
 interface TableProps {
   title?: string;
-  headers: string[];
+  headers: TableHeaderContent[];
   rows: TableRowCell[][];
   onAddEntry: (date: Date) => void;
+  onDelete?: () => void;
 }
 
-const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
+const Table: React.FC<TableProps> = ({
+  title,
+  headers,
+  rows,
+  onAddEntry,
+  onDelete,
+}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isHovering] = useState(true);
+  const [isHoveringHeader, setIsHoveringHeader] = useState(false);
 
   const handleAddEntry = () => {
     if (onAddEntry) {
@@ -32,9 +45,16 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
     //   }}
     >
       {title && (
-        <h2 className="text-lg text-gray-600 font-semibold mb-2 mt-4">
-          {title}
-        </h2>
+        <div
+          className="flex items-center"
+          onMouseEnter={() => setIsHoveringHeader(!isHoveringHeader)}
+          onMouseLeave={() => setIsHoveringHeader(false)}
+        >
+          <h2 className="text-lg text-gray-600 font-semibold mt-4">{title}</h2>
+          {onDelete && isHoveringHeader && (
+            <DeleteIcon className="mt-4 ml-2" onClick={onDelete} />
+          )}
+        </div>
       )}
       <div className="overflow-x-auto mt-4 relative shadow-xl rounded-lg border border-gray-200">
         <table className="w-full">
@@ -97,20 +117,45 @@ const Table: React.FC<TableProps> = ({ title, headers, rows, onAddEntry }) => {
 };
 
 interface TableHeaderProps {
-  headers: string[];
+  headers: TableHeaderContent[];
 }
 
-export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => (
-  <thead>
-    <tr className="bg-gray-200">
-      {headers.map((header, index) => (
-        <th key={index} className="px-4 py-2 text-left text-gray-700">
-          {header}
-        </th>
-      ))}
-    </tr>
-  </thead>
-);
+export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
+  const [isHoveringHeader, setIsHoveringHeader] = useState(false);
+  const getHeaderTitle = (header: TableHeaderContent) => {
+    if (typeof header === "string") {
+      return header;
+    }
+    return header.title;
+  };
+
+  const getOnDelete = (header: TableHeaderContent) => {
+    if (typeof header === "string") {
+      return undefined;
+    }
+    return header.onDelete;
+  };
+
+  return (
+    <thead
+      onMouseEnter={() => setIsHoveringHeader(!isHoveringHeader)}
+      onMouseLeave={() => setIsHoveringHeader(false)}
+    >
+      <tr className="bg-gray-200">
+        {headers.map((header, index) => (
+          <th key={index} className="px-4 py-2 text-left text-gray-700">
+            <div className="flex items-center">
+              {getHeaderTitle(header)}
+              {isHoveringHeader && getOnDelete(header) && (
+                <DeleteIcon className="ml-2" onClick={getOnDelete(header)} />
+              )}
+            </div>
+          </th>
+        ))}
+      </tr>
+    </thead>
+  );
+};
 
 export interface TableRowCell {
   color?: string;

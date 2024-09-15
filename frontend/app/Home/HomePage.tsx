@@ -2,7 +2,11 @@ import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { useUserState } from "../UserState";
 import SettingsIcon from "../components/SettingsIcon";
-import { useGetAccounts, useCreateAccount } from "./accountsAPIs";
+import {
+  useGetAccounts,
+  useCreateAccount,
+  useDeleteAccount,
+} from "./accountsAPIs";
 import {
   useGetAccountingEntries,
   useCreateAccountingEntry,
@@ -14,6 +18,7 @@ import InvestmentTable from "./InvestmentTable";
 import TotalTable from "./TotalTable";
 import TabView from "./TabView";
 import AddButton from "../components/AddButton";
+import Modal from "react-modal";
 
 interface HomePageProps {
   signOut: () => void;
@@ -25,6 +30,11 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const [expandedAddAccount, setExpandedAddAccount] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
   const [activeTab, setActiveTab] = useState("fiat");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [accountToDelete, setAccountToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const {
     data: accounts,
@@ -42,6 +52,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { execute: createAccountingEntry } = useCreateAccountingEntry();
   const { execute: createEntry } = useCreateEntry();
   const { execute: updateEntry } = useUpdateEntry();
+  const { execute: deleteAccount } = useDeleteAccount();
 
   const fiatAccounts =
     accounts?.filter((account) => account.type === "fiat") ?? [];
@@ -145,6 +156,41 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     [accountingEntries, updateEntry, createEntry, fetchAccountingEntries]
   );
 
+  const handleDeleteAccount = useCallback(
+    async (accountId: string) => {
+      const account = accounts?.find((a) => a.id === accountId);
+      if (!account) {
+        toast.error("Account not found. Retry", {
+          position: "bottom-right",
+        });
+        return;
+      }
+
+      setAccountToDelete({ id: accountId, name: account.name });
+      setIsDeleteModalOpen(true);
+    },
+    [accounts]
+  );
+
+  const confirmDeleteAccount = async () => {
+    if (accountToDelete) {
+      try {
+        await deleteAccount(accountToDelete.id);
+        fetchAccounts();
+        toast.success("Account deleted successfully", {
+          position: "bottom-right",
+        });
+      } catch (error) {
+        console.error("Error deleting account:", error);
+        toast.error("Failed to delete account. Please try again.", {
+          position: "bottom-right",
+        });
+      }
+    }
+    setIsDeleteModalOpen(false);
+    setAccountToDelete(null);
+  };
+
   const tabContent = {
     fiat: (
       <div>
@@ -175,6 +221,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           accountingEntries={accountingEntries ?? []}
           handleCellChange={handleCellChange}
           onAddEntry={handleCreateAccountingEntry}
+          onDeleteAccount={handleDeleteAccount}
         />
       </div>
     ),
@@ -209,6 +256,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             accountingEntries={accountingEntries ?? []}
             handleCellChange={handleCellChange}
             onAddEntry={handleCreateAccountingEntry}
+            onDeleteAccount={handleDeleteAccount}
           />
         ))}
         <TotalTable
@@ -281,6 +329,34 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         >
           {tabContent[activeTab as keyof typeof tabContent]}
         </TabView>
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onRequestClose={() => setIsDeleteModalOpen(false)}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+          <p className="mb-6">
+            Are you sure you want to delete the account
+            <b> {accountToDelete?.name}</b>? <br />
+            This action cannot be undone and all the entries for that account
+            will also be deleted.
+          </p>
+          <div className="flex justify-end">
+            <button
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={confirmDeleteAccount}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
+          </div>
+        </Modal>
       </div>
     </div>
   );

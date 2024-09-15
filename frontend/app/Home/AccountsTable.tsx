@@ -1,5 +1,5 @@
 import React from "react";
-import Table, { TableRowCell } from "./Table";
+import Table, { TableHeaderContent, TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 
 interface AccountsTableProps {
@@ -12,6 +12,7 @@ interface AccountsTableProps {
     invested: boolean
   ) => Promise<void>;
   onAddEntry: (date: Date) => void;
+  onDeleteAccount: (accountId: string) => void;
 }
 
 const AccountsTable: React.FC<AccountsTableProps> = ({
@@ -19,8 +20,20 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
   accountingEntries,
   handleCellChange,
   onAddEntry,
+  onDeleteAccount,
 }) => {
-  const headers = ["Date", ...accounts.map((account) => account.name), "Total"];
+  const headers: TableHeaderContent[] = [
+    "Date",
+    ...accounts.map((account) => {
+      return {
+        title: account.name,
+        onDelete: () => {
+          onDeleteAccount(account.id);
+        },
+      };
+    }),
+    "Total",
+  ];
 
   const getEntryValue = (entry: AccountingEntriesDTO, accountId: string) => {
     const matchingEntry = entry.entries.find((e) => e.account_id === accountId);

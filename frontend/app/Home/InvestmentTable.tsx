@@ -12,6 +12,7 @@ interface InvestmentTableProps {
     invested: boolean
   ) => Promise<void>;
   onAddEntry: (date: Date) => void;
+  onDeleteAccount: (accountId: string) => void;
 }
 
 export function colorForValue(value: number | undefined): string | undefined {
@@ -35,6 +36,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
   accountingEntries,
   handleCellChange,
   onAddEntry,
+  onDeleteAccount,
 }) => {
   const headers = [
     "Date",
@@ -89,6 +91,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
       headers={headers}
       rows={accountingEntries.map((entry) => getCells(entry, account))}
       onAddEntry={onAddEntry}
+      onDelete={() => onDeleteAccount(account.id)}
     />
   );
 };
