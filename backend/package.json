@@ -4,14 +4,18 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && yarn sentry:sourcemaps",
     "start": "node dist/index.js",
     "dev": "tsc && npx nodemon -x ts-node -e ts .",
     "knex": "NODE_ENV=development NODE_OPTIONS='--import tsx/esm' knex",
     "migrate": "yarn knex migrate:latest",
-    "codegen": "ts-node generateTypes.ts"
+    "codegen": "ts-node generateTypes.ts",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org mpow --project node ./dist && sentry-cli sourcemaps upload --org mpow --project node ./dist"
   },
   "dependencies": {
+    "@sentry/cli": "^2.36.1",
+    "@sentry/node": "^8.30.0",
+    "@sentry/profiling-node": "^8.30.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
