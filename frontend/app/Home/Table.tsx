@@ -247,7 +247,9 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
         >
           <div className="flex items-center w-full">
             {!value.onValueChange ? (
-              <span className="px-4 py-2">{formattedValue(value.value)}</span>
+              <span className="px-4 py-2 flex-shrink-0">
+                {formattedValue(value.value)}
+              </span>
             ) : (
               <div className="px-2 flex items-center flex-grow">
                 {(value.value !== undefined ||
@@ -264,7 +266,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   onBlur={(e) => handleInputBlur(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(e)}
-                  className="py-2 w-full bg-transparent border-none focus:outline-none rounded"
+                  className="py-2 w-full min-w-16 bg-transparent border-none focus:outline-none rounded"
                 />
               </div>
             )}
