@@ -256,7 +256,11 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
                 )}
                 <input
                   type="text"
-                  value={editingValues[index] ?? value.value}
+                  value={
+                    editingValues[index] !== undefined
+                      ? editingValues[index]
+                      : value.value ?? ""
+                  }
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   onBlur={(e) => handleInputBlur(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(e)}
