@@ -115,7 +115,9 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
       </div>
 
       <footer className="mt-12 text-center text-gray-600 w-full max-w-4xl">
-        <p>stuff.finance - info@stuff.finance</p>
+        <p>
+          stuff.finance <b>-</b> info@stuff.finance
+        </p>
       </footer>
     </div>
   );
