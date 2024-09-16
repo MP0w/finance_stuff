@@ -40,7 +40,6 @@ const TotalTable: React.FC<TotalTableProps> = ({
   fiatAccounts,
   investmentAccounts,
   accountingEntries,
-  onAddEntry,
   onDeleteAccountingEntry,
 }) => {
   const headers = [

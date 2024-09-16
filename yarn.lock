@@ -90,6 +90,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"finance_stuff@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "finance_stuff@workspace:."
+  dependencies:
+    concurrently: "npm:^9.0.1"
+  languageName: unknown
+  linkType: soft
+
 "get-caller-file@npm:^2.0.5":
   version: 2.0.5
   resolution: "get-caller-file@npm:2.0.5"
@@ -140,14 +148,6 @@ __metadata:
   checksum: 10c0/8cec6fd827bad74d0a49347057d40dfea1e01f12a6123bf82c4649f3ef152fc2bc6d6176e6376bffcd205d9d0ccb4f1f9acae889384d20baff92186f01ea455a
   languageName: node
   linkType: hard
-
-"simplefi@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "simplefi@workspace:."
-  dependencies:
-    concurrently: "npm:^9.0.1"
-  languageName: unknown
-  linkType: soft
 
 "string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.3":
   version: 4.2.3
