@@ -343,30 +343,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       ),
     projections: <div>Coming soon</div>,
     graphs: <div>Coming soon</div>,
-    coming: (
-      <div>
-        New entry unified UI
-        <br />
-        better onboarding?
-        <br />
-        Sign in with apple?
-        <br />
-        Graphs
-        <br />
-        Projections
-        <br />
-        AI insights
-        <br />
-        monthly reminder (+ add to cal)
-        <br />
-        more insights
-        <br />
-        better support for investments w/ debt
-        <br />
-        more...? send ideas to support@stuff.finance
-        <br />
-      </div>
-    ),
   };
 
   if (!user) {
@@ -386,7 +362,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               { id: "summary", label: "Summary" },
               { id: "graphs", label: "Graphs" },
               { id: "projections", label: "Projections" },
-              { id: "coming", label: "Upcoming Features" },
             ]}
             activeTab={activeTab}
             setActiveTab={(tabId) => {

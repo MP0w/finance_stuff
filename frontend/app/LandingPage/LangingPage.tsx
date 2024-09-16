@@ -25,8 +25,10 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   return (
     <div className="p-8 md:p-16 flex flex-col items-center min-h-screen bg-gray-50">
       <header className="text-center mb-12 max-w-4xl w-full">
-        <h1 className="text-6xl mb-2 text-gray-600">finance_stuff</h1>
-        <p className="text-2xl text-gray-800">
+        <h1 className="text-4xl md:text-6xl mb-2 text-gray-600">
+          finance_stuff
+        </h1>
+        <p className="text-xl md:text-2xl text-gray-800">
           10 minutes a month to keep your finances in order
         </p>
       </header>
