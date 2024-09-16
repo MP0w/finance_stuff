@@ -11,6 +11,7 @@ import LoginPage from "./Login/LoginPage";
 import { UserStateProvider } from "./UserState";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
+import HomePage from "./Home/HomePage";
 
 export default function Home() {
   const [error, setError] = useState<string | null>(null);
@@ -61,8 +62,8 @@ export default function Home() {
           window.alert("soooon");
         }}
         signInWithGoogle={signInWithGoogle}
-        signOut={signOut}
       />
+      <HomePage signOut={signOut} />
     </UserStateProvider>
   );
 }

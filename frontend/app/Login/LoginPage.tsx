@@ -1,15 +1,11 @@
-"use client";
-
 import React, { useState } from "react";
 import { useUserState } from "../UserState";
-import HomePage from "../Home/HomePage";
 import { FaApple, FaGoogle } from "react-icons/fa";
 
 interface LoginPageProps {
   signInWithEmail: (email: string) => void;
   signInWithApple: () => void;
   signInWithGoogle: () => void;
-  signOut: () => void;
   error: string | null;
 }
 
@@ -17,15 +13,14 @@ const LoginPage: React.FC<LoginPageProps> = ({
   signInWithEmail,
   signInWithGoogle,
   signInWithApple,
-  signOut,
   error,
 }) => {
-  const { userId } = useUserState();
+  const { user, loaded } = useUserState();
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState<boolean>(false);
 
-  if (userId) {
-    return <HomePage signOut={signOut} />;
+  if (user?.id || !loaded) {
+    return <></>;
   }
 
   const handleEmailSubmit = (e: React.FormEvent) => {
@@ -37,7 +32,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+      <div className="w-full max-w-md bg-white m-4 p-4 rounded-lg shadow-lg">
         <h1 className="text-center mb-6 text-gray-600">finance_stuff</h1>
         {error && <p className="text-red-500">{error}</p>}
         <div className="mb-4 flex flex-col space-y-2">

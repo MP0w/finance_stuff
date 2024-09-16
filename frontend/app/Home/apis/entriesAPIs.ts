@@ -1,5 +1,5 @@
-import { Entries } from "../../../backend/types";
-import apiClient, { useApiCall } from "../apiClient";
+import { Entries } from "../../../../backend/types";
+import apiClient, { useApiCall } from "../../apiClient";
 
 const api = apiClient;
 

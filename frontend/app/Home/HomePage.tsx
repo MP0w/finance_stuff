@@ -5,13 +5,13 @@ import {
   useGetAccounts,
   useCreateAccount,
   useDeleteAccount,
-} from "./accountsAPIs";
+} from "./apis/accountsAPIs";
 import {
   useGetAccountingEntries,
   useCreateAccountingEntry,
   useDeleteAccountingEntry,
-} from "./accountingEntriesAPIs";
-import { useCreateEntry, useUpdateEntry } from "./entriesAPIs";
+} from "./apis/accountingEntriesAPIs";
+import { useCreateEntry, useUpdateEntry } from "./apis/entriesAPIs";
 import { AccountType } from "../../../backend/types";
 import AccountsTable from "./AccountsTable";
 import InvestmentTable from "./InvestmentTable";
@@ -27,7 +27,7 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
-  const { userId, email } = useUserState();
+  const { user } = useUserState();
   const [expandedAddAccount, setExpandedAddAccount] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
   const [activeTab, setActiveTab] = useState("fiat");
@@ -69,10 +69,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     fetchAccounts();
     fetchAccountingEntries();
   }, [fetchAccounts, fetchAccountingEntries]);
-
-  if (!userId) {
-    throw Error("invalid state");
-  }
 
   const handleCreateAccount = useCallback(
     async (type: AccountType) => {
@@ -262,7 +258,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           </div>
         )}
 
-        {fiatAccounts.length === 0 && (
+        {!accountToDelete && fiatAccounts.length === 0 && (
           <OnboardingTips
             fiatAccounts={fiatAccounts}
             investmentAccounts={investmentAccounts}
@@ -303,7 +299,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             </button>
           </div>
         )}
-        {investmentAccounts.length === 0 && (
+        {!accountsLoading && investmentAccounts.length === 0 && (
           <OnboardingTips
             fiatAccounts={fiatAccounts}
             investmentAccounts={investmentAccounts}
@@ -373,12 +369,16 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     ),
   };
 
+  if (!user) {
+    return <></>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 pl-8 pr-8 pt-4 pb-8">
       <div className="mx-auto">
         <ArcherContainer strokeColor="gray">
           <TabView
-            email={email}
+            email={user?.email}
             signOut={signOut}
             tabs={[
               { id: "fiat", label: "Bank Accounts" },
@@ -395,13 +395,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               setExpandedAddAccount(false);
             }}
           >
-            {(accountsLoading || (entriesLoading && !accountingEntries)) && (
-              <p>Loading...</p>
-            )}
             {accountsError || entriesError ? (
               <p>Error loading data, retry</p>
             ) : (
               tabContent[activeTab as keyof typeof tabContent]
+            )}
+            {(accountsLoading || (entriesLoading && !accountingEntries)) && (
+              <p>Loading...</p>
             )}
           </TabView>
         </ArcherContainer>

@@ -10,9 +10,14 @@ import { clearAuthToken, setAuthToken } from "./apiClient";
 import * as Sentry from "@sentry/nextjs";
 
 export type UserStateContextType = {
-  idToken?: string;
-  userId?: string;
-  email?: string;
+  user:
+    | {
+        idToken: string;
+        id: string;
+        email: string;
+      }
+    | undefined;
+  loaded: boolean;
 };
 
 export type User = {
@@ -67,18 +72,24 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [idToken, setIdToken] = useState<string | undefined>(undefined);
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [loaded, setLoaded] = useState<boolean>(false);
+
+  const clearUser = () => {
+    localStorage.removeItem("idToken");
+    localStorage.removeItem("user");
+    setIdToken(undefined);
+    setUser(undefined);
+    clearAuthToken();
+  };
 
   useEffect(() => {
+    setLoaded(true);
     setIdToken(localStorage.getItem("idToken") ?? undefined);
     setUser(getCachedUser());
 
     const unsubscribe = auth.onIdTokenChanged(async (user) => {
       if (!user) {
-        localStorage.removeItem("idToken");
-        localStorage.removeItem("user");
-        setIdToken(undefined);
-        setUser(undefined);
-        clearAuthToken();
+        clearUser();
       } else {
         const token = await user.getIdToken();
         localStorage.setItem("idToken", token);
@@ -88,27 +99,34 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
           setAuthToken(token);
           setIdToken(token);
           setUser(userResult);
+          localStorage.setItem("user", JSON.stringify(userResult));
           Sentry.setUser({
             fullName: user.displayName,
             email: user.email ?? undefined,
           });
         } else {
-          setIdToken(undefined);
-          setUser(undefined);
-          clearAuthToken();
+          clearUser();
         }
       }
     });
 
-    return () => unsubscribe(); // Cleanup subscription on unmount
-  }, []); // Dependency array is empty to run the effect only once on mount
+    return () => unsubscribe();
+  }, []);
+
+  const value: UserStateContextType =
+    idToken && user && user.id && user.email
+      ? {
+          user: {
+            idToken,
+            id: user.id,
+            email: user.email,
+          },
+          loaded,
+        }
+      : { user: undefined, loaded };
 
   return (
-    <UserStateContext.Provider
-      value={
-        idToken && user ? { idToken, userId: user?.id, email: user?.email } : {}
-      }
-    >
+    <UserStateContext.Provider value={value}>
       {children}
     </UserStateContext.Provider>
   );

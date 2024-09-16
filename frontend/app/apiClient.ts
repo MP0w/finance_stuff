@@ -18,7 +18,7 @@ export const clearAuthToken = () => {
 export const useApiCall = <T, P extends unknown[]>(
   apiFunction: (...args: P) => Promise<AxiosResponse<T>>
 ) => {
-  const { idToken } = useUserState();
+  const { user } = useUserState();
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -29,9 +29,13 @@ export const useApiCall = <T, P extends unknown[]>(
 
   const execute = useCallback(
     async (...args: P) => {
+      if (!user) {
+        return;
+      }
+
       setLoading(true);
       setError(null);
-      if (idToken) setAuthToken(idToken);
+      setAuthToken(user.idToken);
 
       try {
         const response = await apiFunctionRef.current(...args);
@@ -45,7 +49,7 @@ export const useApiCall = <T, P extends unknown[]>(
         setLoading(false);
       }
     },
-    [idToken]
+    [user]
   );
 
   return { data, loading, error, execute };

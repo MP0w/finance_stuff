@@ -1,5 +1,5 @@
-import { Accounts, AccountType } from "../../../backend/types"; // Assuming you have a types file
-import apiClient, { useApiCall } from "../apiClient";
+import { Accounts, AccountType } from "../../../../backend/types"; // Assuming you have a types file
+import apiClient, { useApiCall } from "../../apiClient";
 
 const api = apiClient;
 
