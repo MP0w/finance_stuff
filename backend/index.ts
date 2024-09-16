@@ -1,8 +1,4 @@
 import { configDotenv } from "dotenv";
-import express, { NextFunction, Request, Response } from "express";
-import { router } from "./endpoints/router";
-import { initializeApp } from "firebase-admin/app";
-import admin from "firebase-admin";
 import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 
@@ -14,6 +10,11 @@ Sentry.init({
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0,
 });
+
+import express, { NextFunction, Request, Response } from "express";
+import { router } from "./endpoints/router";
+import { initializeApp } from "firebase-admin/app";
+import admin from "firebase-admin";
 
 const cert: admin.ServiceAccount = JSON.parse(process.env.FIREBASE_CERT!);
 

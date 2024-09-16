@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { auth } from "./firebase";
 import { clearAuthToken, setAuthToken } from "./apiClient";
+import * as Sentry from "@sentry/nextjs";
 
 export type UserStateContextType = {
   idToken?: string;
@@ -87,6 +88,10 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
           setAuthToken(token);
           setIdToken(token);
           setUser(userResult);
+          Sentry.setUser({
+            fullName: user.displayName,
+            email: user.email ?? undefined,
+          });
         } else {
           setIdToken(undefined);
           setUser(undefined);
