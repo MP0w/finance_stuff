@@ -20,5 +20,8 @@ Sentry.init({
       colorScheme: "system",
       autoInject: false,
     }),
+    Sentry.captureConsoleIntegration({
+      levels: ["error", "warn"],
+    }),
   ],
 });

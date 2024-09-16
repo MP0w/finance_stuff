@@ -6,7 +6,12 @@ configDotenv({ path: ".env.local" });
 
 Sentry.init({
   dsn: "https://c7970c79b7a58d700737f7a34fc57c8b@o4507960601214976.ingest.de.sentry.io/4507960663670864",
-  integrations: [nodeProfilingIntegration()],
+  integrations: [
+    nodeProfilingIntegration(),
+    Sentry.captureConsoleIntegration({
+      levels: ["error", "warn"],
+    }),
+  ],
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0,
 });
