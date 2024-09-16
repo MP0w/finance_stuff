@@ -43,7 +43,7 @@ const login = async (token: string, firebaseUid: string) => {
   }
 
   try {
-    const response = await fetch("http://localhost:4000/sign-in", {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/sign-in", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

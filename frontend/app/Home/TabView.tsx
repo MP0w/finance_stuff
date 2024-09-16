@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import SettingsIcon from "../components/SettingsIcon";
+import React from "react";
 import { ArcherElement } from "react-archer";
-import FeedbackButton from "../components/FeedbackButton";
 import { BrandHeader } from "../components/BrandHeader";
 
 interface Tab {
