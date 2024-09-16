@@ -376,7 +376,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               tabContent[activeTab as keyof typeof tabContent]
             )}
             {(accountsLoading || (entriesLoading && !accountingEntries)) && (
-              <p>Loading...</p>
+              <p className="mt-8 mb-8">Loading...</p>
             )}
           </TabView>
         </ArcherContainer>

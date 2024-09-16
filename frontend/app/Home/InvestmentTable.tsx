@@ -29,6 +29,10 @@ export function stringForPercentage(profit: number): string {
     return "";
   }
 
+  if (!isFinite(profit) && profit < 0) {
+    return stringForPercentage(-1);
+  }
+
   return `${(profit * 100).toFixed(1)}%`;
 }
 

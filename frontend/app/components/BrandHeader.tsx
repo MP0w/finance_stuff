@@ -19,7 +19,6 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
     <div className={`flex justify-between ${className}`}>
       <h1 className="py-1 text-gray-600">finance_stuff</h1>
       <div
-        className="relative"
         onMouseEnter={() => setShowSettings(true)}
         onClick={() => setShowSettings(!showSettings)}
       >
@@ -28,7 +27,7 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
         </button>
         {showSettings && (
           <div
-            className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+            className="absolute right-0 mt-2 bg-white rounded-md shadow-lg px-2 py-1 z-10"
             onMouseLeave={() => setShowSettings(false)}
             onClick={() => setShowSettings(false)}
           >
