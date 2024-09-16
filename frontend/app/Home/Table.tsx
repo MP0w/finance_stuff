@@ -235,7 +235,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
       {cells.map((value, index) => (
         <td
           key={index}
-          className={`px-4 py-2 text-gray-600 ${
+          className={`text-gray-600 ${
             !value.onValueChange ? value.color ?? `bg-gray-100` : ""
           }${
             value.value === undefined && editingValues[index] === undefined
@@ -245,14 +245,14 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          <div className="flex items-center">
+          <div className="flex items-center w-full">
             {!value.onValueChange ? (
-              <span>{formattedValue(value.value)}</span>
+              <span className="px-4 py-2">{formattedValue(value.value)}</span>
             ) : (
-              <span className="flex items-center">
+              <div className="px-2 flex items-center flex-grow">
                 {(value.value !== undefined ||
                   editingValues[index] !== undefined) && (
-                  <span className="mr-1">$</span>
+                  <span className="mr-1 flex-shrink-0">$</span>
                 )}
                 <input
                   type="text"
@@ -260,9 +260,9 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   onBlur={(e) => handleInputBlur(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(e)}
-                  className="w-full bg-transparent border-none focus:outline-none rounded"
+                  className="py-2 w-full bg-transparent border-none focus:outline-none rounded"
                 />
-              </span>
+              </div>
             )}
             <div className="w-6 flex-shrink-0">
               {value.onDelete && (
