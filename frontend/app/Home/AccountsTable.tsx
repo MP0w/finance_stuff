@@ -39,7 +39,7 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
 
   const getEntryValue = (entry: AccountingEntriesDTO, accountId: string) => {
     const matchingEntry = entry.entries.find((e) => e.account_id === accountId);
-    return matchingEntry ? matchingEntry.value : 0;
+    return matchingEntry?.value;
   };
 
   function getCells(
@@ -53,7 +53,7 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
       },
     }));
 
-    const sum = entries.reduce((acc, curr) => acc + curr.value, 0);
+    const sum = entries.reduce((acc, curr) => acc + (curr.value ?? 0), 0);
 
     return [
       {

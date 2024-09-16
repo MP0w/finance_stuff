@@ -157,7 +157,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
 
 export interface TableRowCell {
   color?: string;
-  value: string | number;
+  value: string | number | undefined;
   onValueChange?: (value: number) => Promise<void>;
   onDelete?: () => void;
 }
@@ -196,7 +196,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
           // Revert the value to the original
           setEditingValues((prev) => {
             const newValues = [...prev];
-            newValues[index] = cells[index].value.toString();
+            newValues[index] = cells[index].value?.toString();
             return newValues;
           });
           // Show error toast
@@ -218,7 +218,10 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
     []
   );
 
-  const formattedValue = (value: string | number) => {
+  const formattedValue = (value: string | number | undefined) => {
+    if (!value) {
+      return "";
+    }
     if (typeof value === "number") {
       return `$ ${value}`;
     }
@@ -234,6 +237,10 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
           key={index}
           className={`px-4 py-2 text-gray-600 ${
             !value.onValueChange ? value.color ?? `bg-gray-100` : ""
+          }${
+            value.value === undefined && editingValues[index] === undefined
+              ? "border-b-2 border-b-red-100 bg-red-50 animate-pulse"
+              : ""
           }`}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
@@ -243,14 +250,17 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
               <span>{formattedValue(value.value)}</span>
             ) : (
               <span className="flex items-center">
-                <span className="mr-1">$</span>
+                {(value.value !== undefined ||
+                  editingValues[index] !== undefined) && (
+                  <span className="mr-1">$</span>
+                )}
                 <input
                   type="text"
                   value={editingValues[index] ?? value.value}
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   onBlur={(e) => handleInputBlur(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(e)}
-                  className="w-full bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  className="w-full bg-transparent border-none focus:outline-none rounded"
                 />
               </span>
             )}

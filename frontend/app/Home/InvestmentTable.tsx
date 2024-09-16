@@ -60,9 +60,9 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
       (e) => e.account_id === account.id
     );
 
-    const value = entry?.value ?? 0;
-    const invested = entry?.invested ?? 0;
-    const profits = value - invested;
+    const value = entry?.value;
+    const invested = entry?.invested ?? undefined;
+    const profits = (value ?? 0) - (invested ?? 0);
 
     return [
       {
@@ -88,7 +88,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
         color: colorForValue(profits),
       },
       {
-        value: stringForPercentage(profits / value),
+        value: stringForPercentage(profits / (value ?? 0)),
         color: colorForValue(profits),
       },
     ];
