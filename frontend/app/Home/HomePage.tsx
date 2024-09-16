@@ -398,8 +398,11 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             {(accountsLoading || (entriesLoading && !accountingEntries)) && (
               <p>Loading...</p>
             )}
-            {(accountsError || entriesError) && <p>Error loading data</p>}
-            {tabContent[activeTab as keyof typeof tabContent]}
+            {accountsError || entriesError ? (
+              <p>Error loading data, retry</p>
+            ) : (
+              tabContent[activeTab as keyof typeof tabContent]
+            )}
           </TabView>
         </ArcherContainer>
         <Modal

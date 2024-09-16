@@ -40,7 +40,6 @@ export const useApiCall = <T, P extends unknown[]>(
       } catch (err) {
         const error = err as AxiosError;
         setError(error);
-        throw error;
       } finally {
         setLoading(false);
       }
