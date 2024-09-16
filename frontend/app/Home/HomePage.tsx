@@ -64,6 +64,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     accounts?.filter((account) => account.type === "fiat") ?? [];
   const investmentAccounts =
     accounts?.filter((account) => account.type === "investment") ?? [];
+  const isLoading = accountsLoading || (entriesLoading && !accountingEntries);
 
   useEffect(() => {
     fetchAccounts();
@@ -258,7 +259,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           </div>
         )}
 
-        {!accountToDelete && fiatAccounts.length === 0 && (
+        {!isLoading && fiatAccounts.length === 0 && (
           <OnboardingTips
             fiatAccounts={fiatAccounts}
             investmentAccounts={investmentAccounts}
@@ -299,7 +300,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             </button>
           </div>
         )}
-        {!accountsLoading && investmentAccounts.length === 0 && (
+        {!isLoading && investmentAccounts.length === 0 && (
           <OnboardingTips
             fiatAccounts={fiatAccounts}
             investmentAccounts={investmentAccounts}
@@ -375,9 +376,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             ) : (
               tabContent[activeTab as keyof typeof tabContent]
             )}
-            {(accountsLoading || (entriesLoading && !accountingEntries)) && (
-              <p className="mt-8 mb-8">Loading...</p>
-            )}
+            {isLoading && <p className="mt-8 mb-8">Loading...</p>}
           </TabView>
         </ArcherContainer>
         <Modal
