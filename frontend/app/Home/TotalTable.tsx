@@ -3,7 +3,7 @@ import Table, { TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 import { colorForValue, stringForPercentage } from "./InvestmentTable";
 
-interface TotalTableProps {
+export interface TotalTableProps {
   title?: string;
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
@@ -176,7 +176,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
       title={title}
       headers={headers.filter((h) => h !== undefined)}
       rows={summaryCells.map((entry) => getCells(entry))}
-      onAddEntry={onAddEntry}
+      onAddEntry={undefined}
     />
   );
 };

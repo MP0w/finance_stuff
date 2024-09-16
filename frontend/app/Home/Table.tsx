@@ -13,7 +13,7 @@ interface TableProps {
   title?: string;
   headers: TableHeaderContent[];
   rows: TableRowCell[][];
-  onAddEntry: (date: Date) => void;
+  onAddEntry?: (date: Date) => void;
   onDelete?: () => void;
 }
 
@@ -26,7 +26,6 @@ const Table: React.FC<TableProps> = ({
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [isHovering] = useState(true);
   const [isHoveringHeader, setIsHoveringHeader] = useState(false);
 
   const handleAddEntry = () => {
@@ -37,13 +36,7 @@ const Table: React.FC<TableProps> = ({
   };
 
   return (
-    <div
-    //   onMouseEnter={() => setIsHovering(true)}
-    //   onMouseLeave={() => {
-    //     setIsHovering(false);
-    //     setShowDatePicker(false);
-    //   }}
-    >
+    <div>
       {title && (
         <div
           className="flex items-center"
@@ -63,7 +56,7 @@ const Table: React.FC<TableProps> = ({
             {rows.map((row, index) => (
               <TableRow key={index} cells={row} />
             ))}
-            {isHovering && (
+            {onAddEntry && (
               <tr className="bg-gray-100 border-t border-gray-300">
                 <td colSpan={headers.length}>
                   <div className="ml-4 mt-2 mb-2">

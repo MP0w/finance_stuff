@@ -33,7 +33,9 @@ const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md bg-white m-4 p-4 rounded-lg shadow-lg">
-        <h1 className="text-center mb-6 text-gray-600">finance_stuff</h1>
+        <h1 className="text-center text-4xl mb-6 text-gray-600">
+          finance_stuff
+        </h1>
         {error && <p className="text-red-500">{error}</p>}
         <div className="mb-4 flex flex-col space-y-2">
           <form onSubmit={handleEmailSubmit} className="space-y-4 mb-4">
