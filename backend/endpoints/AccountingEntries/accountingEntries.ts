@@ -12,13 +12,25 @@ export function accountingEntriesRouter(app: Application) {
   app.get(
     "/accounting_entries",
     expressAsyncHandler(async (req, res) => {
-      const accountingEntries = await dbConnection<AccountingEntries>(
+      let accountingEntries = await dbConnection<AccountingEntries>(
         Table.AccountingEntries
       )
         .select()
         .where({ user_id: req.userId })
         .orderBy("date", "asc")
         .limit(1000);
+
+      if (accountingEntries.length === 0) {
+        await createAccountingEntriesForUser(req.userId);
+
+        accountingEntries = await dbConnection<AccountingEntries>(
+          Table.AccountingEntries
+        )
+          .select()
+          .where({ user_id: req.userId })
+          .orderBy("date", "asc")
+          .limit(1000);
+      }
 
       const allEntries = await dbConnection<Entries>(Table.Entries)
         .select()
@@ -144,5 +156,40 @@ export function accountingEntriesRouter(app: Application) {
 
       res.send({});
     })
+  );
+}
+
+function getFirstDaysOfMonth(date: Date, count: number): Date[] {
+  const result: Date[] = [];
+  const currentDate = new Date(date);
+
+  for (let i = 0; i < count; i++) {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDayOfMonth = new Date(Date.UTC(year, month, 1));
+    result.push(firstDayOfMonth);
+
+    // Move to the previous month
+    if (month === 0) {
+      // If it's January, go to December of the previous year
+      currentDate.setFullYear(year - 1, 11, 1);
+    } else {
+      currentDate.setMonth(month - 1);
+    }
+  }
+
+  return result;
+}
+
+export async function createAccountingEntriesForUser(userId: string) {
+  const datesToAdd = getFirstDaysOfMonth(new Date(), 6);
+
+  await dbConnection<AccountingEntries>(Table.AccountingEntries).insert(
+    datesToAdd.map((date) => ({
+      id: generateUUID(),
+      date,
+      user_id: userId,
+      updated_at: new Date(),
+    }))
   );
 }
