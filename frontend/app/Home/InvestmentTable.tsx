@@ -1,5 +1,5 @@
 import React from "react";
-import Table, { TableRowCell } from "./Table";
+import Table, { TableHeaderContent, TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 
 interface InvestmentTableProps {
@@ -44,10 +44,18 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
   onDeleteAccount,
   onDeleteAccountingEntry,
 }) => {
-  const headers = [
+  const headers: TableHeaderContent[] = [
     "Date",
-    `Initial investment`,
-    `Investment Value`,
+    {
+      title: "Initial Investment",
+      tipText:
+        "The overall amount you invested in this asset to date, excluding profits or losses",
+    },
+    {
+      title: "Investment Value",
+      tipText:
+        "The value of your investment to date including profits or losses",
+    },
     "Profits",
     "Change",
     "%",
