@@ -1,5 +1,5 @@
 import React from "react";
-import Table, { TableRowCell } from "./Table";
+import Table, { TableHeaderContent, TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 import { colorForValue, stringForPercentage } from "./InvestmentTable";
 
@@ -44,14 +44,20 @@ const TotalTable: React.FC<TotalTableProps> = ({
   accountingEntries,
   onDeleteAccountingEntry,
 }) => {
-  const headers = [
+  const headers: (TableHeaderContent | undefined)[] = [
     "Date",
     fiatAccounts.length ? "Liquid Total" : undefined,
     investmentAccounts.length ? "Investments Invested" : undefined,
     investmentAccounts.length ? "Investments Total" : undefined,
     investmentAccounts.length ? "Investments Profit" : undefined,
     investmentAccounts.length ? "Investments %" : undefined,
-    fiatAccounts.length ? "Savings (excl. profits)" : undefined,
+    fiatAccounts.length
+      ? {
+          title: "Savings",
+          tipText:
+            "Savings excluding profits or losses of investments from the previous entry. Basically your net worth change if investments stayed flat.",
+        }
+      : undefined,
     fiatAccounts.length && investmentAccounts.length ? "Total" : undefined,
     "Change",
   ];
@@ -131,19 +137,19 @@ const TotalTable: React.FC<TotalTableProps> = ({
       fiatAccounts.length
         ? {
             value: summary.liquidTotal,
-            color: "bg-indigo-100",
+            color: "bg-purple-100",
           }
         : undefined,
       investmentAccounts.length
         ? {
             value: summary.investmentsInvested,
-            color: "bg-lime-100",
+            color: "bg-sky-100",
           }
         : undefined,
       investmentAccounts.length
         ? {
             value: summary.investmentsTotal,
-            color: "bg-emerald-100",
+            color: "bg-indigo-100",
           }
         : undefined,
       investmentAccounts.length

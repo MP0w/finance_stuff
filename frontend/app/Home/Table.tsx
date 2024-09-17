@@ -6,10 +6,11 @@ import AddButton from "../components/AddButton";
 import DeleteIcon from "../components/DeleteIcon";
 import { FiAlertCircle } from "react-icons/fi";
 import { createPortal } from "react-dom";
+import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
 
 export type TableHeaderContent =
   | string
-  | { title: string; onDelete: () => void };
+  | { title: string; tipText?: string; onDelete?: () => void };
 
 interface TableProps {
   title?: string;
@@ -122,11 +123,22 @@ interface TableHeaderProps {
 
 export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
   const [isHoveringHeader, setIsHoveringHeader] = useState(false);
+  const [tooltipContent, setTooltipContent] = useState<string | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
   const getHeaderTitle = (header: TableHeaderContent) => {
     if (typeof header === "string") {
       return header;
     }
     return header.title;
+  };
+
+  const getTipText = (header: TableHeaderContent) => {
+    if (typeof header === "string") {
+      return undefined;
+    }
+    return header.tipText;
   };
 
   const getOnDelete = (header: TableHeaderContent) => {
@@ -136,24 +148,69 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
     return header.onDelete;
   };
 
+  const handleTipMouseEnter = (event: React.MouseEvent, tipText: string) => {
+    if (tooltipContent) {
+      handleTipMouseLeave();
+      return;
+    }
+    setTooltipContent(tipText);
+    const rect = event.currentTarget.getBoundingClientRect();
+    setTooltipPosition({
+      top: rect.bottom + 10,
+      left: rect.left + rect.width / 2,
+    });
+  };
+
+  const handleTipMouseLeave = () => {
+    setTooltipContent(null);
+  };
+
   return (
-    <thead
-      onMouseEnter={() => setIsHoveringHeader(!isHoveringHeader)}
-      onMouseLeave={() => setIsHoveringHeader(false)}
-    >
-      <tr className="bg-gray-200">
-        {headers.map((header, index) => (
-          <th key={index} className="px-4 py-2 text-left text-gray-700">
-            <div className="flex items-center">
-              {getHeaderTitle(header)}
-              {isHoveringHeader && getOnDelete(header) && (
-                <DeleteIcon className="ml-2" onClick={getOnDelete(header)} />
-              )}
-            </div>
-          </th>
-        ))}
-      </tr>
-    </thead>
+    <>
+      <thead
+        onMouseEnter={() => setIsHoveringHeader(!isHoveringHeader)}
+        onMouseLeave={() => setIsHoveringHeader(false)}
+      >
+        <tr className="bg-gray-200">
+          {headers.map((header, index) => (
+            <th key={index} className="px-4 py-2 text-left text-gray-700">
+              <div className="flex items-center">
+                {getHeaderTitle(header)}
+                {getTipText(header) && (
+                  <div
+                    className="relative"
+                    onMouseEnter={(e) =>
+                      handleTipMouseEnter(e, getTipText(header)!)
+                    }
+                    onMouseLeave={handleTipMouseLeave}
+                  >
+                    <HiOutlineQuestionMarkCircle className="ml-2" />
+                  </div>
+                )}
+                {isHoveringHeader && getOnDelete(header) && (
+                  <DeleteIcon className="ml-2" onClick={getOnDelete(header)} />
+                )}
+              </div>
+            </th>
+          ))}
+        </tr>
+      </thead>
+      {tooltipContent &&
+        createPortal(
+          <div
+            ref={tooltipRef}
+            className="fixed z-50 p-2 bg-gray-600 text-gray-50 text-sm rounded shadow-lg pointer-events-none max-w-xs break-words"
+            style={{
+              top: `${tooltipPosition.top}px`,
+              left: `${tooltipPosition.left}px`,
+              transform: "translate(-50%, 0)", // Changed from translate(-50%, -100%)
+            }}
+          >
+            {tooltipContent}
+          </div>,
+          document.body
+        )}
+    </>
   );
 };
 
