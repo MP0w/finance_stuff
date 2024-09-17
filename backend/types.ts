@@ -89,7 +89,7 @@ export type Connections = {
 
 export type ConnectionsDTO = Omit<
   Connections,
-  "settings" | "created_at" | "updated_at"
+  "settings" | "created_at" | "updated_at" | "user_id"
 >;
 
 export type Connector = {

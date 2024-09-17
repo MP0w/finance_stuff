@@ -3,6 +3,10 @@ import apiClient, { useApiCall } from "../../apiClient";
 
 const api = apiClient;
 
+type ConnectionWithSettings = Omit<ConnectionsDTO, "id"> & {
+  settings: Record<string, string>;
+};
+
 // Fetch connectors settings
 export const useGetConnectorsSettings = () => {
   return useApiCall(() => api.get<Connector[]>(`/connectors-settings`));
@@ -20,14 +24,14 @@ export const useGetConnection = (id: string) => {
 
 // Create a new connection
 export const useCreateConnection = () => {
-  return useApiCall((data: Omit<ConnectionsDTO, "id">) =>
+  return useApiCall((data: ConnectionWithSettings) =>
     api.post(`/connections`, data)
   );
 };
 
 // Update an existing connection
 export const useUpdateConnection = () => {
-  return useApiCall((id: string, data: Partial<ConnectionsDTO>) =>
+  return useApiCall((id: string, data: ConnectionWithSettings) =>
     api.put(`/connections/${id}`, data)
   );
 };
