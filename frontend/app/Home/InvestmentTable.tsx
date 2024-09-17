@@ -88,7 +88,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
         color: colorForValue(profits),
       },
       {
-        value: stringForPercentage(profits / (value ?? 0)),
+        value: stringForPercentage(profits / (invested ?? 0)),
         color: colorForValue(profits),
       },
     ];
