@@ -206,7 +206,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltipPosition({
       top: rect.bottom + 10,
-      left: rect.left + rect.width / 2,
+      left: rect.left + rect.width,
     });
   };
 

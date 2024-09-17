@@ -23,6 +23,7 @@ import { ArcherContainer } from "react-archer";
 import OnboardingTips from "./OnboardingTips";
 import AddToCalendar from "../components/AddToCalendar";
 import { logAnalyticsEvent } from "../firebase";
+import { GraphsTab } from "./GraphsTab";
 
 interface HomePageProps {
   signOut: () => void;
@@ -353,7 +354,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         <div>Add yours accounts and entries to see the summary</div>
       ),
     projections: <div>Coming soon</div>,
-    graphs: <div>Coming soon</div>,
+    graphs: (
+      <GraphsTab
+        fiatAccounts={fiatAccounts}
+        investmentAccounts={investmentAccounts}
+        accountingEntries={accountingEntries ?? []}
+      />
+    ),
   };
 
   if (!user) {

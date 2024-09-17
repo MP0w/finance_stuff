@@ -14,7 +14,7 @@ export interface TotalTableProps {
 
 type Summary = {
   id: string;
-  date: string;
+  date: Date;
   liquidTotal: number;
   investmentsTotal: number;
   investmentsInvested: number;
@@ -25,7 +25,7 @@ type Summary = {
 
 type SummaryCell = {
   id: string;
-  date: string;
+  date: Date;
   liquidTotal: number;
   investmentsTotal: number;
   investmentsInvested: number;
@@ -36,6 +36,77 @@ type SummaryCell = {
   savings: number | undefined;
   isMissingValues: boolean;
 };
+
+export function makeSummaryData(args: {
+  fiatAccounts: Accounts[];
+  investmentAccounts: Accounts[];
+  accountingEntries: AccountingEntriesDTO[];
+}) {
+  const { fiatAccounts, investmentAccounts, accountingEntries } = args;
+  const fiatAccountsIds = new Set(fiatAccounts.map((account) => account.id));
+  const investmentAccountsIds = new Set(
+    investmentAccounts.map((account) => account.id)
+  );
+
+  const summaries: Summary[] = accountingEntries.map((entry) => {
+    const fiatEntries = entry.entries.filter((entry) =>
+      fiatAccountsIds.has(entry.account_id)
+    );
+    const investmentEntries = entry.entries.filter((entry) =>
+      investmentAccountsIds.has(entry.account_id)
+    );
+
+    const isMissingValues =
+      fiatEntries.length < fiatAccounts.length ||
+      investmentEntries.length < investmentAccounts.length ||
+      investmentEntries.some((entry) => entry.invested === null);
+
+    const liquidTotal = fiatEntries.reduce((acc, curr) => acc + curr.value, 0);
+    const investmentsTotal = investmentEntries.reduce(
+      (acc, curr) => acc + curr.value,
+      0
+    );
+    const investmentsInvested = investmentEntries.reduce(
+      (acc, curr) => acc + (curr.invested ?? 0),
+      0
+    );
+
+    const profits = investmentsTotal - investmentsInvested;
+    const total = liquidTotal + investmentsTotal;
+
+    return {
+      id: entry.id,
+      date: new Date(entry.date),
+      liquidTotal,
+      investmentsTotal,
+      investmentsInvested,
+      profits,
+      total,
+      isMissingValues,
+    };
+  });
+
+  const summaryCells: SummaryCell[] = summaries.map((summary, index) => {
+    const previous = index > 0 ? summaries.at(index - 1) : undefined;
+    const change = previous ? summary.total - previous.total : undefined;
+    let savings = undefined;
+
+    if (previous) {
+      const previousTotalWithoutGains = previous.total - previous.profits;
+      const currentTotalWithoutGains = summary.total - summary.profits;
+      savings = currentTotalWithoutGains - previousTotalWithoutGains;
+    }
+
+    return {
+      ...summary,
+      previous,
+      change,
+      savings,
+    };
+  });
+
+  return summaryCells;
+}
 
 const TotalTable: React.FC<TotalTableProps> = ({
   title,
@@ -84,72 +155,17 @@ const TotalTable: React.FC<TotalTableProps> = ({
     fiatAccounts.length && investmentAccounts.length ? "Total" : undefined,
     "Change",
   ];
-  const fiatAccountsIds = new Set(fiatAccounts.map((account) => account.id));
-  const investmentAccountsIds = new Set(
-    investmentAccounts.map((account) => account.id)
-  );
 
-  const summaries: Summary[] = accountingEntries.map((entry) => {
-    const fiatEntries = entry.entries.filter((entry) =>
-      fiatAccountsIds.has(entry.account_id)
-    );
-    const investmentEntries = entry.entries.filter((entry) =>
-      investmentAccountsIds.has(entry.account_id)
-    );
-
-    const isMissingValues =
-      fiatEntries.length < fiatAccounts.length ||
-      investmentEntries.length < investmentAccounts.length ||
-      investmentEntries.some((entry) => entry.invested === null);
-
-    const liquidTotal = fiatEntries.reduce((acc, curr) => acc + curr.value, 0);
-    const investmentsTotal = investmentEntries.reduce(
-      (acc, curr) => acc + curr.value,
-      0
-    );
-    const investmentsInvested = investmentEntries.reduce(
-      (acc, curr) => acc + (curr.invested ?? 0),
-      0
-    );
-
-    const profits = investmentsTotal - investmentsInvested;
-    const total = liquidTotal + investmentsTotal;
-
-    return {
-      id: entry.id,
-      date: new Date(entry.date).toLocaleDateString(),
-      liquidTotal,
-      investmentsTotal,
-      investmentsInvested,
-      profits,
-      total,
-      isMissingValues,
-    };
-  });
-
-  const summaryCells: SummaryCell[] = summaries.map((summary, index) => {
-    const previous = index > 0 ? summaries.at(index - 1) : undefined;
-    const change = previous ? summary.total - previous.total : undefined;
-    let savings = undefined;
-
-    if (previous) {
-      const previousTotalWithoutGains = previous.total - previous.profits;
-      const currentTotalWithoutGains = summary.total - summary.profits;
-      savings = currentTotalWithoutGains - previousTotalWithoutGains;
-    }
-
-    return {
-      ...summary,
-      previous,
-      change,
-      savings,
-    };
+  const summaryCells = makeSummaryData({
+    fiatAccounts,
+    investmentAccounts,
+    accountingEntries,
   });
 
   const getCells = (summary: SummaryCell): TableRowCell[] => {
     const cells: (TableRowCell | undefined)[] = [
       {
-        value: summary.date,
+        value: summary.date.toLocaleDateString(),
         warningText: summary.isMissingValues
           ? "🚨 You are missing some values in your accounts for this entry, check the glowing red cells in Bank Accounts & Investments for this date"
           : undefined,
