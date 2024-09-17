@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { auth } from "./firebase";
+import { auth, logAnalyticsEvent } from "./firebase";
 import { clearAuthToken, setAuthToken } from "./apiClient";
 import * as Sentry from "@sentry/nextjs";
 
@@ -59,6 +59,7 @@ const login = async (token: string, firebaseUid: string) => {
     const result = await response.json();
     localStorage.setItem("user", JSON.stringify(result));
     console.log(result);
+    logAnalyticsEvent("sign-in");
 
     return result;
   } catch (error) {

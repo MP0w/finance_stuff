@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "add-to-calendar-button";
+import { logAnalyticsEvent } from "../firebase";
 
 const addToCalendarOpenCountKey = "add-to-calendar-open-count";
 const addToCalendarDateKey = "add-to-calendar-open-count-date";
@@ -47,12 +48,15 @@ const AddToCalendar: React.FC = () => {
             setAddToCalendarOpenCount(10000);
             setOpenCount(10000);
             observer.disconnect();
+            logAnalyticsEvent("add_to_calendar_success");
           }
+
           if (lastEvent?.startsWith("closeList")) {
             const newOpenCount = openCount + 1;
             setAddToCalendarOpenCount(newOpenCount);
             setOpenCount(newOpenCount);
             observer.disconnect();
+            logAnalyticsEvent("add_to_calendar_close");
           }
         }
       }

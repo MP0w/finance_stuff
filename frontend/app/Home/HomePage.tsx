@@ -22,6 +22,7 @@ import Modal from "react-modal";
 import { ArcherContainer } from "react-archer";
 import OnboardingTips from "./OnboardingTips";
 import AddToCalendar from "../components/AddToCalendar";
+import { logAnalyticsEvent } from "../firebase";
 
 interface HomePageProps {
   signOut: () => void;
@@ -80,6 +81,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           fetchAccounts();
           setNewAccountName("");
           toast.success("Account created", { position: "bottom-right" });
+          logAnalyticsEvent("create_account_success");
         } catch (error) {
           console.error("Error creating account:", error);
           toast.error("Failed to create account. Please try again.", {
@@ -97,6 +99,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         await createAccountingEntry(date);
         fetchAccountingEntries();
         toast.success("new entry created", { position: "bottom-right" });
+        logAnalyticsEvent("create_accounting_entry_success");
       } catch (error) {
         console.error("Error creating accounting entry:", error);
         toast.error(
