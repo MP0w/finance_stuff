@@ -41,6 +41,7 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
     id: "Liquid",
     label: "Liquid",
     value: summaryCells[summaryCells.length - 1].liquidTotal,
+    color: "#8ededd",
   });
 
   return (
@@ -77,7 +78,12 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
         series={[{ data: pieData, type: "pie" }]}
         width={400}
         height={400}
-        slotProps={{ legend: { hidden: true } }}
+        slotProps={{
+          legend: {
+            itemMarkHeight: 8,
+            itemMarkWidth: 8,
+          },
+        }}
       />
     </div>
   );
