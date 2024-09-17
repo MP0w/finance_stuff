@@ -75,7 +75,9 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
         slotProps={{ legend: { hidden: true } }}
       />
       <PieChart
-        series={[{ data: pieData, type: "pie" }]}
+        series={[
+          { data: pieData.sort((a, b) => a.value - b.value), type: "pie" },
+        ]}
         width={400}
         height={400}
         slotProps={{
