@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Accounts, Connector } from "../../../backend/types";
 import { useGetConnectorsSettings } from "./apis/connectionsAPIs";
-import { get } from "http";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];

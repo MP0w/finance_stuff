@@ -1229,7 +1229,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=13.7.0, @types/node@npm:^22, @types/node@npm:^22.0.1":
+"@types/node@npm:*, @types/node@npm:>=13.7.0, @types/node@npm:^22.0.1, @types/node@npm:^22.5.5":
   version: 22.5.5
   resolution: "@types/node@npm:22.5.5"
   dependencies:
@@ -1504,7 +1504,7 @@ __metadata:
     "@sentry/profiling-node": "npm:^8.30.0"
     "@types/cors": "npm:^2.8.17"
     "@types/express": "npm:^4.17.21"
-    "@types/node": "npm:^22"
+    "@types/node": "npm:^22.5.5"
     "@types/uuid": "npm:^10.0.0"
     cors: "npm:^2.8.5"
     dotenv: "npm:^16.4.5"
