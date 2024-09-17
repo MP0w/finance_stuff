@@ -2251,6 +2251,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"add-to-calendar-button@npm:^2.6.19":
+  version: 2.6.19
+  resolution: "add-to-calendar-button@npm:2.6.19"
+  dependencies:
+    timezones-ical-library: "npm:^1.8.3"
+  checksum: 10c0/d34c4c04738171305536dbe9283f80a91a6d3c4a257b447299163bbc860b3c39e2ddcdeb623c8a082501f098bea2bc789f85544ca13e5c7ec8c37167e828b1b7
+  languageName: node
+  linkType: hard
+
 "agent-base@npm:6":
   version: 6.0.2
   resolution: "agent-base@npm:6.0.2"
@@ -3726,6 +3735,7 @@ __metadata:
     "@types/react-dom": "npm:^18"
     "@types/react-modal": "npm:^3.16.3"
     "@types/uuid": "npm:^10.0.0"
+    add-to-calendar-button: "npm:^2.6.19"
     axios: "npm:^1.7.7"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.8"
@@ -6468,6 +6478,13 @@ __metadata:
   dependencies:
     any-promise: "npm:^1.0.0"
   checksum: 10c0/f375aeb2b05c100a456a30bc3ed07ef03a39cbdefe02e0403fb714b8c7e57eeaad1a2f5c4ecfb9ce554ce3db9c2b024eba144843cd9e344566d9fcee73b04767
+  languageName: node
+  linkType: hard
+
+"timezones-ical-library@npm:^1.8.3":
+  version: 1.8.3
+  resolution: "timezones-ical-library@npm:1.8.3"
+  checksum: 10c0/5d1b65558fb95bdaafc6c1dc240da0bfdb53eb8bcf0373e3ce7a6d7ea2642392abbf25600b10a35e61ddefb00f0cf857083e8114fe3f0059deede6ce07cee00a
   languageName: node
   linkType: hard
 

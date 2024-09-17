@@ -5,15 +5,6 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"add-to-calendar-button@npm:^2.6.19":
-  version: 2.6.19
-  resolution: "add-to-calendar-button@npm:2.6.19"
-  dependencies:
-    timezones-ical-library: "npm:^1.8.3"
-  checksum: 10c0/d34c4c04738171305536dbe9283f80a91a6d3c4a257b447299163bbc860b3c39e2ddcdeb623c8a082501f098bea2bc789f85544ca13e5c7ec8c37167e828b1b7
-  languageName: node
-  linkType: hard
-
 "ansi-regex@npm:^5.0.1":
   version: 5.0.1
   resolution: "ansi-regex@npm:5.0.1"
@@ -103,7 +94,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "finance_stuff@workspace:."
   dependencies:
-    add-to-calendar-button: "npm:^2.6.19"
     concurrently: "npm:^9.0.1"
   languageName: unknown
   linkType: soft
@@ -194,13 +184,6 @@ __metadata:
   dependencies:
     has-flag: "npm:^4.0.0"
   checksum: 10c0/ea1d3c275dd604c974670f63943ed9bd83623edc102430c05adb8efc56ba492746b6e95386e7831b872ec3807fd89dd8eb43f735195f37b5ec343e4234cc7e89
-  languageName: node
-  linkType: hard
-
-"timezones-ical-library@npm:^1.8.3":
-  version: 1.8.3
-  resolution: "timezones-ical-library@npm:1.8.3"
-  checksum: 10c0/5d1b65558fb95bdaafc6c1dc240da0bfdb53eb8bcf0373e3ce7a6d7ea2642392abbf25600b10a35e61ddefb00f0cf857083e8114fe3f0059deede6ce07cee00a
   languageName: node
   linkType: hard
 
