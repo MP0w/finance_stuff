@@ -7,6 +7,8 @@ import {
   Table,
 } from "../../types";
 import expressAsyncHandler from "express-async-handler";
+import { getConnectionWithDecryptedSettings } from "../Connectors/connectors";
+import { ConnectorId, getConnector } from "finance_stuff_connectors";
 
 export function accountingEntriesRouter(app: Application) {
   app.get(
@@ -91,7 +93,12 @@ export function accountingEntriesRouter(app: Application) {
     })
   );
 
-  async function upsertEntry(id: string, req: Request, res: Response) {
+  async function upsertEntry(
+    id: string,
+    req: Request,
+    res: Response,
+    successHandler?: () => Promise<void>
+  ) {
     const date: Date | undefined = req.body.date;
 
     if (!date) {
@@ -109,7 +116,11 @@ export function accountingEntriesRouter(app: Application) {
         .onConflict("id")
         .merge();
 
-      res.send({});
+      if (successHandler) {
+        await successHandler();
+      } else {
+        res.send({});
+      }
     } catch (error) {
       const isDupe = (error as Error).message.includes(
         `duplicate key value violates unique constraint "accounting_entries_user_id_date_unique"`
@@ -125,7 +136,45 @@ export function accountingEntriesRouter(app: Application) {
   app.post(
     "/accounting_entry",
     expressAsyncHandler(async (req, res) => {
-      upsertEntry(generateUUID(), req, res);
+      const id = generateUUID();
+      upsertEntry(id, req, res, async () => {
+        const connections = await getConnectionWithDecryptedSettings(
+          req.userId
+        );
+
+        const failedConnections: { connectorId: string; accountId: string }[] =
+          [];
+
+
+        for (const c of connections) {
+          try {
+            const connector = getConnector(
+              c.connector_id as ConnectorId,
+              c.settings
+            );
+
+            const value = await connector.getBalance();
+
+            await dbConnection<Entries>(Table.Entries).insert({
+              id: generateUUID(),
+              accounting_entry_id: id,
+              account_id: c.account_id,
+              user_id: req.userId,
+              value,
+              created_at: new Date(),
+              updated_at: new Date(),
+            });
+          } catch (error) {
+            console.error(error);
+            failedConnections.push({
+              connectorId: c.connector_id,
+              accountId: c.account_id,
+            });
+          }
+        }
+
+        res.send({ failedConnections });
+      });
     })
   );
 

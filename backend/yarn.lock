@@ -2238,12 +2238,12 @@ __metadata:
 
 "finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git":
   version: 1.0.0
-  resolution: "finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git#commit=c02a5d10066d6506cb51a89663a7ae337e69595c"
+  resolution: "finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git#commit=1f72ae71fd4b24c835bd20f6f99316dd1613e3cc"
   dependencies:
     typescript: "npm:^5.6.2"
   peerDependencies:
     node: ^22.8.0
-  checksum: 10c0/47710d060b7166c9e0ab6cc344364d42025ebb9620501d7d722b111a4120cc430fcf4c962f2b7f2297fd24663867690fe3f8a757df901af120f6c7629474aa5c
+  checksum: 10c0/ecab3a0337aaf1e5af757d53f87917172c61a72482133d33fba5ff8544edbb6841222373ec7ca58c8c3c09a736583dc660f643bf4a872bf3ec6e26de7175acc3
   languageName: node
   linkType: hard
 

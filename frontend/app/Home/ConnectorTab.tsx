@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Accounts, Connector } from "../../../backend/types";
-import { useGetConnectorsSettings } from "./apis/connectionsAPIs";
+import {
+  useGetConnectorsSettings,
+  useCreateConnection,
+} from "./apis/connectionsAPIs";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
@@ -16,6 +19,12 @@ export const ConnectorsTab: React.FC<{
     error,
     execute: getConnectorsSettings,
   } = useGetConnectorsSettings();
+
+  const {
+    execute: createConnection,
+    loading: isCreating,
+    error: createError,
+  } = useCreateConnection();
 
   const [availableConnectors, setAvailableConnectors] = useState<Connector[]>(
     connectorsSettings ?? []
@@ -59,13 +68,23 @@ export const ConnectorsTab: React.FC<{
     });
   }, [selectedAccount, selectedConnector, availableConnectors, formData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
-      console.log("Selected Account:", selectedAccount);
-      console.log("Selected Connector:", selectedConnector);
-      console.log("Form Data:", formData);
-      // Add your form submission logic here
+    if (isFormValid && selectedAccount && selectedConnector) {
+      try {
+        await createConnection({
+          connector_id: selectedConnector,
+          account_id: selectedAccount,
+          settings: formData,
+        });
+        // Reset form or show success message
+        setSelectedAccount(undefined);
+        setSelectedConnector(undefined);
+        setFormData({});
+        // Optionally, you can refetch the connections list here
+      } catch (error) {
+        console.error("Error creating connection:", error);
+      }
     }
   };
 
@@ -163,11 +182,16 @@ export const ConnectorsTab: React.FC<{
           )}
           <button
             type="submit"
-            disabled={!isFormValid}
+            disabled={!isFormValid || isCreating}
             className="w-full flex justify-center py-2 px-4 border border-transparent shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 pixel-corners-small disabled:opacity-50"
           >
-            Connect
+            {isCreating ? "Connecting..." : "Connect"}
           </button>
+          {createError && (
+            <p className="text-red-500 text-sm mt-2">
+              Error creating connection: {createError.message}
+            </p>
+          )}
         </form>
       )}
     </div>
