@@ -1510,6 +1510,7 @@ __metadata:
     dotenv: "npm:^16.4.5"
     express: "npm:^4.19.2"
     express-async-handler: "npm:^1.2.0"
+    finance_stuff_connectors: "https://github.com/MP0w/finance_stuff_connectors.git"
     firebase-admin: "npm:^12.4.0"
     knex: "npm:^3.1.0"
     knex-types: "npm:^0.5.0"
@@ -2232,6 +2233,17 @@ __metadata:
     statuses: "npm:2.0.1"
     unpipe: "npm:~1.0.0"
   checksum: 10c0/d38035831865a49b5610206a3a9a9aae4e8523cbbcd01175d0480ffbf1278c47f11d89be3ca7f617ae6d94f29cf797546a4619cd84dd109009ef33f12f69019f
+  languageName: node
+  linkType: hard
+
+"finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git":
+  version: 1.0.0
+  resolution: "finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git#commit=c02a5d10066d6506cb51a89663a7ae337e69595c"
+  dependencies:
+    typescript: "npm:^5.6.2"
+  peerDependencies:
+    node: ^22.8.0
+  checksum: 10c0/47710d060b7166c9e0ab6cc344364d42025ebb9620501d7d722b111a4120cc430fcf4c962f2b7f2297fd24663867690fe3f8a757df901af120f6c7629474aa5c
   languageName: node
   linkType: hard
 
@@ -4322,7 +4334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.5.4":
+"typescript@npm:^5.5.4, typescript@npm:^5.6.2":
   version: 5.6.2
   resolution: "typescript@npm:5.6.2"
   bin:
@@ -4332,7 +4344,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.5.4#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.5.4#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.2#optional!builtin<compat/typescript>":
   version: 5.6.2
   resolution: "typescript@patch:typescript@npm%3A5.6.2#optional!builtin<compat/typescript>::version=5.6.2&hash=8c6c40"
   bin:

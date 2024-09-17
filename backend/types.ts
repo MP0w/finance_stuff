@@ -75,3 +75,14 @@ export type Users = {
   updated_at: Date;
 };
 
+export type Connector = {
+  id: string;
+  name: string;
+  type: AccountType;
+  icon: string | undefined;
+  settings: {
+    key: string;
+    hint: string;
+    type: "string" | "number" | "boolean";
+  }[];
+};

@@ -8,6 +8,7 @@ import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import getUuidByString from "uuid-by-string";
 import cors from "cors";
 import expressAsyncHandler from "express-async-handler";
+import { connectorsRouter } from "./Connectors/connectors";
 
 declare global {
   namespace Express {
@@ -55,4 +56,5 @@ export function router(app: Application) {
   accountsRouter(app);
   accountingEntriesRouter(app);
   entriesRouter(app);
+  connectorsRouter(app);
 }

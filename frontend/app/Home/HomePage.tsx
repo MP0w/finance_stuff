@@ -24,6 +24,7 @@ import OnboardingTips from "./OnboardingTips";
 import AddToCalendar from "../components/AddToCalendar";
 import { logAnalyticsEvent } from "../firebase";
 import SummaryTab from "./Summary/SummaryTab";
+import ConnectorsTab from "./ConnectorTab";
 
 interface HomePageProps {
   signOut: () => void;
@@ -350,6 +351,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         onDeleteAccountingEntry={handleDeleteAccountingEntry}
       />
     ),
+    connectors: <ConnectorsTab accounts={accounts ?? []} />,
   };
 
   if (!user) {
@@ -371,6 +373,11 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             activeTab={activeTab}
             setActiveTab={(tabId) => {
               setActiveTab(tabId);
+              setNewAccountName("");
+              setExpandedAddAccount(false);
+            }}
+            onOpenConnectors={() => {
+              setActiveTab("connectors");
               setNewAccountName("");
               setExpandedAddAccount(false);
             }}

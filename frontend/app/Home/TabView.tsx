@@ -14,6 +14,7 @@ interface TabViewProps {
   children: React.ReactNode;
   email?: string;
   signOut: () => void;
+  onOpenConnectors: () => void;
 }
 
 const TabView: React.FC<TabViewProps> = ({
@@ -23,10 +24,16 @@ const TabView: React.FC<TabViewProps> = ({
   children,
   email,
   signOut,
+  onOpenConnectors,
 }) => {
   return (
     <div>
-      <BrandHeader className="md:hidden" email={email} signOut={signOut} />
+      <BrandHeader
+        className="md:hidden"
+        email={email}
+        signOut={signOut}
+        onOpenConnectors={onOpenConnectors}
+      />
       <header className="flex border-b border-gray-200 mb-8">
         <div className="w-full">
           {tabs.map((tab) => (
@@ -49,6 +56,7 @@ const TabView: React.FC<TabViewProps> = ({
           className="hidden md:flex"
           email={email}
           signOut={signOut}
+          onOpenConnectors={onOpenConnectors}
         />
       </header>
       <div>{children}</div>
