@@ -20,6 +20,7 @@ type Summary = {
   investmentsInvested: number;
   profits: number;
   total: number;
+  isMissingValues: boolean;
 };
 
 type SummaryCell = {
@@ -33,6 +34,7 @@ type SummaryCell = {
   previous: Summary | undefined;
   change: number | undefined;
   savings: number | undefined;
+  isMissingValues: boolean;
 };
 
 const TotalTable: React.FC<TotalTableProps> = ({
@@ -66,6 +68,11 @@ const TotalTable: React.FC<TotalTableProps> = ({
       investmentAccountsIds.has(entry.account_id)
     );
 
+    const isMissingValues =
+      fiatEntries.length < fiatAccounts.length ||
+      investmentEntries.length < investmentAccounts.length ||
+      investmentEntries.some((entry) => entry.invested === null);
+
     const liquidTotal = fiatEntries.reduce((acc, curr) => acc + curr.value, 0);
     const investmentsTotal = investmentEntries.reduce(
       (acc, curr) => acc + curr.value,
@@ -87,6 +94,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
       investmentsInvested,
       profits,
       total,
+      isMissingValues,
     };
   });
 
@@ -113,6 +121,9 @@ const TotalTable: React.FC<TotalTableProps> = ({
     const cells: (TableRowCell | undefined)[] = [
       {
         value: summary.date,
+        warningText: summary.isMissingValues
+          ? "🚨 You are missing some values in your accounts for this entry, check the glowing red cells in Bank Accounts & Investments for this date"
+          : undefined,
         onDelete: () => {
           onDeleteAccountingEntry(summary.id);
         },

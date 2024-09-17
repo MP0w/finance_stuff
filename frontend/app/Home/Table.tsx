@@ -1,9 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import AddButton from "../components/AddButton";
 import DeleteIcon from "../components/DeleteIcon";
+import { FiAlertCircle } from "react-icons/fi";
+import { createPortal } from "react-dom";
 
 export type TableHeaderContent =
   | string
@@ -158,6 +160,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
 export interface TableRowCell {
   color?: string;
   value: string | number | undefined;
+  warningText?: string;
   onValueChange?: (value: number) => Promise<void>;
   onDelete?: () => void;
 }
@@ -170,6 +173,10 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
   const [editingValues, setEditingValues] = useState<(string | undefined)[]>(
     cells.map(() => undefined)
   );
+
+  const [tooltipContent, setTooltipContent] = useState<string | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = useCallback((index: number, value: string) => {
     setEditingValues((prev) => {
@@ -230,60 +237,109 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
 
   const [isHovering, setIsHovering] = useState(false);
 
+  const handleWarningMouseEnter = (
+    event: React.MouseEvent,
+    warningText: string
+  ) => {
+    setTooltipContent(warningText);
+    const rect = event.currentTarget.getBoundingClientRect();
+    setTooltipPosition({
+      top: rect.top - 10,
+      left: rect.left + rect.width / 2,
+    });
+  };
+
+  const handleWarningMouseLeave = () => {
+    setTooltipContent(null);
+  };
+
   return (
-    <tr className="border-t border-gray-300">
-      {cells.map((value, index) => (
-        <td
-          key={index}
-          className={`text-gray-600 ${
-            !value.onValueChange ? value.color ?? `bg-gray-100` : ""
-          }${
-            value.value === undefined && editingValues[index] === undefined
-              ? "border-b-2 border-b-red-100 bg-red-100 animate-pulse"
-              : ""
-          }`}
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          <div className="flex items-center w-full">
-            {!value.onValueChange ? (
-              <span className="px-4 py-2 flex-shrink-0">
-                {formattedValue(value.value)}
-              </span>
-            ) : (
-              <div className="px-2 flex items-center flex-grow">
-                {(value.value !== undefined ||
-                  editingValues[index] !== undefined) && (
-                  <span className="mr-1 flex-shrink-0">$</span>
-                )}
-                <input
-                  type="text"
-                  value={
-                    editingValues[index] !== undefined
-                      ? editingValues[index]
-                      : value.value ?? ""
-                  }
-                  onChange={(e) => handleInputChange(index, e.target.value)}
-                  onBlur={(e) => handleInputBlur(index, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(e)}
-                  className="py-2 w-full min-w-16 bg-transparent border-none focus:outline-none rounded"
-                />
-              </div>
-            )}
-            <div className="w-6 flex-shrink-0">
-              {value.onDelete && (
-                <DeleteIcon
-                  className={`ml-2 transition-opacity duration-200 ${
-                    isHovering ? "opacity-100" : "opacity-0"
-                  }`}
-                  onClick={value.onDelete}
-                />
+    <>
+      <tr className="border-t border-gray-300">
+        {cells.map((value, index) => (
+          <td
+            key={index}
+            className={`text-gray-600 ${
+              !value.onValueChange ? value.color ?? `bg-gray-100` : ""
+            }${
+              value.value === undefined && editingValues[index] === undefined
+                ? "border-b-2 border-b-red-100 bg-red-100 animate-pulse"
+                : ""
+            }`}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            <div className="flex items-center w-full">
+              {!value.onValueChange ? (
+                <span className="px-4 py-2 flex-shrink-0">
+                  {formattedValue(value.value)}
+                </span>
+              ) : (
+                <div className="px-2 flex items-center flex-grow">
+                  {(value.value !== undefined ||
+                    editingValues[index] !== undefined) && (
+                    <span className="mr-1 flex-shrink-0">$</span>
+                  )}
+                  <input
+                    type="text"
+                    value={
+                      editingValues[index] !== undefined
+                        ? editingValues[index]
+                        : value.value ?? ""
+                    }
+                    onChange={(e) => handleInputChange(index, e.target.value)}
+                    onBlur={(e) => handleInputBlur(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(e)}
+                    className="py-2 w-full min-w-16 bg-transparent border-none focus:outline-none rounded"
+                  />
+                </div>
               )}
+              {value.warningText && (
+                <div
+                  className="relative"
+                  onMouseEnter={(e) =>
+                    handleWarningMouseEnter(e, value.warningText!)
+                  }
+                  onMouseLeave={handleWarningMouseLeave}
+                  onClick={(e) => {
+                    tooltipContent
+                      ? handleWarningMouseLeave()
+                      : handleWarningMouseEnter(e, value.warningText!);
+                  }}
+                >
+                  <FiAlertCircle className="text-red-500" />
+                </div>
+              )}
+              <div className="w-6 flex-shrink-0">
+                {value.onDelete && (
+                  <DeleteIcon
+                    className={`ml-2 transition-opacity duration-200 ${
+                      isHovering ? "opacity-100" : "opacity-0"
+                    }`}
+                    onClick={value.onDelete}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        </td>
-      ))}
-    </tr>
+          </td>
+        ))}
+      </tr>
+      {tooltipContent &&
+        createPortal(
+          <div
+            ref={tooltipRef}
+            className="fixed z-50 p-2 bg-gray-600 text-gray-50 text-sm rounded shadow-lg pointer-events-none max-w-xs break-words"
+            style={{
+              top: `${tooltipPosition.top}px`,
+              left: `${tooltipPosition.left}px`,
+              transform: "translate(-50%, -100%)",
+            }}
+          >
+            {tooltipContent}
+          </div>,
+          document.body
+        )}
+    </>
   );
 };
 
