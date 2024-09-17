@@ -1,4 +1,6 @@
+import { DateTime } from "luxon";
 import { SummaryCell } from "./SummaryTab";
+import { LineChart } from "@mui/x-charts";
 
 export interface ProjectionsTabProps {
   summaryCells: SummaryCell[];
@@ -25,13 +27,42 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
   const averageSavings = sums.savings / (summaryCells.length - 1);
   const averageTotal = sums.total / summaryCells.length;
   const averageProfits = sums.profits / (summaryCells.length - 1);
+  const lastSummary = summaryCells.at(-1);
+  const firstDate = DateTime.fromJSDate(summaryCells.at(0)?.date ?? new Date());
+  const lastDate = DateTime.fromJSDate(lastSummary?.date ?? new Date());
+  const distanceBetweenEntries =
+    summaryCells.length > 1 ? lastDate.diff(firstDate, "months").months : 0;
+  const totalDiff =
+    (lastSummary?.total ?? 0) - (summaryCells.at(0)?.total ?? 0);
+  const averageDiff = totalDiff / distanceBetweenEntries;
+
+  const nextYearDates = Array(12)
+    .fill(1)
+    .map((_, i) => {
+      return lastDate.plus({ months: i + 1 }).toJSDate();
+    });
+
+  const projectionValues = [
+    { date: lastDate.toJSDate(), value: lastSummary?.total ?? 0 },
+  ].concat(
+    nextYearDates.map((date, index) => {
+      const rand = Math.random() / (index + 1);
+      const randPercentage = Math.random() > 0.5 ? rand : -rand;
+      const diff = averageDiff + averageDiff * randPercentage;
+      return {
+        date,
+        value: (lastSummary?.total ?? 0) + diff * (index + 1),
+      };
+    })
+  );
 
   return (
     <div>
-      {summaryCells.length < 6 && (
+      {distanceBetweenEntries < 6 && (
         <blockquote className="text-gray-800 border-l-4 border-gray-600 pl-4">
-          Statistics and projections will be more accurate the more data you
-          will have. You can also enter data of previous months.
+          Your data covers {distanceBetweenEntries} months, statistics and
+          projections will be more accurate the more data you will have. You can
+          also enter data of previous months.
         </blockquote>
       )}
       <div className="w-full mt-8 flex gap-16 flex-wrap items-center justify-center">
@@ -58,6 +89,47 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
           </div>
         )}
       </div>
+
+      <h2 className="text-xl text-gray-800 mt-16 text-center">Projection</h2>
+      {distanceBetweenEntries < 6 ? (
+        <blockquote className="text-gray-800 border-l-4 border-gray-600 pl-4">
+          We can only do projections if you have at least 6 months of data. You
+          currently have {distanceBetweenEntries} months of data.
+        </blockquote>
+      ) : (
+        <div className="flex justify-center items-center">
+          <LineChart
+            xAxis={[
+              {
+                data: projectionValues.map((p) => p.date),
+                valueFormatter: (d: Date) =>
+                  new Date(d).toLocaleDateString(undefined, {
+                    dateStyle: "short",
+                  }),
+                tickMinStep: 3600 * 1000 * 24 * 30 * 3,
+                min: projectionValues[0].date,
+                max: projectionValues[projectionValues.length - 1].date,
+              },
+            ]}
+            series={[
+              {
+                label: "Total net worth",
+                data: projectionValues.map((p) => p.value),
+                color: "#3852d6",
+              },
+            ]}
+            width={600}
+            height={400}
+            slotProps={{ legend: { hidden: true } }}
+            leftAxis={{
+              disableTicks: true,
+            }}
+            bottomAxis={{
+              disableTicks: true,
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -21,6 +21,7 @@
     "add-to-calendar-button": "^2.6.19",
     "axios": "^1.7.7",
     "firebase": "^10.13.1",
+    "luxon": "^3.5.0",
     "next": "14.2.8",
     "react": "^18",
     "react-archer": "^4.4.0",
@@ -33,6 +34,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@types/luxon": "^3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
