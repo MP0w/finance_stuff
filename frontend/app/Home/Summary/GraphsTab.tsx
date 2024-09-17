@@ -1,26 +1,20 @@
 import { PieChart, PieValueType } from "@mui/x-charts";
-import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
-import { makeSummaryData } from "./TotalTable";
+import { AccountingEntriesDTO, Accounts } from "../../../../backend/types";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { stringForPercentage } from "./InvestmentTable";
+import { stringForPercentage } from "../InvestmentTable";
+import { SummaryCell } from "./SummaryTab";
 
 export interface GraphsTabProps {
-  fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
+  summaryCells: SummaryCell[];
 }
 
 export const GraphsTab: React.FC<GraphsTabProps> = ({
-  fiatAccounts,
   investmentAccounts,
   accountingEntries,
+  summaryCells,
 }) => {
-  const summaryCells = makeSummaryData({
-    fiatAccounts,
-    investmentAccounts,
-    accountingEntries,
-  });
-
   const lastEntry = accountingEntries[accountingEntries.length - 1];
   const investmentAccountsByIds = new Map(
     investmentAccounts.map((account) => [account.id, account])

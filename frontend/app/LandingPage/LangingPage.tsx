@@ -1,6 +1,6 @@
 import React from "react";
 import { useUserState } from "../UserState";
-import TotalTable, { TotalTableProps } from "../Home/TotalTable";
+import TotalTable, { TotalTableProps } from "../Home/Summary/TotalTable";
 import {
   mockAccountingEntries,
   mockFiatAccounts,

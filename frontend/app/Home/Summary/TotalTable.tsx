@@ -1,111 +1,17 @@
 import React from "react";
-import Table, { dateHeader, TableHeaderContent, TableRowCell } from "./Table";
-import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
-import { colorForValue, stringForPercentage } from "./InvestmentTable";
+import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
+import { AccountingEntriesDTO, Accounts } from "../../../../backend/types";
+import { colorForValue, stringForPercentage } from "../InvestmentTable";
+import { makeSummaryData, SummaryCell } from "./SummaryTab";
 
 export interface TotalTableProps {
   title?: string;
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
+  summaryCells?: SummaryCell[];
   onAddEntry: (date: Date) => void;
   onDeleteAccountingEntry: (entryId: string) => void;
-}
-
-type Summary = {
-  id: string;
-  date: Date;
-  liquidTotal: number;
-  investmentsTotal: number;
-  investmentsInvested: number;
-  profits: number;
-  total: number;
-  isMissingValues: boolean;
-};
-
-type SummaryCell = {
-  id: string;
-  date: Date;
-  liquidTotal: number;
-  investmentsTotal: number;
-  investmentsInvested: number;
-  profits: number;
-  total: number;
-  previous: Summary | undefined;
-  change: number | undefined;
-  savings: number | undefined;
-  isMissingValues: boolean;
-};
-
-export function makeSummaryData(args: {
-  fiatAccounts: Accounts[];
-  investmentAccounts: Accounts[];
-  accountingEntries: AccountingEntriesDTO[];
-}) {
-  const { fiatAccounts, investmentAccounts, accountingEntries } = args;
-  const fiatAccountsIds = new Set(fiatAccounts.map((account) => account.id));
-  const investmentAccountsIds = new Set(
-    investmentAccounts.map((account) => account.id)
-  );
-
-  const summaries: Summary[] = accountingEntries.map((entry) => {
-    const fiatEntries = entry.entries.filter((entry) =>
-      fiatAccountsIds.has(entry.account_id)
-    );
-    const investmentEntries = entry.entries.filter((entry) =>
-      investmentAccountsIds.has(entry.account_id)
-    );
-
-    const isMissingValues =
-      fiatEntries.length < fiatAccounts.length ||
-      investmentEntries.length < investmentAccounts.length ||
-      investmentEntries.some((entry) => entry.invested === null);
-
-    const liquidTotal = fiatEntries.reduce((acc, curr) => acc + curr.value, 0);
-    const investmentsTotal = investmentEntries.reduce(
-      (acc, curr) => acc + curr.value,
-      0
-    );
-    const investmentsInvested = investmentEntries.reduce(
-      (acc, curr) => acc + (curr.invested ?? 0),
-      0
-    );
-
-    const profits = investmentsTotal - investmentsInvested;
-    const total = liquidTotal + investmentsTotal;
-
-    return {
-      id: entry.id,
-      date: new Date(entry.date),
-      liquidTotal,
-      investmentsTotal,
-      investmentsInvested,
-      profits,
-      total,
-      isMissingValues,
-    };
-  });
-
-  const summaryCells: SummaryCell[] = summaries.map((summary, index) => {
-    const previous = index > 0 ? summaries.at(index - 1) : undefined;
-    const change = previous ? summary.total - previous.total : undefined;
-    let savings = undefined;
-
-    if (previous) {
-      const previousTotalWithoutGains = previous.total - previous.profits;
-      const currentTotalWithoutGains = summary.total - summary.profits;
-      savings = currentTotalWithoutGains - previousTotalWithoutGains;
-    }
-
-    return {
-      ...summary,
-      previous,
-      change,
-      savings,
-    };
-  });
-
-  return summaryCells;
 }
 
 const TotalTable: React.FC<TotalTableProps> = ({
@@ -113,6 +19,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
   fiatAccounts,
   investmentAccounts,
   accountingEntries,
+  summaryCells,
   onDeleteAccountingEntry,
 }) => {
   const headers: (TableHeaderContent | undefined)[] = [
@@ -156,11 +63,13 @@ const TotalTable: React.FC<TotalTableProps> = ({
     "Change",
   ];
 
-  const summaryCells = makeSummaryData({
-    fiatAccounts,
-    investmentAccounts,
-    accountingEntries,
-  });
+  const summaryData =
+    summaryCells ??
+    makeSummaryData({
+      fiatAccounts,
+      investmentAccounts,
+      accountingEntries,
+    });
 
   const getCells = (summary: SummaryCell): TableRowCell[] => {
     const cells: (TableRowCell | undefined)[] = [
@@ -230,7 +139,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
     <Table
       title={title}
       headers={headers.filter((h) => h !== undefined)}
-      rows={summaryCells.map((entry) => getCells(entry))}
+      rows={summaryData.map((entry) => getCells(entry))}
       onAddEntry={undefined}
     />
   );

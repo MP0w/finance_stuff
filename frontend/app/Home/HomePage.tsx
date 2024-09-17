@@ -15,7 +15,7 @@ import { useCreateEntry, useUpdateEntry } from "./apis/entriesAPIs";
 import { AccountType } from "../../../backend/types";
 import AccountsTable from "./AccountsTable";
 import InvestmentTable from "./InvestmentTable";
-import TotalTable from "./TotalTable";
+import TotalTable from "./Summary/TotalTable";
 import TabView from "./TabView";
 import AddButton from "../components/AddButton";
 import Modal from "react-modal";
@@ -23,7 +23,7 @@ import { ArcherContainer } from "react-archer";
 import OnboardingTips from "./OnboardingTips";
 import AddToCalendar from "../components/AddToCalendar";
 import { logAnalyticsEvent } from "../firebase";
-import { GraphsTab } from "./GraphsTab";
+import SummaryTab from "./Summary/SummaryTab";
 
 interface HomePageProps {
   signOut: () => void;
@@ -341,29 +341,15 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         )}
       </>
     ),
-    summary:
-      fiatAccounts.length > 0 || investmentAccounts.length > 0 ? (
-        <div>
-          <div className="flex justify-between items-center">
-            <div></div>
-            <AddToCalendar />
-          </div>
-          <TotalTable
-            fiatAccounts={fiatAccounts}
-            investmentAccounts={investmentAccounts}
-            accountingEntries={accountingEntries ?? []}
-            onAddEntry={handleCreateAccountingEntry}
-            onDeleteAccountingEntry={handleDeleteAccountingEntry}
-          />
-          <GraphsTab
-            fiatAccounts={fiatAccounts}
-            investmentAccounts={investmentAccounts}
-            accountingEntries={accountingEntries ?? []}
-          />
-        </div>
-      ) : (
-        <div>Add yours accounts and entries to see the summary</div>
-      ),
+    summary: (
+      <SummaryTab
+        fiatAccounts={fiatAccounts}
+        investmentAccounts={investmentAccounts}
+        accountingEntries={accountingEntries ?? []}
+        onAddEntry={handleCreateAccountingEntry}
+        onDeleteAccountingEntry={handleDeleteAccountingEntry}
+      />
+    ),
   };
 
   if (!user) {
