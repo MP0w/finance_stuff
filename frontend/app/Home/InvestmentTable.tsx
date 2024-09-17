@@ -48,7 +48,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
     "Date",
     `Initial investment`,
     `Investment Value`,
-    "Profit",
+    "Profits",
     "Change",
     "%",
   ];

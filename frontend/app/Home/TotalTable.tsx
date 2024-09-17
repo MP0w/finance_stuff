@@ -46,11 +46,11 @@ const TotalTable: React.FC<TotalTableProps> = ({
 }) => {
   const headers: (TableHeaderContent | undefined)[] = [
     "Date",
-    fiatAccounts.length ? "Liquid Total" : undefined,
-    investmentAccounts.length ? "Investments Invested" : undefined,
-    investmentAccounts.length ? "Investments Total" : undefined,
-    investmentAccounts.length ? "Investments Profit" : undefined,
-    investmentAccounts.length ? "Investments %" : undefined,
+    fiatAccounts.length ? "Liquid" : undefined,
+    investmentAccounts.length ? "Invested" : undefined,
+    investmentAccounts.length ? "Investments Value" : undefined,
+    investmentAccounts.length ? "Profits" : undefined,
+    investmentAccounts.length ? "%" : undefined,
     fiatAccounts.length
       ? {
           title: "Savings",
