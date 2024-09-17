@@ -20,7 +20,7 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete("CASCADE")
       .index("connections_account_id");
 
-    table.string("settings").notNullable();
+    table.text("settings").notNullable();
     table.string("connector_id").notNullable();
 
     table.timestamps(true, true);

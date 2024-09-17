@@ -5,6 +5,7 @@ import {
   AccountingEntriesDTO,
   Entries,
   Table,
+  Users,
 } from "../../types";
 import expressAsyncHandler from "express-async-handler";
 import { getConnectionWithDecryptedSettings } from "../Connectors/connectors";
@@ -144,13 +145,21 @@ export function accountingEntriesRouter(app: Application) {
 
         const failedConnections: { connectorId: string; accountId: string }[] =
           [];
-
+        const user = await dbConnection<Users>(Table.Users)
+          .select()
+          .where({ id: req.userId })
+          .limit(1)
+          .first();
+        const currency = user?.currency ?? "USD";
 
         for (const c of connections) {
           try {
+            const settings = c.settings;
+            settings.currency = currency;
+
             const connector = getConnector(
               c.connector_id as ConnectorId,
-              c.settings
+              settings
             );
 
             const value = await connector.getBalance();

@@ -77,11 +77,9 @@ export const ConnectorsTab: React.FC<{
           account_id: selectedAccount,
           settings: formData,
         });
-        // Reset form or show success message
         setSelectedAccount(undefined);
         setSelectedConnector(undefined);
         setFormData({});
-        // Optionally, you can refetch the connections list here
       } catch (error) {
         console.error("Error creating connection:", error);
       }
@@ -162,9 +160,12 @@ export const ConnectorsTab: React.FC<{
                   <div key={setting.key} className="mb-4">
                     <label
                       htmlFor={setting.key}
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm text-gray-900 mb-1"
                     >
                       {setting.hint}
+                      <p className="text-gray-600">
+                        {setting.extraInstructions}
+                      </p>
                     </label>
                     <input
                       type={setting.type === "number" ? "number" : "text"}
