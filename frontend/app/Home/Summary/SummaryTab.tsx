@@ -139,7 +139,7 @@ export const SummaryTab: React.FC<{
         accountingEntries={accountingEntries ?? []}
         summaryCells={summaryCells}
       />
-      <ProjectionsTab />
+      <ProjectionsTab summaryCells={summaryCells} />
     </div>
   ) : (
     <div>Add your accounts and entries to see the summary</div>
