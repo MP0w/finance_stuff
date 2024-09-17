@@ -239,7 +239,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
             !value.onValueChange ? value.color ?? `bg-gray-100` : ""
           }${
             value.value === undefined && editingValues[index] === undefined
-              ? "border-b-2 border-b-red-100 bg-red-50 animate-pulse"
+              ? "border-b-2 border-b-red-100 bg-red-100 animate-pulse"
               : ""
           }`}
           onMouseEnter={() => setIsHovering(true)}

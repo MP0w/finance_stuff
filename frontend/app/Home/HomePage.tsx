@@ -21,6 +21,7 @@ import AddButton from "../components/AddButton";
 import Modal from "react-modal";
 import { ArcherContainer } from "react-archer";
 import OnboardingTips from "./OnboardingTips";
+import AddToCalendar from "../components/AddToCalendar";
 
 interface HomePageProps {
   signOut: () => void;
@@ -235,10 +236,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const tabContent = {
     fiat: (
       <div>
-        <AddButton
-          title="Add account"
-          onClick={() => setExpandedAddAccount(!expandedAddAccount)}
-        />
+        <div className="flex justify-between items-center">
+          <AddButton
+            title="Add account"
+            onClick={() => setExpandedAddAccount(!expandedAddAccount)}
+          />
+          <AddToCalendar />
+        </div>
 
         {expandedAddAccount && (
           <div className="mt-4 mb-4 flex">
@@ -278,10 +282,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     ),
     investments: (
       <>
-        <AddButton
-          title="Add account"
-          onClick={() => setExpandedAddAccount(!expandedAddAccount)}
-        />
+        <div className="flex justify-between items-center">
+          <AddButton
+            title="Add account"
+            onClick={() => setExpandedAddAccount(!expandedAddAccount)}
+          />
+          <AddToCalendar />
+        </div>
         {expandedAddAccount && (
           <div className="mb-4 mt-4 flex">
             <input
