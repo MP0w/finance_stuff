@@ -297,15 +297,12 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
               {value.warningText && (
                 <div
                   className="relative"
-                  onMouseEnter={(e) =>
-                    handleWarningMouseEnter(e, value.warningText!)
-                  }
-                  onMouseLeave={handleWarningMouseLeave}
-                  onClick={(e) => {
+                  onMouseEnter={(e) => {
                     tooltipContent
                       ? handleWarningMouseLeave()
                       : handleWarningMouseEnter(e, value.warningText!);
                   }}
+                  onMouseLeave={handleWarningMouseLeave}
                 >
                   <FiAlertCircle className="text-red-500" />
                 </div>
