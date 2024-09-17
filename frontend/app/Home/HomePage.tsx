@@ -343,24 +343,27 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     ),
     summary:
       fiatAccounts.length > 0 || investmentAccounts.length > 0 ? (
-        <TotalTable
-          fiatAccounts={fiatAccounts}
-          investmentAccounts={investmentAccounts}
-          accountingEntries={accountingEntries ?? []}
-          onAddEntry={handleCreateAccountingEntry}
-          onDeleteAccountingEntry={handleDeleteAccountingEntry}
-        />
+        <div>
+          <div className="flex justify-between items-center">
+            <div></div>
+            <AddToCalendar />
+          </div>
+          <TotalTable
+            fiatAccounts={fiatAccounts}
+            investmentAccounts={investmentAccounts}
+            accountingEntries={accountingEntries ?? []}
+            onAddEntry={handleCreateAccountingEntry}
+            onDeleteAccountingEntry={handleDeleteAccountingEntry}
+          />
+          <GraphsTab
+            fiatAccounts={fiatAccounts}
+            investmentAccounts={investmentAccounts}
+            accountingEntries={accountingEntries ?? []}
+          />
+        </div>
       ) : (
         <div>Add yours accounts and entries to see the summary</div>
       ),
-    projections: <div>Coming soon</div>,
-    graphs: (
-      <GraphsTab
-        fiatAccounts={fiatAccounts}
-        investmentAccounts={investmentAccounts}
-        accountingEntries={accountingEntries ?? []}
-      />
-    ),
   };
 
   if (!user) {
@@ -378,8 +381,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               { id: "fiat", label: "Bank Accounts" },
               { id: "investments", label: "Investments" },
               { id: "summary", label: "Summary" },
-              { id: "graphs", label: "Graphs" },
-              { id: "projections", label: "Projections" },
             ]}
             activeTab={activeTab}
             setActiveTab={(tabId) => {
