@@ -49,7 +49,13 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
         xAxis={[
           {
             data: summaryCells.map((p) => p.date),
-            valueFormatter: (d: Date) => new Date(d).toLocaleDateString(),
+            valueFormatter: (d: Date) =>
+              new Date(d).toLocaleDateString(undefined, {
+                dateStyle: "short",
+              }),
+            tickMinStep: 3600 * 1000 * 24 * 30 * (summaryCells.length / 3),
+            min: summaryCells[0].date,
+            max: summaryCells[summaryCells.length - 1].date,
           },
         ]}
         series={[
@@ -72,6 +78,12 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
         width={600}
         height={400}
         slotProps={{ legend: { hidden: true } }}
+        leftAxis={{
+          disableTicks: true,
+        }}
+        bottomAxis={{
+          disableTicks: true,
+        }}
       />
       <PieChart
         series={[
