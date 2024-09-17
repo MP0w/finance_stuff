@@ -1,5 +1,5 @@
 import React from "react";
-import Table, { TableHeaderContent, TableRowCell } from "./Table";
+import Table, { dateHeader, TableHeaderContent, TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 
 interface AccountsTableProps {
@@ -25,7 +25,7 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
   onDeleteAccountingEntry,
 }) => {
   const headers: TableHeaderContent[] = [
-    "Date",
+    dateHeader,
     ...accounts.map((account) => {
       return {
         title: account.name,

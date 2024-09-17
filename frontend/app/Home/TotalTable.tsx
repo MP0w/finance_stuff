@@ -1,5 +1,5 @@
 import React from "react";
-import Table, { TableHeaderContent, TableRowCell } from "./Table";
+import Table, { dateHeader, TableHeaderContent, TableRowCell } from "./Table";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 import { colorForValue, stringForPercentage } from "./InvestmentTable";
 
@@ -45,21 +45,29 @@ const TotalTable: React.FC<TotalTableProps> = ({
   onDeleteAccountingEntry,
 }) => {
   const headers: (TableHeaderContent | undefined)[] = [
-    "Date",
+    dateHeader,
     fiatAccounts.length
-      ? { title: "Liquid", tipText: "Total of all bank accounts" }
+      ? {
+          title: "Liquid",
+          tip: { text: "Total of all bank accounts", id: "total-table-liquid" },
+        }
       : undefined,
     investmentAccounts.length
       ? {
           title: "Invested",
-          tipText: "Total of all your investments excluding profits or losses",
+          tip: {
+            text: "Total of all your investments excluding profits or losses",
+            id: "total-table-invested",
+          },
         }
       : undefined,
     investmentAccounts.length
       ? {
           title: "Investments Value",
-          tipText:
-            "Total value of your investments including profits or losses",
+          tip: {
+            text: "Total value of your investments including profits or losses",
+            id: "total-table-value",
+          },
         }
       : undefined,
     investmentAccounts.length ? "Profits" : undefined,
@@ -67,8 +75,10 @@ const TotalTable: React.FC<TotalTableProps> = ({
     fiatAccounts.length
       ? {
           title: "Savings",
-          tipText:
-            "Savings excluding profits or losses of investments from the previous entry. Basically your net worth change if investments stayed flat.",
+          tip: {
+            text: "Savings excluding profits or losses of investments from the previous entry. Basically your net worth change if investments stayed flat.",
+            id: "total-table-savings",
+          },
         }
       : undefined,
     fiatAccounts.length && investmentAccounts.length ? "Total" : undefined,
