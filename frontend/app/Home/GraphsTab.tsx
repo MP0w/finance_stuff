@@ -2,6 +2,7 @@ import { PieChart, PieValueType } from "@mui/x-charts";
 import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
 import { makeSummaryData } from "./TotalTable";
 import { LineChart } from "@mui/x-charts/LineChart";
+import { stringForPercentage } from "./InvestmentTable";
 
 export interface GraphsTabProps {
   fiatAccounts: Accounts[];
@@ -42,6 +43,8 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
     label: "Liquid",
     value: summaryCells[summaryCells.length - 1].liquidTotal,
   });
+
+  const pieTotal = pieData.reduce((acc, curr) => acc + curr.value, 0);
 
   return (
     <div className="w-full flex flex-row gap-4 flex-wrap">
@@ -87,7 +90,19 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
       />
       <PieChart
         series={[
-          { data: pieData.sort((a, b) => a.value - b.value), type: "pie" },
+          {
+            valueFormatter: (value) => {
+              return `${value.value.toFixed(0)} (${stringForPercentage(
+                value.value / pieTotal
+              )})`;
+            },
+            data: pieData.sort((a, b) => a.value - b.value),
+            highlightScope: { fade: "global", highlight: "item" },
+            innerRadius: 10,
+            outerRadius: 100,
+            paddingAngle: 3,
+            cornerRadius: 5,
+          },
         ]}
         width={400}
         height={400}

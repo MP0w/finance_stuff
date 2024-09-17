@@ -357,7 +357,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
 
   return (
     <>
-      <tr className="border-t border-gray-300">
+      <tr className="border-t border-gray-300 last:border-gray-400">
         {cells.map((value, index) => (
           <td
             key={index}
