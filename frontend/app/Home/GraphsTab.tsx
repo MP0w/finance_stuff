@@ -41,7 +41,6 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
     id: "Liquid",
     label: "Liquid",
     value: summaryCells[summaryCells.length - 1].liquidTotal,
-    color: "#8ededd",
   });
 
   return (
@@ -84,6 +83,12 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
           legend: {
             itemMarkHeight: 8,
             itemMarkWidth: 8,
+            markGap: 5,
+            itemGap: 10,
+            labelStyle: {
+              fontSize: 10,
+              maxWidth: 20,
+            },
           },
         }}
       />
