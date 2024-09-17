@@ -29,8 +29,8 @@ export function stringForPercentage(profit: number): string {
     return "";
   }
 
-  if (!isFinite(profit) && profit < 0) {
-    return stringForPercentage(-1);
+  if (!isFinite(profit)) {
+    return stringForPercentage(profit < 0 ? -1 : 1);
   }
 
   return `${(profit * 100).toFixed(1)}%`;
@@ -49,20 +49,39 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
     `Initial investment`,
     `Investment Value`,
     "Profit",
+    "Change",
     "%",
   ];
 
+  function getLinkedEntries(accountingEntries: AccountingEntriesDTO[]) {
+    return accountingEntries.map((entry, index) => {
+      const previous = index > 0 ? accountingEntries.at(index - 1) : undefined;
+      return {
+        ...entry,
+        previous,
+      };
+    });
+  }
+
   function getCells(
-    accountingEntry: AccountingEntriesDTO,
+    accountingEntry: AccountingEntriesDTO & {
+      previous: AccountingEntriesDTO | undefined;
+    },
     account: Accounts
   ): TableRowCell[] {
     const entry = accountingEntry.entries.find(
       (e) => e.account_id === account.id
     );
 
+    const previousEntry = accountingEntry.previous?.entries.find(
+      (e) => e.account_id === account.id
+    );
+
     const value = entry?.value;
     const invested = entry?.invested ?? undefined;
     const profits = (value ?? 0) - (invested ?? 0);
+    const previousProfits =
+      (previousEntry?.value ?? 0) - (previousEntry?.invested ?? 0);
 
     return [
       {
@@ -88,8 +107,12 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
         color: colorForValue(profits),
       },
       {
+        value: profits - previousProfits,
+        color: colorForValue(profits - previousProfits),
+      },
+      {
         value: stringForPercentage(profits / (invested ?? 0)),
-        color: colorForValue(profits),
+        color: colorForValue(profits / (invested ?? 0)),
       },
     ];
   }
@@ -98,7 +121,9 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
     <Table
       title={account.name}
       headers={headers}
-      rows={accountingEntries.map((entry) => getCells(entry, account))}
+      rows={getLinkedEntries(accountingEntries).map((entry) =>
+        getCells(entry, account)
+      )}
       onAddEntry={onAddEntry}
       onDelete={() => onDeleteAccount(account.id)}
     />
