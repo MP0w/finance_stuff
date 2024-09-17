@@ -8,15 +8,17 @@ export enum Table {
   KnexMigrations = "knex_migrations",
   KnexMigrationsLock = "knex_migrations_lock",
   Users = "users",
+  Connections = "connections",
 }
 
 export type Tables = {
-  "accounting_entries": AccountingEntries,
-  "accounts": Accounts,
-  "entries": Entries,
-  "knex_migrations": KnexMigrations,
-  "knex_migrations_lock": KnexMigrationsLock,
-  "users": Users,
+  accounting_entries: AccountingEntries;
+  accounts: Accounts;
+  entries: Entries;
+  knex_migrations: KnexMigrations;
+  knex_migrations_lock: KnexMigrationsLock;
+  users: Users;
+  connections: Connections;
 };
 
 export type AccountingEntries = {
@@ -74,6 +76,21 @@ export type Users = {
   created_at: Date;
   updated_at: Date;
 };
+
+export type Connections = {
+  id: string;
+  user_id: string;
+  connector_id: string;
+  account_id: string;
+  settings: string;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type ConnectionsDTO = Omit<
+  Connections,
+  "settings" | "created_at" | "updated_at"
+>;
 
 export type Connector = {
   id: string;
