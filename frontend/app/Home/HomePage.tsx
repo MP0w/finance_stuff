@@ -399,7 +399,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               { id: "fiat", label: "Bank Accounts" },
               { id: "investments", label: "Investments" },
               { id: "summary", label: "Summary" },
-              { id: "connectors", label: "Connectors", hidden: true },
+              { id: "connectors", label: "Connectors" },
             ]}
             activeTab={activeTab}
             setActiveTab={switchTab}

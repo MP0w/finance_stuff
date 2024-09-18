@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { ArcherElement } from "react-archer";
 import { BrandHeader } from "../components/BrandHeader";
 
 interface Tab {
   id: string;
   label: string;
-  hidden?: boolean;
 }
 
 interface TabViewProps {
@@ -25,33 +24,29 @@ const TabView: React.FC<TabViewProps> = ({
   email,
   signOut,
 }) => {
-  const [isHovering, setIsHovering] = useState(false);
+  function renderTab(tab: Tab) {
+    return (
+      <button
+        key={tab.id}
+        className={`py-4 px-4 font-medium text-sm md:text-md focus:outline-none ${
+          activeTab === tab.id
+            ? "border-b border-gray-800 text-gray-800"
+            : "text-gray-500 hover:text-gray-800 "
+        }`}
+        onClick={() => setActiveTab(tab.id)}
+      >
+        <ArcherElement id={tab.id}>
+          <div>{tab.label}</div>
+        </ArcherElement>
+      </button>
+    );
+  }
 
   return (
     <div>
       <BrandHeader className="md:hidden" email={email} signOut={signOut} />
-      <header
-        className="flex border-b border-gray-200 mb-8"
-        onMouseEnter={() => setIsHovering(!isHovering)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        <div className="w-full">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`py-4 px-4 font-medium text-sm md:text-md focus:outline-none ${
-                activeTab === tab.id
-                  ? "border-b border-gray-800 text-gray-800"
-                  : "text-gray-500 hover:text-gray-800 "
-              }${tab.hidden && !isHovering ? "hidden" : ""}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <ArcherElement id={tab.id}>
-                <div>{tab.label}</div>
-              </ArcherElement>
-            </button>
-          ))}
-        </div>
+      <header className="flex border-b border-gray-200 mb-8">
+        <div className="w-full">{tabs.map((tab) => renderTab(tab))}</div>
         <BrandHeader
           className="hidden md:flex"
           email={email}
