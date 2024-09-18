@@ -39,7 +39,8 @@ async function liveEntries(userId: string, accountingEntryId: string) {
     .first();
   const currency = user?.currency ?? "USD";
 
-  const balances: Map<string, { value: number; cost: number }> = new Map();
+  const balances: Map<string, { value: number; cost: number | undefined }> =
+    new Map();
 
   for (const c of connections) {
     try {
@@ -54,11 +55,13 @@ async function liveEntries(userId: string, accountingEntryId: string) {
       const value = await connector.getBalance();
       const currentBalance = balances.get(c.account_id) ?? {
         value: 0,
-        cost: 0,
+        cost: undefined,
       };
       balances.set(c.account_id, {
         value: currentBalance.value + value.value,
-        cost: currentBalance.cost + (value.cost ?? 0),
+        cost: value.cost
+          ? value.cost + (currentBalance.cost ?? 0)
+          : currentBalance.cost,
       });
     } catch (error) {
       console.error(error);
@@ -78,7 +81,7 @@ async function liveEntries(userId: string, accountingEntryId: string) {
       account_id: accountId,
       user_id: userId,
       value: parseFloat(balance.value.toFixed(2)),
-      invested: parseFloat(balance.cost.toFixed(2)),
+      invested: balance.cost ? parseFloat(balance.cost.toFixed(2)) : null,
       created_at: new Date(),
       updated_at: new Date(),
     });
@@ -206,13 +209,16 @@ export function accountingEntriesRouter(app: Application) {
             (entry) => entry.account_id === accountId
           );
 
-          if (liveEntry) {
-            return liveEntry;
-          }
-
           const existingEntry = entries?.find(
             (entry) => entry.account_id === accountId
           );
+
+          if (liveEntry) {
+            return {
+              ...liveEntry,
+              invested: liveEntry.invested ?? existingEntry?.invested ?? null,
+            };
+          }
 
           return existingEntry
             ? {
