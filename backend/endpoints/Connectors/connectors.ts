@@ -1,9 +1,19 @@
 import { Application, Request, Response } from "express";
 import expressAsyncHandler from "express-async-handler";
-import { connectorSettings } from "finance_stuff_connectors";
+import {
+  ConnectorProvider,
+  ConnectorProviderConfig,
+} from "finance_stuff_connectors";
 import { dbConnection, generateUUID } from "../../dbConnection";
 import { Connections, Table } from "../../types";
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
+
+const config: ConnectorProviderConfig = {
+  debankAPIKey: process.env.DEBANK_API_KEY!,
+  currencyAPIKey: process.env.CURRENCY_API_KEY!,
+};
+
+export const connectorProvider = new ConnectorProvider(config);
 
 export function encryptAndStringifySettings(settings: Record<string, unknown>) {
   const string = JSON.stringify(settings);
@@ -57,7 +67,7 @@ export function connectorsRouter(app: Application) {
   app.get(
     "/connectors-settings",
     expressAsyncHandler(async (_, res) => {
-      res.send(connectorSettings);
+      res.send(connectorProvider.connectorSettings);
     })
   );
 

@@ -8,8 +8,11 @@ import {
   Users,
 } from "../../types";
 import expressAsyncHandler from "express-async-handler";
-import { getConnectionWithDecryptedSettings } from "../Connectors/connectors";
-import { ConnectorId, getConnector } from "finance_stuff_connectors";
+import {
+  connectorProvider,
+  getConnectionWithDecryptedSettings,
+} from "../Connectors/connectors";
+import { ConnectorId } from "finance_stuff_connectors";
 
 export function accountingEntriesRouter(app: Application) {
   app.get(
@@ -152,27 +155,21 @@ export function accountingEntriesRouter(app: Application) {
           .first();
         const currency = user?.currency ?? "USD";
 
+        const balances: Map<string, number> = new Map();
+
         for (const c of connections) {
           try {
             const settings = c.settings;
             settings.currency = currency;
 
-            const connector = getConnector(
+            const connector = connectorProvider.getConnector(
               c.connector_id as ConnectorId,
               settings
             );
 
             const value = await connector.getBalance();
-
-            await dbConnection<Entries>(Table.Entries).insert({
-              id: generateUUID(),
-              accounting_entry_id: id,
-              account_id: c.account_id,
-              user_id: req.userId,
-              value,
-              created_at: new Date(),
-              updated_at: new Date(),
-            });
+            const currentValue = balances.get(c.account_id) ?? 0;
+            balances.set(c.account_id, currentValue + value);
           } catch (error) {
             console.error(error);
             failedConnections.push({
@@ -182,6 +179,17 @@ export function accountingEntriesRouter(app: Application) {
           }
         }
 
+        for (const [accountId, value] of balances) {
+          await dbConnection<Entries>(Table.Entries).insert({
+            id: generateUUID(),
+            accounting_entry_id: id,
+            account_id: accountId,
+            user_id: req.userId,
+            value: parseFloat(value.toFixed(2)),
+            created_at: new Date(),
+            updated_at: new Date(),
+          });
+        }
         res.send({ failedConnections });
       });
     })

@@ -98,9 +98,14 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const handleCreateAccountingEntry = useCallback(
     async (date: Date) => {
       try {
-        await createAccountingEntry(date);
+        const response = await createAccountingEntry(date);
         fetchAccountingEntries();
         toast.success("new entry created", { position: "bottom-right" });
+        response?.failedConnections?.forEach((connection) => {
+          toast.error(`Failed to get value for ${connection}`, {
+            position: "bottom-right",
+          });
+        });
         logAnalyticsEvent("create_accounting_entry_success");
       } catch (error) {
         console.error("Error creating accounting entry:", error);
