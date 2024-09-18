@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Accounts, Connector, ConnectionsDTO } from "../../../backend/types";
+import { Accounts, ConnectionsDTO } from "../../../backend/types";
 import {
   useGetConnectorsSettings,
   useCreateConnection,
@@ -15,7 +15,9 @@ import DeleteIcon from "../components/DeleteIcon";
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
 }> = ({ accounts }) => {
-  const [selectedAccount, setSelectedAccount] = useState<string | undefined>();
+  const [selectedAccount, setSelectedAccount] = useState<
+    Accounts | undefined
+  >();
   const [selectedConnector, setSelectedConnector] = useState<
     string | undefined
   >();
@@ -29,10 +31,6 @@ export const ConnectorsTab: React.FC<{
 
   const { execute: createConnection, loading: isCreating } =
     useCreateConnection();
-
-  const [availableConnectors, setAvailableConnectors] = useState<Connector[]>(
-    connectorsSettings ?? []
-  );
   const [formData, setFormData] = useState<Record<string, string>>({});
 
   const [connections, setConnections] = useState<ConnectionsDTO[]>([]);
@@ -62,19 +60,8 @@ export const ConnectorsTab: React.FC<{
   }, [connectionsData]);
 
   const handleAccountChange = (accountId: string) => {
-    setSelectedAccount(accountId);
+    setSelectedAccount(accounts.find((account) => account.id === accountId));
     setSelectedConnector(undefined);
-    const selectedAccountType = accounts.find(
-      (account) => account.id === accountId
-    )?.type;
-    if (selectedAccountType) {
-      setAvailableConnectors(
-        connectorsSettings?.filter(
-          (connector) =>
-            connector.type === selectedAccountType || !connector.type
-        ) || []
-      );
-    }
   };
 
   const handleInputChange = (key: string, value: string) => {
@@ -88,9 +75,10 @@ export const ConnectorsTab: React.FC<{
   const isFormValid = useMemo(() => {
     if (!selectedAccount || !selectedConnector) return false;
 
-    const selectedConnectorSettings = availableConnectors.find(
+    const selectedConnectorSettings = connectorsSettings?.find(
       (c) => c.id === selectedConnector
     )?.settings;
+
     if (!selectedConnectorSettings) return false;
 
     return selectedConnectorSettings.every((setting) => {
@@ -100,7 +88,7 @@ export const ConnectorsTab: React.FC<{
       }
       return value !== undefined && value.trim() !== "";
     });
-  }, [selectedAccount, selectedConnector, availableConnectors, formData]);
+  }, [selectedAccount, selectedConnector, formData, connectorsSettings]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,7 +96,7 @@ export const ConnectorsTab: React.FC<{
       try {
         await createConnection({
           connector_id: selectedConnector,
-          account_id: selectedAccount,
+          account_id: selectedAccount.id,
           settings: formData,
         });
         setSelectedAccount(undefined);
@@ -202,7 +190,7 @@ export const ConnectorsTab: React.FC<{
                 </label>
                 <select
                   id="account"
-                  value={selectedAccount}
+                  value={selectedAccount?.id}
                   onChange={(e) => handleAccountChange(e.target.value)}
                   required
                   className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
@@ -217,19 +205,21 @@ export const ConnectorsTab: React.FC<{
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {availableConnectors.length > 0 && "Select a connector:"}
-                  {availableConnectors.length === 0 &&
-                    selectedAccount &&
-                    "No connectors available for this type of account, select another account"}
+                  {connectorsSettings && "Select a connector:"}
                 </label>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {availableConnectors.map((connector) => (
+                  {connectorsSettings?.map((connector) => (
                     <button
                       key={connector.id}
                       type="button"
+                      disabled={
+                        !selectedAccount ||
+                        (selectedAccount.type !== connector.type &&
+                          connector.type !== undefined)
+                      }
                       onClick={() => setSelectedConnector(connector.id)}
-                      className={`flex flex-col items-center justify-center p-4 border rounded-md transition-colors ${
+                      className={`flex flex-col items-center justify-center p-4 border rounded-md transition-colors disabled:opacity-50 ${
                         selectedConnector === connector.id
                           ? "bg-indigo-100 border-indigo-300"
                           : "bg-white border-gray-300 hover:bg-gray-50"
@@ -258,8 +248,8 @@ export const ConnectorsTab: React.FC<{
                   <h3 className="text-lg font-medium text-gray-900 mb-4">
                     Connector Settings
                   </h3>
-                  {availableConnectors
-                    .find((c) => c.id === selectedConnector)
+                  {connectorsSettings
+                    ?.find((c) => c.id === selectedConnector)
                     ?.settings.map((setting) => (
                       <div key={setting.key} className="mb-4">
                         <label
