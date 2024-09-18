@@ -6,6 +6,7 @@ import {
   mockFiatAccounts,
   mockInvestmentsAccounts,
 } from "./mockData";
+import Link from "next/link";
 
 const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   const { user, loaded } = useUserState();
@@ -119,9 +120,9 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
           stuff.finance <b>-</b> info@stuff.finance
         </p>
         <p>
-          <a href="/privacy">Privacy Policy</a>
+          <Link href="/privacy">Privacy Policy</Link>
           <b> - </b>
-          <a href="/terms">Terms of Service</a>
+          <Link href="/terms">Terms of Service</Link>
         </p>
       </footer>
     </div>
