@@ -35,7 +35,7 @@ export const useApiCall = <T, P extends unknown[]>(
 
       setLoading(true);
       setError(null);
-      setAuthToken(user.idToken);
+      setAuthToken(await user.idToken());
 
       try {
         const response = await apiFunctionRef.current(...args);

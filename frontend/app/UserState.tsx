@@ -12,7 +12,7 @@ import * as Sentry from "@sentry/nextjs";
 export type UserStateContextType = {
   user:
     | {
-        idToken: string;
+        idToken: () => Promise<string>;
         id: string;
         email: string;
       }
@@ -34,6 +34,18 @@ export function getCurrencySymbol() {
 const UserStateContext = createContext<UserStateContextType | undefined>(
   undefined
 );
+
+function isTokenExpired(token: string): boolean {
+  try {
+    const [, payload] = token.split(".");
+    const decodedPayload = JSON.parse(atob(payload));
+    const expirationTime = decodedPayload.exp * 1000; // Convert to milliseconds
+    return Date.now() >= expirationTime;
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    return true; // Assume expired if there's an error
+  }
+}
 
 function getCachedUser() {
   const cachedUser = localStorage.getItem("user");
@@ -123,7 +135,13 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
     idToken && user && user.id && user.email
       ? {
           user: {
-            idToken,
+            idToken: () => {
+              const isValid = !isTokenExpired(idToken);
+              if (!isValid && auth.currentUser) {
+                return auth.currentUser.getIdToken(true);
+              }
+              return Promise.resolve(idToken);
+            },
             id: user.id,
             email: user.email,
           },
