@@ -5,7 +5,6 @@ import SettingsIcon from "./SettingsIcon";
 interface BrandHeaderProps {
   email?: string;
   signOut: () => void;
-  onOpenConnectors: () => void;
   className?: string;
 }
 
@@ -13,7 +12,6 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
   email,
   signOut,
   className,
-  onOpenConnectors,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
 
@@ -34,12 +32,6 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
             onClick={() => setShowSettings(false)}
           >
             <p className="px-4 py-2 text-sm text-gray-700">{email}</p>
-            <button
-              className="block w-full text-left px-4 py-2 text-sm text-purple-500 hover:bg-gray-100"
-              onClick={onOpenConnectors}
-            >
-              Connect your accounts
-            </button>
             <FeedbackButton />
             <button
               className="block w-full text-left px-4 py-2 text-sm text-lime-500 hover:bg-gray-100"

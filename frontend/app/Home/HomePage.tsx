@@ -243,6 +243,12 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     setAccountingEntryToDelete(null);
   };
 
+  const switchTab = (id: string) => {
+    setActiveTab(id);
+    setNewAccountName("");
+    setExpandedAddAccount(false);
+  };
+
   const tabContent = {
     fiat: (
       <div>
@@ -300,20 +306,39 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           <AddToCalendar />
         </div>
         {expandedAddAccount && (
-          <div className="mb-4 mt-4 flex">
-            <input
-              type="text"
-              value={newAccountName}
-              onChange={(e) => setNewAccountName(e.target.value)}
-              placeholder="Crypto, Stocks, Bonds, etc."
-              className="border rounded px-2 py-1 mr-2"
-            />
+          <div>
+            <div className="mb-4 mt-4 flex">
+              <input
+                type="text"
+                value={newAccountName}
+                onChange={(e) => setNewAccountName(e.target.value)}
+                placeholder="Crypto, Stocks, Bonds, etc."
+                className="border rounded px-2 py-1 mr-2"
+              />
+              <button
+                onClick={() => handleCreateAccount("investment")}
+                className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={newAccountName.length === 0}
+              >
+                Add
+              </button>
+            </div>
+            <p className="text-sm text-gray-600 max-w-lg">
+              After creating an account you can connect it to external accounts
+              (e.g. banks, crypto exchanges, stock brokers, etc...) to autofill
+              the amounts each time you create an entry.
+            </p>
+            <p className="text-sm text-gray-600 max-w-lg">
+              If we don&apos;t yet support one of your favorite providers yet
+              feel free to use the feedback form or send an email to let us know
+            </p>
             <button
-              onClick={() => handleCreateAccount("investment")}
-              className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={newAccountName.length === 0}
+              className="mt-4 px-4 py-2 text-sm bg-purple-300 text-gray-800 hover:bg-purple-500 pixel-corners-small"
+              onClick={() => {
+                switchTab("connectors");
+              }}
             >
-              Add
+              Connect external accounts
             </button>
           </div>
         )}
@@ -374,18 +399,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               { id: "fiat", label: "Bank Accounts" },
               { id: "investments", label: "Investments" },
               { id: "summary", label: "Summary" },
+              { id: "connectors", label: "Connectors", hidden: true },
             ]}
             activeTab={activeTab}
-            setActiveTab={(tabId) => {
-              setActiveTab(tabId);
-              setNewAccountName("");
-              setExpandedAddAccount(false);
-            }}
-            onOpenConnectors={() => {
-              setActiveTab("connectors");
-              setNewAccountName("");
-              setExpandedAddAccount(false);
-            }}
+            setActiveTab={switchTab}
           >
             {accountsError || entriesError ? (
               <p>Error loading data, retry</p>
