@@ -95,7 +95,7 @@ export type ConnectionsDTO = Omit<
 export type Connector = {
   id: string;
   name: string;
-  type: AccountType;
+  type?: AccountType;
   icon: string | undefined;
   settings: {
     key: string;

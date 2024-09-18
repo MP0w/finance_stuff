@@ -70,7 +70,8 @@ export const ConnectorsTab: React.FC<{
     if (selectedAccountType) {
       setAvailableConnectors(
         connectorsSettings?.filter(
-          (connector) => connector.type === selectedAccountType
+          (connector) =>
+            connector.type === selectedAccountType || !connector.type
         ) || []
       );
     }

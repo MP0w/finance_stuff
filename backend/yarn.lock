@@ -2259,13 +2259,13 @@ __metadata:
 
 "finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git":
   version: 1.0.0
-  resolution: "finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git#commit=5ef7a0d7971a07d19e1355e1dc4d533d9bd4ea79"
+  resolution: "finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git#commit=6a09ed393878433aae078e901196e7dcb9b30f04"
   dependencies:
     "@binance/connector": "npm:^3.4.1"
     typescript: "npm:^5.6.2"
   peerDependencies:
     node: ^22.8.0
-  checksum: 10c0/25dc1614241119ce70cddbce7da14dc08ea855fedd0fc153ec230a99766cb6bae7f1c55ea4ecc5d1465209e33de21d71c351a78cd0b04963476ccf6acba3c239
+  checksum: 10c0/731968e63b07d40a365042b3238a3409de2d4531f3cf37756ea7c0be98e3466a1b520779ea1993e0292825fe3d2f32252d06d1f9e339caadaa31c330779beba6
   languageName: node
   linkType: hard
 
