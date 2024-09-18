@@ -333,7 +333,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
       return "";
     }
     if (typeof value === "number") {
-      return `${getCurrencySymbol()} ${value}`;
+      return `${getCurrencySymbol()} ${value.toFixed(0)}`;
     }
     return value;
   };
