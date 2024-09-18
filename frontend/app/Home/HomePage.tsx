@@ -392,7 +392,12 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         onDeleteAccountingEntry={handleDeleteAccountingEntry}
       />
     ),
-    connectors: <ConnectorsTab accounts={accounts ?? []} />,
+    connectors: (
+      <ConnectorsTab
+        accounts={accounts ?? []}
+        refetchLiveAccountingEntry={fetchLiveAccountingEntry}
+      />
+    ),
   };
 
   if (!user) {

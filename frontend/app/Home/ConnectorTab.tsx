@@ -14,7 +14,8 @@ import DeleteIcon from "../components/DeleteIcon";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
-}> = ({ accounts }) => {
+  refetchLiveAccountingEntry: () => void;
+}> = ({ accounts, refetchLiveAccountingEntry }) => {
   const [selectedAccount, setSelectedAccount] = useState<
     Accounts | undefined
   >();
@@ -102,6 +103,7 @@ export const ConnectorsTab: React.FC<{
         setSelectedAccount(undefined);
         setSelectedConnector(undefined);
         setFormData({});
+        refetchLiveAccountingEntry();
       } catch (error) {
         toast.error("Error creating connection: " + (error as Error).message, {
           id: "create-connection-error",
