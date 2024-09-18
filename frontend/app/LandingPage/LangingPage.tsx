@@ -21,6 +21,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
     accountingEntries: mockAccountingEntries,
     onAddEntry: () => {},
     onDeleteAccountingEntry: () => {},
+    liveAccountingEntry: undefined,
   };
 
   return (
@@ -106,6 +107,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
 
       <div className="mt-8 w-full max-w-4xl">
         <TotalTable
+          liveAccountingEntry={undefined}
           title={mock.title}
           fiatAccounts={mock.fiatAccounts}
           investmentAccounts={mock.investmentAccounts}
