@@ -77,7 +77,7 @@ export function accountingEntriesRouter(app: Application) {
       const accountingEntry = accountingEntries.at(0);
 
       if (!accountingEntry) {
-        res.status(404).send({ message: "Accounting entry not found" });
+        res.status(404).send({ error: "Accounting entry not found" });
         return;
       }
 
@@ -130,7 +130,7 @@ export function accountingEntriesRouter(app: Application) {
         `duplicate key value violates unique constraint "accounting_entries_user_id_date_unique"`
       );
       res.status(500).send({
-        message: isDupe
+        error: isDupe
           ? "You cannot create two entries for the same date"
           : "Failed to create entry",
       });
@@ -155,7 +155,8 @@ export function accountingEntriesRouter(app: Application) {
           .first();
         const currency = user?.currency ?? "USD";
 
-        const balances: Map<string, number> = new Map();
+        const balances: Map<string, { value: number; cost: number }> =
+          new Map();
 
         for (const c of connections) {
           try {
@@ -168,8 +169,14 @@ export function accountingEntriesRouter(app: Application) {
             );
 
             const value = await connector.getBalance();
-            const currentValue = balances.get(c.account_id) ?? 0;
-            balances.set(c.account_id, currentValue + value);
+            const currentBalance = balances.get(c.account_id) ?? {
+              value: 0,
+              cost: 0,
+            };
+            balances.set(c.account_id, {
+              value: currentBalance.value + value.value,
+              cost: currentBalance.cost + (value.cost ?? 0),
+            });
           } catch (error) {
             console.error(error);
             failedConnections.push({
@@ -179,13 +186,14 @@ export function accountingEntriesRouter(app: Application) {
           }
         }
 
-        for (const [accountId, value] of balances) {
+        for (const [accountId, balance] of balances) {
           await dbConnection<Entries>(Table.Entries).insert({
             id: generateUUID(),
             accounting_entry_id: id,
             account_id: accountId,
             user_id: req.userId,
-            value: parseFloat(value.toFixed(2)),
+            value: parseFloat(balance.value.toFixed(2)),
+            invested: parseFloat(balance.cost.toFixed(2)),
             created_at: new Date(),
             updated_at: new Date(),
           });

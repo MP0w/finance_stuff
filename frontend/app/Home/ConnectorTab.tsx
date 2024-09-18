@@ -5,6 +5,7 @@ import {
   useCreateConnection,
 } from "./apis/connectionsAPIs";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
@@ -21,11 +22,8 @@ export const ConnectorsTab: React.FC<{
     execute: getConnectorsSettings,
   } = useGetConnectorsSettings();
 
-  const {
-    execute: createConnection,
-    loading: isCreating,
-    error: createError,
-  } = useCreateConnection();
+  const { execute: createConnection, loading: isCreating } =
+    useCreateConnection();
 
   const [availableConnectors, setAvailableConnectors] = useState<Connector[]>(
     connectorsSettings ?? []
@@ -65,6 +63,9 @@ export const ConnectorsTab: React.FC<{
 
     return selectedConnectorSettings.every((setting) => {
       const value = formData[setting.key];
+      if (setting.optional) {
+        return true;
+      }
       return value !== undefined && value.trim() !== "";
     });
   }, [selectedAccount, selectedConnector, availableConnectors, formData]);
@@ -82,7 +83,10 @@ export const ConnectorsTab: React.FC<{
         setSelectedConnector(undefined);
         setFormData({});
       } catch (error) {
-        console.error("Error creating connection:", error);
+        toast.error("Error creating connection: " + (error as Error).message, {
+          id: "create-connection-error",
+          position: "bottom-right",
+        });
       }
     }
   };
@@ -164,10 +168,10 @@ export const ConnectorsTab: React.FC<{
                   <div key={setting.key} className="mb-4">
                     <label
                       htmlFor={setting.key}
-                      className="block text-sm text-gray-900 mb-1"
+                      className="block text-md font-bold text-gray-800 mb-1"
                     >
                       {setting.hint}
-                      <p className="text-gray-600">
+                      <p className="text-gray-600 text-sm font-normal">
                         {setting.extraInstructions}
                       </p>
                     </label>
@@ -179,7 +183,7 @@ export const ConnectorsTab: React.FC<{
                         handleInputChange(setting.key, e.target.value)
                       }
                       className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                      required
+                      required={setting.optional ? false : true}
                     />
                   </div>
                 ))}
@@ -192,11 +196,6 @@ export const ConnectorsTab: React.FC<{
           >
             {isCreating ? "Connecting..." : "Connect"}
           </button>
-          {createError && (
-            <p className="text-red-500 text-sm mt-2">
-              Error creating connection: {createError.message}
-            </p>
-          )}
         </form>
       )}
     </div>

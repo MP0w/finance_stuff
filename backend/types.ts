@@ -100,6 +100,7 @@ export type Connector = {
   settings: {
     key: string;
     hint: string;
+    optional?: boolean;
     extraInstructions?: string;
     type: "string" | "number" | "boolean";
   }[];

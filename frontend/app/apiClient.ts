@@ -42,7 +42,17 @@ export const useApiCall = <T, P extends unknown[]>(
         setData(response.data);
         return response.data;
       } catch (err) {
-        const error = err as AxiosError;
+        const axiosError = err as AxiosError;
+        let errorMessage = axiosError.message;
+        if (
+          axiosError.response?.data &&
+          typeof axiosError.response.data === "object" &&
+          "error" in axiosError.response.data
+        ) {
+          errorMessage = axiosError.response.data.error as string;
+        }
+
+        const error = new Error(errorMessage);
         setError(error);
         throw error;
       } finally {

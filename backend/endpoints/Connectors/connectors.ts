@@ -1,6 +1,7 @@
 import { Application, Request, Response } from "express";
 import expressAsyncHandler from "express-async-handler";
 import {
+  ConnectorId,
   ConnectorProvider,
   ConnectorProviderConfig,
 } from "finance_stuff_connectors";
@@ -105,8 +106,23 @@ export function connectorsRouter(app: Application) {
   async function upsertConnection(id: string, req: Request, res: Response) {
     const { connector_id, account_id, settings } = req.body;
 
+    try {
+      const testProvider = connectorProvider.getConnector(
+        connector_id as ConnectorId,
+        {
+          ...settings,
+          currency: "USD",
+        }
+      );
+      await testProvider.getBalance();
+    } catch (error) {
+      res.status(400).send({ error: (error as Error).message });
+      return;
+    }
+
     if (!connector_id || !account_id || !settings) {
-      throw Error("Invalid params");
+      res.status(400).send({ error: "Invalid params" });
+      return;
     }
 
     await dbConnection<Connections>(Table.Connections)
