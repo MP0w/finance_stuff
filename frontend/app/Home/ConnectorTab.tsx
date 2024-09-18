@@ -283,6 +283,9 @@ export const ConnectorsTab: React.FC<{
                         />
                       </div>
                     ))}
+                  <p className="text-sm">
+                    All connectors settings are encrypted and stored securely.
+                  </p>
                   <button
                     type="submit"
                     disabled={!isFormValid || isCreating}
