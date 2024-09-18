@@ -14,6 +14,113 @@ import {
 } from "../Connectors/connectors";
 import { ConnectorId } from "finance_stuff_connectors";
 
+function isDateRecentEnough(date: Date): boolean {
+  const daysFromToday =
+    (date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
+
+  return daysFromToday > -15;
+}
+
+async function liveEntries(userId: string, accountingEntryId: string) {
+  const connections = await getConnectionWithDecryptedSettings(userId);
+
+  if (connections.length === 0) {
+    return {
+      entries: [],
+      failedConnections: [],
+    };
+  }
+
+  const failedConnections: { connectorId: string; accountId: string }[] = [];
+  const user = await dbConnection<Users>(Table.Users)
+    .select()
+    .where({ id: userId })
+    .limit(1)
+    .first();
+  const currency = user?.currency ?? "USD";
+
+  const balances: Map<string, { value: number; cost: number }> = new Map();
+
+  for (const c of connections) {
+    try {
+      const settings = c.settings;
+      settings.currency = currency;
+
+      const connector = connectorProvider.getConnector(
+        c.connector_id as ConnectorId,
+        settings
+      );
+
+      const value = await connector.getBalance();
+      const currentBalance = balances.get(c.account_id) ?? {
+        value: 0,
+        cost: 0,
+      };
+      balances.set(c.account_id, {
+        value: currentBalance.value + value.value,
+        cost: currentBalance.cost + (value.cost ?? 0),
+      });
+    } catch (error) {
+      console.error(error);
+      failedConnections.push({
+        connectorId: c.connector_id,
+        accountId: c.account_id,
+      });
+    }
+  }
+
+  const entries: Entries[] = [];
+
+  for (const [accountId, balance] of balances) {
+    entries.push({
+      id: generateUUID(),
+      accounting_entry_id: accountingEntryId,
+      account_id: accountId,
+      user_id: userId,
+      value: parseFloat(balance.value.toFixed(2)),
+      invested: parseFloat(balance.cost.toFixed(2)),
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+  }
+
+  return {
+    entries,
+    failedConnections,
+  };
+}
+
+export async function fillInMissingAccountingEntriesIfNeeded(userId: string) {
+  let lastAccountingEntry = (
+    await dbConnection<AccountingEntries>(Table.AccountingEntries)
+      .select()
+      .where({ user_id: userId })
+      .orderBy("date", "desc")
+      .limit(1)
+  ).at(0);
+
+  if (!lastAccountingEntry || !isDateRecentEnough(lastAccountingEntry.date)) {
+    return;
+  }
+
+  const live = await liveEntries(userId, lastAccountingEntry.id);
+  if (live.entries.length === 0) {
+    return;
+  }
+
+  const entries = await dbConnection<Entries>(Table.Entries).select().where({
+    user_id: userId,
+    accounting_entry_id: lastAccountingEntry.id,
+  });
+
+  const existingEntries = new Set(entries.map((entry) => entry.account_id));
+  const missingEntries = live.entries.filter(
+    (entry) => !existingEntries.has(entry.account_id)
+  );
+
+  await dbConnection<Entries>(Table.Entries).insert(missingEntries);
+}
+
 export function accountingEntriesRouter(app: Application) {
   app.get(
     "/accounting_entries",
@@ -63,75 +170,6 @@ export function accountingEntriesRouter(app: Application) {
       res.send(accountingEntriesDTO);
     })
   );
-
-  async function liveEntries(userId: string, accountingEntryId: string) {
-    const connections = await getConnectionWithDecryptedSettings(userId);
-
-    if (connections.length === 0) {
-      return {
-        entries: [],
-        failedConnections: [],
-      };
-    }
-
-    const failedConnections: { connectorId: string; accountId: string }[] = [];
-    const user = await dbConnection<Users>(Table.Users)
-      .select()
-      .where({ id: userId })
-      .limit(1)
-      .first();
-    const currency = user?.currency ?? "USD";
-
-    const balances: Map<string, { value: number; cost: number }> = new Map();
-
-    for (const c of connections) {
-      try {
-        const settings = c.settings;
-        settings.currency = currency;
-
-        const connector = connectorProvider.getConnector(
-          c.connector_id as ConnectorId,
-          settings
-        );
-
-        const value = await connector.getBalance();
-        const currentBalance = balances.get(c.account_id) ?? {
-          value: 0,
-          cost: 0,
-        };
-        balances.set(c.account_id, {
-          value: currentBalance.value + value.value,
-          cost: currentBalance.cost + (value.cost ?? 0),
-        });
-      } catch (error) {
-        console.error(error);
-        failedConnections.push({
-          connectorId: c.connector_id,
-          accountId: c.account_id,
-        });
-      }
-    }
-
-    const entries: Entries[] = [];
-
-    for (const [accountId, balance] of balances) {
-      entries.push({
-        id: generateUUID(),
-        accounting_entry_id: accountingEntryId,
-        account_id: accountId,
-        user_id: userId,
-        value: parseFloat(balance.value.toFixed(2)),
-        invested: parseFloat(balance.cost.toFixed(2)),
-        created_at: new Date(),
-        updated_at: new Date(),
-      });
-    }
-
-    return {
-      entries,
-      failedConnections,
-    };
-  }
 
   app.get(
     "/live_accounting_entry",
@@ -281,10 +319,9 @@ export function accountingEntriesRouter(app: Application) {
     expressAsyncHandler(async (req, res) => {
       const id = generateUUID();
       upsertEntry(id, req, res, async (date) => {
-        const daysFromToday =
-          (date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
+        const isRecent = isDateRecentEnough(date);
 
-        if (daysFromToday < -15) {
+        if (!isRecent) {
           res.send({});
           return;
         }
@@ -352,7 +389,7 @@ function getFirstDaysOfMonth(date: Date, count: number): Date[] {
 }
 
 export async function createAccountingEntriesForUser(userId: string) {
-  const datesToAdd = getFirstDaysOfMonth(new Date(), 6);
+  const datesToAdd = getFirstDaysOfMonth(new Date(), 1);
 
   await dbConnection<AccountingEntries>(Table.AccountingEntries).insert(
     datesToAdd.map((date) => ({

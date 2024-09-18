@@ -14,8 +14,8 @@ import DeleteIcon from "../components/DeleteIcon";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
-  refetchLiveAccountingEntry: () => void;
-}> = ({ accounts, refetchLiveAccountingEntry }) => {
+  onAddConnection: () => void;
+}> = ({ accounts, onAddConnection }) => {
   const [selectedAccount, setSelectedAccount] = useState<
     Accounts | undefined
   >();
@@ -103,7 +103,7 @@ export const ConnectorsTab: React.FC<{
         setSelectedAccount(undefined);
         setSelectedConnector(undefined);
         setFormData({});
-        refetchLiveAccountingEntry();
+        onAddConnection();
       } catch (error) {
         toast.error("Error creating connection: " + (error as Error).message, {
           id: "create-connection-error",
@@ -288,7 +288,7 @@ export const ConnectorsTab: React.FC<{
                 </div>
               )}
               {!selectedConnector && selectedAccount && (
-                <p className="text-gray-600 text-sm font-normal">
+                <div className="text-gray-600 text-sm font-normal">
                   <p className="mb-8">
                     If you don&apos;t see your favorite provider in the list,
                     you can send a feedback or email to us and we will consider
@@ -300,7 +300,7 @@ export const ConnectorsTab: React.FC<{
                       https://github.com/MP0w/finance_stuff_connectors
                     </p>
                   </Link>
-                </p>
+                </div>
               )}
             </form>
           )}

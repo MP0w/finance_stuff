@@ -395,7 +395,9 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     connectors: (
       <ConnectorsTab
         accounts={accounts ?? []}
-        refetchLiveAccountingEntry={fetchLiveAccountingEntry}
+        onAddConnection={() => {
+          fetchAccountingEntries();
+        }}
       />
     ),
   };

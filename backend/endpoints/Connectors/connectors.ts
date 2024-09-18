@@ -8,6 +8,7 @@ import {
 import { dbConnection, generateUUID } from "../../dbConnection";
 import { Connections, Table } from "../../types";
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
+import { fillInMissingAccountingEntriesIfNeeded } from "../AccountingEntries/accountingEntries";
 
 const config: ConnectorProviderConfig = {
   debankAPIKey: process.env.DEBANK_API_KEY!,
@@ -136,6 +137,12 @@ export function connectorsRouter(app: Application) {
       })
       .onConflict("id")
       .merge();
+
+    try {
+      await fillInMissingAccountingEntriesIfNeeded(req.userId);
+    } catch (error) {
+      console.error("Failed to fill in entries", error);
+    }
 
     res.send({});
   }
