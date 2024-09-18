@@ -4,6 +4,7 @@ import {
   useGetConnectorsSettings,
   useCreateConnection,
 } from "./apis/connectionsAPIs";
+import Image from "next/image";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
@@ -135,12 +136,15 @@ export const ConnectorsTab: React.FC<{
                   }`}
                 >
                   {connector.icon && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={connector.icon}
-                      alt={connector.name}
-                      className="w-8 h-8 mb-2"
-                    />
+                    <div className="m-2 rounded-xl border border-gray-300 overflow-hidden">
+                      <Image
+                        src={connector.icon}
+                        alt={connector.name}
+                        width={60}
+                        height={60}
+                        className="rounded-md"
+                      />
+                    </div>
                   )}
                   <span className="text-sm font-medium text-gray-900">
                     {connector.name}
