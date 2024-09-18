@@ -42,6 +42,12 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
             </button>
             <FeedbackButton />
             <button
+              className="block w-full text-left px-4 py-2 text-sm text-lime-500 hover:bg-gray-100"
+              onClick={() => window.open("/privacy", "_blank")}
+            >
+              Privacy Policy
+            </button>
+            <button
               className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
               onClick={signOut}
             >

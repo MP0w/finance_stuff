@@ -118,6 +118,11 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
         <p>
           stuff.finance <b>-</b> info@stuff.finance
         </p>
+        <p>
+          <a href="/privacy">Privacy Policy</a>
+          <b> - </b>
+          <a href="/terms">Terms of Service</a>
+        </p>
       </footer>
     </div>
   );
