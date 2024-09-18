@@ -6,6 +6,7 @@ import {
 } from "./apis/connectionsAPIs";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
@@ -127,7 +128,7 @@ export const ConnectorsTab: React.FC<{
                 : "Select a connector:"}
             </label>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {availableConnectors.map((connector) => (
                 <button
                   key={connector.id}
@@ -187,15 +188,28 @@ export const ConnectorsTab: React.FC<{
                     />
                   </div>
                 ))}
+              <button
+                type="submit"
+                disabled={!isFormValid || isCreating}
+                className="w-full mt-8 flex justify-center py-2 px-4 border border-transparent shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 pixel-corners-small disabled:opacity-50"
+              >
+                {isCreating ? "Connecting..." : "Connect"}
+              </button>
             </div>
           )}
-          <button
-            type="submit"
-            disabled={!isFormValid || isCreating}
-            className="w-full flex justify-center py-2 px-4 border border-transparent shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 pixel-corners-small disabled:opacity-50"
-          >
-            {isCreating ? "Connecting..." : "Connect"}
-          </button>
+          {!selectedConnector && (
+            <p className="text-gray-600 text-sm font-normal">
+              <p className="mb-8">
+                If you don&apos;t see your favorite provider in the list, you
+                can send a feedback or email to us and we will consider adding
+                it!
+              </p>
+              <Link href="https://github.com/MP0w/finance_stuff_connectors">
+                You can also contribute, it&apos;s easy!
+                <p>https://github.com/MP0w/finance_stuff_connectors</p>
+              </Link>
+            </p>
+          )}
         </form>
       )}
     </div>
