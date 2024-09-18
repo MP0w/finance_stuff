@@ -148,7 +148,7 @@ export const ConnectorsTab: React.FC<{
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-2xl mx-auto">
       <h2 className="text-2xl font-bold mb-6">Connections</h2>
 
       {connectionsLoading && <p>Loading connections...</p>}
@@ -304,7 +304,9 @@ export const ConnectorsTab: React.FC<{
                   </p>
                   <Link href="https://github.com/MP0w/finance_stuff_connectors">
                     You can also contribute, it&apos;s easy!
-                    <p>https://github.com/MP0w/finance_stuff_connectors</p>
+                    <p className="break-all">
+                      https://github.com/MP0w/finance_stuff_connectors
+                    </p>
                   </Link>
                 </p>
               )}
