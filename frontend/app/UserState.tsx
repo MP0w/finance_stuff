@@ -24,7 +24,12 @@ export type User = {
   id: string | undefined;
   firebase_uid: string | undefined;
   email: string | undefined;
+  currency: string | undefined;
 };
+
+export function getCurrencySymbol() {
+  return "€"; // TODO: get from user
+}
 
 const UserStateContext = createContext<UserStateContextType | undefined>(
   undefined

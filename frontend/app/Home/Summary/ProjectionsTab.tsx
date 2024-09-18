@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { SummaryCell } from "./SummaryTab";
 import { LineChart } from "@mui/x-charts";
+import { getCurrencySymbol } from "@/app/UserState";
 
 export interface ProjectionsTabProps {
   summaryCells: SummaryCell[];
@@ -70,21 +71,23 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
           <div className="flex flex-col items-center justify-center">
             <h2 className="text-xl text-gray-800">Average Savings</h2>
             <p className="text-md text-gray-500">
-              $ {averageSavings.toFixed(0)}
+              {getCurrencySymbol()} {averageSavings.toFixed(0)}
             </p>
           </div>
         )}
         {isFinite(averageProfits) && (
           <div className="flex flex-col items-center justify-center">
             <h2 className="text-xl text-gray-800">Average Total</h2>
-            <p className="text-md text-gray-500">$ {averageTotal.toFixed(0)}</p>
+            <p className="text-md text-gray-500">
+              {getCurrencySymbol()} {averageTotal.toFixed(0)}
+            </p>
           </div>
         )}
         {isFinite(averageProfits) && averageProfits > 0 && (
           <div className="flex flex-col items-center justify-center">
             <h2 className="text-xl text-gray-800">Average Monthly Profits</h2>
             <p className="text-md text-gray-500">
-              $ {averageProfits.toFixed(0)}
+              {getCurrencySymbol()} {averageProfits.toFixed(0)}
             </p>
           </div>
         )}

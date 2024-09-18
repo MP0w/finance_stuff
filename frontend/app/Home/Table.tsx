@@ -7,6 +7,7 @@ import DeleteIcon from "../components/DeleteIcon";
 import { FiAlertCircle } from "react-icons/fi";
 import { createPortal } from "react-dom";
 import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
+import { getCurrencySymbol } from "../UserState";
 
 export type TableHeaderContent =
   | string
@@ -332,7 +333,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
       return "";
     }
     if (typeof value === "number") {
-      return `$ ${value}`;
+      return `${getCurrencySymbol()} ${value}`;
     }
     return value;
   };
@@ -380,7 +381,9 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
                 <div className="px-2 flex items-center flex-grow">
                   {(value.value !== undefined ||
                     editingValues[index] !== undefined) && (
-                    <span className="mr-1 flex-shrink-0">$</span>
+                    <span className="mr-1 flex-shrink-0">
+                      {getCurrencySymbol()}
+                    </span>
                   )}
                   <input
                     type="text"
