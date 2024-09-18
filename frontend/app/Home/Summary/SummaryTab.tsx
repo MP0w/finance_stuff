@@ -14,6 +14,7 @@ type Summary = {
   profits: number;
   total: number;
   isMissingValues: boolean;
+  isLive: boolean;
 };
 
 export type SummaryCell = {
@@ -28,20 +29,30 @@ export type SummaryCell = {
   change: number | undefined;
   savings: number | undefined;
   isMissingValues: boolean;
+  isLive: boolean;
 };
 
 export function makeSummaryData(args: {
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
+  liveAccountingEntry: AccountingEntriesDTO | undefined;
 }) {
-  const { fiatAccounts, investmentAccounts, accountingEntries } = args;
+  const {
+    fiatAccounts,
+    investmentAccounts,
+    accountingEntries,
+    liveAccountingEntry,
+  } = args;
   const fiatAccountsIds = new Set(fiatAccounts.map((account) => account.id));
   const investmentAccountsIds = new Set(
     investmentAccounts.map((account) => account.id)
   );
 
-  const summaries: Summary[] = accountingEntries.map((entry) => {
+  const makeSummary = (
+    entry: AccountingEntriesDTO,
+    isLive: boolean
+  ): Summary => {
     const fiatEntries = entry.entries.filter((entry) =>
       fiatAccountsIds.has(entry.account_id)
     );
@@ -76,8 +87,17 @@ export function makeSummaryData(args: {
       profits,
       total,
       isMissingValues,
+      isLive,
     };
+  };
+
+  const summaries: Summary[] = accountingEntries.map((entry) => {
+    return makeSummary(entry, false);
   });
+
+  if (liveAccountingEntry) {
+    summaries.push(makeSummary(liveAccountingEntry, true));
+  }
 
   const summaryCells: SummaryCell[] = summaries.map((summary, index) => {
     const previous = index > 0 ? summaries.at(index - 1) : undefined;
@@ -102,12 +122,14 @@ export function makeSummaryData(args: {
 }
 
 export const SummaryTab: React.FC<{
+  liveAccountingEntry: AccountingEntriesDTO | undefined;
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
   onAddEntry: (date: Date) => void;
   onDeleteAccountingEntry: (entryId: string) => void;
 }> = ({
+  liveAccountingEntry,
   fiatAccounts,
   investmentAccounts,
   accountingEntries,
@@ -118,6 +140,7 @@ export const SummaryTab: React.FC<{
     fiatAccounts,
     investmentAccounts,
     accountingEntries,
+    liveAccountingEntry: undefined,
   });
 
   return fiatAccounts.length > 0 || investmentAccounts.length > 0 ? (
@@ -130,9 +153,9 @@ export const SummaryTab: React.FC<{
         fiatAccounts={fiatAccounts}
         investmentAccounts={investmentAccounts}
         accountingEntries={accountingEntries ?? []}
+        liveAccountingEntry={liveAccountingEntry}
         onAddEntry={onAddEntry}
         onDeleteAccountingEntry={onDeleteAccountingEntry}
-        summaryCells={summaryCells}
       />
       <GraphsTab
         investmentAccounts={investmentAccounts}

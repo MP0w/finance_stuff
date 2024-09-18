@@ -107,7 +107,9 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
                 data: projectionValues.map((p) => p.date),
                 valueFormatter: (d: Date) =>
                   new Date(d).toLocaleDateString(undefined, {
-                    dateStyle: "short",
+                    day: undefined,
+                    month: "short",
+                    year: "2-digit",
                   }),
                 tickMinStep: 3600 * 1000 * 24 * 30 * 3,
                 min: projectionValues[0].date,

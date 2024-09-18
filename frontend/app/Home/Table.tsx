@@ -262,7 +262,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
 
 export interface TableRowCell {
   color?: string;
-  value: string | number | undefined;
+  value: string | number | Date | undefined;
   warningText?: string;
   onValueChange?: (value: number) => Promise<void>;
   onDelete?: () => void;
@@ -328,13 +328,22 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
     []
   );
 
-  const formattedValue = (value: string | number | undefined) => {
+  const formattedValue = (value: string | number | Date | undefined) => {
     if (!value) {
       return "";
     }
     if (typeof value === "number") {
       return `${getCurrencySymbol()} ${value.toFixed(0)}`;
     }
+
+    if (value instanceof Date) {
+      return value.toLocaleDateString(undefined, {
+        day: "numeric",
+        month: "short",
+        year: "2-digit",
+      });
+    }
+
     return value;
   };
 
@@ -374,7 +383,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
           >
             <div className="flex items-center w-full">
               {!value.onValueChange ? (
-                <span className="px-4 py-2 flex-shrink-0">
+                <span className="px-4 py-2 whitespace-nowrap">
                   {formattedValue(value.value)}
                 </span>
               ) : (
@@ -390,7 +399,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
                     value={
                       editingValues[index] !== undefined
                         ? editingValues[index]
-                        : value.value ?? ""
+                        : value.value?.toString() ?? ""
                     }
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onBlur={(e) => handleInputBlur(index, e.target.value)}
@@ -412,7 +421,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
                   <FiAlertCircle className="text-red-500" />
                 </div>
               )}
-              <div className="w-6 flex-shrink-0">
+              <div className="w-6 mr-2">
                 {value.onDelete && (
                   <DeleteIcon
                     className={`ml-2 transition-opacity duration-200 ${

@@ -9,7 +9,7 @@ export interface TotalTableProps {
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
-  summaryCells?: SummaryCell[];
+  liveAccountingEntry: AccountingEntriesDTO | undefined;
   onAddEntry: (date: Date) => void;
   onDeleteAccountingEntry: (entryId: string) => void;
 }
@@ -19,8 +19,8 @@ const TotalTable: React.FC<TotalTableProps> = ({
   fiatAccounts,
   investmentAccounts,
   accountingEntries,
-  summaryCells,
   onDeleteAccountingEntry,
+  liveAccountingEntry,
 }) => {
   const headers: (TableHeaderContent | undefined)[] = [
     dateHeader,
@@ -63,25 +63,29 @@ const TotalTable: React.FC<TotalTableProps> = ({
     "Change",
   ];
 
-  const summaryData =
-    summaryCells ??
-    makeSummaryData({
-      fiatAccounts,
-      investmentAccounts,
-      accountingEntries,
-    });
+  const summaryData = makeSummaryData({
+    fiatAccounts,
+    investmentAccounts,
+    accountingEntries,
+    liveAccountingEntry,
+  });
 
   const getCells = (summary: SummaryCell): TableRowCell[] => {
     const cells: (TableRowCell | undefined)[] = [
-      {
-        value: summary.date.toLocaleDateString(),
-        warningText: summary.isMissingValues
-          ? "🚨 You are missing some values in your accounts for this entry, check the glowing red cells in Bank Accounts & Investments for this date"
-          : undefined,
-        onDelete: () => {
-          onDeleteAccountingEntry(summary.id);
-        },
-      },
+      summary.isLive
+        ? {
+            value: "Live Data",
+            color: "bg-red-100",
+          }
+        : {
+            value: summary.date,
+            warningText: summary.isMissingValues
+              ? "🚨 You are missing some values in your accounts for this entry, check the glowing red cells in Bank Accounts & Investments for this date"
+              : undefined,
+            onDelete: () => {
+              onDeleteAccountingEntry(summary.id);
+            },
+          },
       fiatAccounts.length
         ? {
             value: summary.liquidTotal,

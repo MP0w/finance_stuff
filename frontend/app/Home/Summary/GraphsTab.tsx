@@ -48,7 +48,9 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
             data: summaryCells.map((p) => p.date),
             valueFormatter: (d: Date) =>
               new Date(d).toLocaleDateString(undefined, {
-                dateStyle: "short",
+                day: "numeric",
+                month: "short",
+                year: "2-digit",
               }),
             tickMinStep: 3600 * 1000 * 24 * 30 * (summaryCells.length / 3),
             min: summaryCells[0].date,

@@ -57,7 +57,7 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
 
     return [
       {
-        value: new Date(entry.date).toLocaleDateString(),
+        value: new Date(entry.date),
         onDelete: () => {
           onDeleteAccountingEntry(entry.id);
         },

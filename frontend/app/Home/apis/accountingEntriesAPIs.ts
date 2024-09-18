@@ -10,6 +10,13 @@ export const useGetAccountingEntries = () => {
   );
 };
 
+// get live entry
+export const useGetLiveAccountingEntry = () => {
+  return useApiCall(() =>
+    api.get<{ live?: AccountingEntriesDTO }>("/live_accounting_entry")
+  );
+};
+
 // Fetch a single accounting entry
 export const useGetAccountingEntry = () => {
   return useApiCall((id: string) =>

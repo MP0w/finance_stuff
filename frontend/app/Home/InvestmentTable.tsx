@@ -97,7 +97,11 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
 
     return [
       {
-        value: new Date(accountingEntry.date).toLocaleDateString(),
+        value: new Date(accountingEntry.date).toLocaleDateString(undefined, {
+          day: "2-digit",
+          month: "short",
+          year: "2-digit",
+        }),
         onDelete: () => {
           onDeleteAccountingEntry(accountingEntry.id);
         },

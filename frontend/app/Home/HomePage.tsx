@@ -10,6 +10,7 @@ import {
   useGetAccountingEntries,
   useCreateAccountingEntry,
   useDeleteAccountingEntry,
+  useGetLiveAccountingEntry,
 } from "./apis/accountingEntriesAPIs";
 import { useCreateEntry, useUpdateEntry } from "./apis/entriesAPIs";
 import { AccountType } from "../../../backend/types";
@@ -57,6 +58,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     error: entriesError,
     execute: fetchAccountingEntries,
   } = useGetAccountingEntries();
+
+  const { data: liveAccountingEntry, execute: fetchLiveAccountingEntry } =
+    useGetLiveAccountingEntry();
+
   const { execute: createAccount } = useCreateAccount();
   const { execute: createAccountingEntry } = useCreateAccountingEntry();
   const { execute: createEntry } = useCreateEntry();
@@ -73,7 +78,11 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   useEffect(() => {
     fetchAccounts();
     fetchAccountingEntries();
-  }, [fetchAccounts, fetchAccountingEntries]);
+  }, [fetchAccounts, fetchAccountingEntries, fetchLiveAccountingEntry]);
+
+  useEffect(() => {
+    if (accountingEntries) fetchLiveAccountingEntry();
+  }, [accountingEntries, fetchLiveAccountingEntry]);
 
   const handleCreateAccount = useCallback(
     async (type: AccountType) => {
@@ -366,6 +375,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             fiatAccounts={[]}
             investmentAccounts={investmentAccounts}
             accountingEntries={accountingEntries ?? []}
+            liveAccountingEntry={liveAccountingEntry?.live}
             onAddEntry={handleCreateAccountingEntry}
             onDeleteAccountingEntry={handleDeleteAccountingEntry}
           />
@@ -377,6 +387,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         fiatAccounts={fiatAccounts}
         investmentAccounts={investmentAccounts}
         accountingEntries={accountingEntries ?? []}
+        liveAccountingEntry={liveAccountingEntry?.live}
         onAddEntry={handleCreateAccountingEntry}
         onDeleteAccountingEntry={handleDeleteAccountingEntry}
       />
@@ -446,11 +457,12 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           className="modal"
           overlayClassName="overlay"
         >
-          <h2 className="text-xl font-semibold mb-4">Confirm Entry Deletion</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Delete date from all accounts
+          </h2>
           <p className="mb-6">
-            Are you sure you want to delete the entry? <br />
-            This action cannot be undone and all the values for that date on
-            each account will be removed.
+            All the values for that date on each account will be removed. This
+            action cannot be undone and
           </p>
           <div className="flex justify-end">
             <button

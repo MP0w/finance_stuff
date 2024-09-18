@@ -64,6 +64,144 @@ export function accountingEntriesRouter(app: Application) {
     })
   );
 
+  async function liveEntries(userId: string, accountingEntryId: string) {
+    const connections = await getConnectionWithDecryptedSettings(userId);
+
+    if (connections.length === 0) {
+      return {
+        entries: [],
+        failedConnections: [],
+      };
+    }
+
+    const failedConnections: { connectorId: string; accountId: string }[] = [];
+    const user = await dbConnection<Users>(Table.Users)
+      .select()
+      .where({ id: userId })
+      .limit(1)
+      .first();
+    const currency = user?.currency ?? "USD";
+
+    const balances: Map<string, { value: number; cost: number }> = new Map();
+
+    for (const c of connections) {
+      try {
+        const settings = c.settings;
+        settings.currency = currency;
+
+        const connector = connectorProvider.getConnector(
+          c.connector_id as ConnectorId,
+          settings
+        );
+
+        const value = await connector.getBalance();
+        const currentBalance = balances.get(c.account_id) ?? {
+          value: 0,
+          cost: 0,
+        };
+        balances.set(c.account_id, {
+          value: currentBalance.value + value.value,
+          cost: currentBalance.cost + (value.cost ?? 0),
+        });
+      } catch (error) {
+        console.error(error);
+        failedConnections.push({
+          connectorId: c.connector_id,
+          accountId: c.account_id,
+        });
+      }
+    }
+
+    const entries: Entries[] = [];
+
+    for (const [accountId, balance] of balances) {
+      entries.push({
+        id: generateUUID(),
+        accounting_entry_id: accountingEntryId,
+        account_id: accountId,
+        user_id: userId,
+        value: parseFloat(balance.value.toFixed(2)),
+        invested: parseFloat(balance.cost.toFixed(2)),
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+    }
+
+    return {
+      entries,
+      failedConnections,
+    };
+  }
+
+  app.get(
+    "/live_accounting_entry",
+    expressAsyncHandler(async (req, res) => {
+      const live = await liveEntries(req.userId, "live");
+      if (live.entries.length === 0) {
+        res.send({});
+        return;
+      }
+
+      let lastAccountingEntry = (
+        await dbConnection<AccountingEntries>(Table.AccountingEntries)
+          .select()
+          .where({ user_id: req.userId })
+          .orderBy("date", "desc")
+          .limit(1)
+      ).at(0);
+
+      const entries = lastAccountingEntry
+        ? await dbConnection<Entries>(Table.Entries).select().where({
+            user_id: req.userId,
+            accounting_entry_id: lastAccountingEntry.id,
+          })
+        : undefined;
+
+      const allAccountIds = new Set([
+        ...live.entries.map((entry) => entry.account_id),
+        ...(entries?.map((entry) => entry.account_id) ?? []),
+      ]);
+
+      const mergedEntries = Array.from(allAccountIds)
+        .map((accountId) => {
+          const liveEntry = live.entries.find(
+            (entry) => entry.account_id === accountId
+          );
+
+          if (liveEntry) {
+            return liveEntry;
+          }
+
+          const existingEntry = entries?.find(
+            (entry) => entry.account_id === accountId
+          );
+
+          return existingEntry
+            ? {
+                ...existingEntry,
+                id: generateUUID(),
+                accounting_entry_id: "mock",
+              }
+            : undefined;
+        })
+        .filter((e) => e !== undefined);
+
+      const accountingEntryDTO: AccountingEntriesDTO = {
+        id: "mock",
+        user_id: req.userId,
+        date: new Date(),
+        created_at: new Date(),
+        updated_at: new Date(),
+        entries: mergedEntries,
+      };
+
+      res.send({
+        live: accountingEntryDTO,
+        failedConnections: live.failedConnections,
+      });
+    })
+  );
+
   app.get(
     "/accounting_entry/:id",
     expressAsyncHandler(async (req, res) => {
@@ -101,9 +239,9 @@ export function accountingEntriesRouter(app: Application) {
     id: string,
     req: Request,
     res: Response,
-    successHandler?: () => Promise<void>
+    successHandler?: (date: Date) => Promise<void>
   ) {
-    const date: Date | undefined = req.body.date;
+    const date = req.body.date ? new Date(req.body.date) : undefined;
 
     if (!date) {
       throw Error("Invalid params");
@@ -121,11 +259,12 @@ export function accountingEntriesRouter(app: Application) {
         .merge();
 
       if (successHandler) {
-        await successHandler();
+        await successHandler(date);
       } else {
         res.send({});
       }
     } catch (error) {
+      console.log(error);
       const isDupe = (error as Error).message.includes(
         `duplicate key value violates unique constraint "accounting_entries_user_id_date_unique"`
       );
@@ -141,64 +280,21 @@ export function accountingEntriesRouter(app: Application) {
     "/accounting_entry",
     expressAsyncHandler(async (req, res) => {
       const id = generateUUID();
-      upsertEntry(id, req, res, async () => {
-        const connections = await getConnectionWithDecryptedSettings(
-          req.userId
-        );
+      upsertEntry(id, req, res, async (date) => {
+        const daysFromToday =
+          (date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
 
-        const failedConnections: { connectorId: string; accountId: string }[] =
-          [];
-        const user = await dbConnection<Users>(Table.Users)
-          .select()
-          .where({ id: req.userId })
-          .limit(1)
-          .first();
-        const currency = user?.currency ?? "USD";
-
-        const balances: Map<string, { value: number; cost: number }> =
-          new Map();
-
-        for (const c of connections) {
-          try {
-            const settings = c.settings;
-            settings.currency = currency;
-
-            const connector = connectorProvider.getConnector(
-              c.connector_id as ConnectorId,
-              settings
-            );
-
-            const value = await connector.getBalance();
-            const currentBalance = balances.get(c.account_id) ?? {
-              value: 0,
-              cost: 0,
-            };
-            balances.set(c.account_id, {
-              value: currentBalance.value + value.value,
-              cost: currentBalance.cost + (value.cost ?? 0),
-            });
-          } catch (error) {
-            console.error(error);
-            failedConnections.push({
-              connectorId: c.connector_id,
-              accountId: c.account_id,
-            });
-          }
+        if (daysFromToday < -15) {
+          res.send({});
+          return;
         }
 
-        for (const [accountId, balance] of balances) {
-          await dbConnection<Entries>(Table.Entries).insert({
-            id: generateUUID(),
-            accounting_entry_id: id,
-            account_id: accountId,
-            user_id: req.userId,
-            value: parseFloat(balance.value.toFixed(2)),
-            invested: parseFloat(balance.cost.toFixed(2)),
-            created_at: new Date(),
-            updated_at: new Date(),
-          });
+        const live = await liveEntries(req.userId, id);
+        if (live.entries.length > 0) {
+          await dbConnection<Entries>(Table.Entries).insert(live.entries);
         }
-        res.send({ failedConnections });
+
+        res.send({ failedConnections: live.failedConnections });
       });
     })
   );
