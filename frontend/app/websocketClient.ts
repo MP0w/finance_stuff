@@ -5,6 +5,7 @@ import { useUserState } from "./UserState";
 export type ChatMessage = {
   role: "user" | "assistant" | "error";
   content: string;
+  default?: boolean;
 };
 
 export function useAIChat() {
@@ -24,10 +25,12 @@ function useWebSocket(url: string) {
       role: "assistant",
       content:
         "I can help you with your personal finances, budgeting or accounting topics.",
+      default: true,
     },
     {
       role: "assistant",
       content: "What are you looking for?",
+      default: true,
     },
   ]);
   const [isConnected, setIsConnected] = useState<boolean | undefined>(
@@ -85,12 +88,26 @@ function useWebSocket(url: string) {
         }
         liveMessageRef.current = undefined;
         setLiveMessage(undefined);
-      } else {
+      } else if (liveMessageRef.current) {
         liveMessageRef.current = {
-          ...liveMessageRef.current!,
+          ...liveMessageRef.current,
           content: (liveMessageRef.current?.content || "") + text,
         };
         setLiveMessage(liveMessageRef.current);
+      } else {
+        const messages: { chatId: string; messages: ChatMessage[] } =
+          JSON.parse(text);
+
+        setMessages((current) => {
+          if (
+            !messages.messages.length &&
+            current.every((msg) => msg.default)
+          ) {
+            return current;
+          }
+
+          return messages.messages;
+        });
       }
     };
 

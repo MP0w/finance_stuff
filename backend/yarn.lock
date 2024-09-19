@@ -1716,6 +1716,7 @@ __metadata:
     knex: "npm:^3.1.0"
     knex-types: "npm:^0.5.0"
     node: "npm:^22.8.0"
+    node-cache: "npm:^5.1.2"
     nodemon: "npm:^3.1.4"
     pg: "npm:^8.12.0"
     ts-node: "npm:^10.9.2"
@@ -1913,6 +1914,13 @@ __metadata:
     strip-ansi: "npm:^6.0.1"
     wrap-ansi: "npm:^7.0.0"
   checksum: 10c0/4bda0f09c340cbb6dfdc1ed508b3ca080f12992c18d68c6be4d9cf51756033d5266e61ec57529e610dacbf4da1c634423b0c1b11037709cc6b09045cbd815df5
+  languageName: node
+  linkType: hard
+
+"clone@npm:2.x":
+  version: 2.1.2
+  resolution: "clone@npm:2.1.2"
+  checksum: 10c0/ed0601cd0b1606bc7d82ee7175b97e68d1dd9b91fd1250a3617b38d34a095f8ee0431d40a1a611122dcccb4f93295b4fdb94942aa763392b5fe44effa50c2d5e
   languageName: node
   linkType: hard
 
@@ -3587,6 +3595,15 @@ __metadata:
   version: 1.1.3
   resolution: "node-bin-setup@npm:1.1.3"
   checksum: 10c0/7de7d17aff7baa4e424f2b94ba14626b177620998d7bbe5bb28841a4e078d9c198a96edefb88f00e80a724f3d56907cdfb4be8af1c45e46b0f1476c26d828910
+  languageName: node
+  linkType: hard
+
+"node-cache@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "node-cache@npm:5.1.2"
+  dependencies:
+    clone: "npm:2.x"
+  checksum: 10c0/2f91907510a1276415ae5898269d0765934d5a4f3682c8b1b19964694a9b841c8bd791e1a125d1f89050f412e1da5dd982179d714252b3a7223abb05b8cb24d5
   languageName: node
   linkType: hard
 

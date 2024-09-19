@@ -3,12 +3,14 @@ import { CoreMessage, streamText } from "ai";
 
 
 export class AIChat {
-  private messages: CoreMessage[] = [];
+  id: string;
+  messages: CoreMessage[] = [];
   private context: AIChatContext;
 
-  constructor(context: AIChatContext) {
+  constructor(context: AIChatContext, id: string) {
     this.messages = [];
     this.context = context;
+    this.id = id;
   }
 
   async *onUserMessage(message: string) {

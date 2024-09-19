@@ -2,8 +2,11 @@ import { WebSocketServer } from "ws";
 import { verifyToken } from "../endpoints/auth";
 import getUuidByString from "uuid-by-string";
 import { AIChat, defaultContext } from "./ai-chat";
+import { generateUUID } from "../dbConnection";
+import NodeCache from "node-cache";
 
 let wss: WebSocketServer;
+const chatCache = new NodeCache({ stdTTL: 60 * 60 });
 
 async function auth(token: string): Promise<string | undefined> {
   const user = await verifyToken(token);
@@ -25,12 +28,18 @@ export function startWebsocketServer() {
     }
 
     const userId = await auth(token);
-    const aiChat = new AIChat(defaultContext);
+    const id = generateUUID();
 
     if (!userId) {
       ws.close(4002, "Invalid authentication token");
       return;
     }
+
+    const aiChat = (chatCache.get(userId) ??
+      new AIChat(defaultContext, id)) as AIChat;
+    chatCache.set(userId, aiChat);
+
+    ws.send(JSON.stringify({ chatId: id, messages: aiChat.messages }));
 
     // console.log(`Client connected: ${userId}`);
 
@@ -46,6 +55,7 @@ export function startWebsocketServer() {
     });
 
     ws.on("close", () => {
+      chatCache.set(userId, aiChat);
       // console.log(`Client disconnected: ${userId}`);
     });
   });
