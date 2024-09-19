@@ -20,6 +20,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { router } from "./endpoints/router";
 import { initializeApp } from "firebase-admin/app";
 import admin from "firebase-admin";
+import { startWebsocketServer } from "./ai-chat/websocket";
 
 const cert: admin.ServiceAccount = JSON.parse(process.env.FIREBASE_CERT!);
 
@@ -48,3 +49,5 @@ app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+startWebsocketServer();
