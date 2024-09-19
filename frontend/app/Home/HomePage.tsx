@@ -110,11 +110,19 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         const response = await createAccountingEntry(date);
         fetchAccountingEntries();
         toast.success("new entry created", { position: "bottom-right" });
-        response?.failedConnections?.forEach((connection) => {
-          toast.error(`Failed to get value for ${connection}`, {
-            position: "bottom-right",
-          });
-        });
+        const failedConnections = response?.failedConnections ?? [];
+        if (failedConnections.length > 0) {
+          toast.error(
+            `Failed to get a value from: ${failedConnections
+              .map((c) => c.connectorId)
+              .join(", ")}.`,
+            {
+              position: "bottom-right",
+              duration: 20000,
+            }
+          );
+        }
+
         logAnalyticsEvent("create_accounting_entry_success");
       } catch (error) {
         console.error("Error creating accounting entry:", error);

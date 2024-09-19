@@ -27,9 +27,12 @@ export const useGetAccountingEntry = () => {
 // Create a new accounting entry
 export const useCreateAccountingEntry = () => {
   return useApiCall((date: Date) =>
-    api.post<{ failedConnections: string[] }>("/accounting_entry", {
-      date: date.toLocaleDateString("en-US"),
-    })
+    api.post<{ failedConnections: { connectorId: string }[] }>(
+      "/accounting_entry",
+      {
+        date: date.toLocaleDateString("en-US"),
+      }
+    )
   );
 };
 
