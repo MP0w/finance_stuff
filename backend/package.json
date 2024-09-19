@@ -11,6 +11,7 @@
     "knex": "NODE_ENV=development NODE_OPTIONS='--import tsx/esm' knex",
     "migrate": "npm run knex migrate:latest",
     "codegen": "ts-node generateTypes.ts",
+    "backup": "ts-node backupDB.ts",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org mpow --project node ./dist && sentry-cli sourcemaps upload --org mpow --project node ./dist",
     "update:connectors": "yarn remove finance_stuff_connectors && yarn add finance_stuff_connectors@https://github.com/MP0w/finance_stuff_connectors.git"
   },
