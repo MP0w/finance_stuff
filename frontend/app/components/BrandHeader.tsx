@@ -7,12 +7,14 @@ interface BrandHeaderProps {
   email?: string;
   signOut: () => void;
   className?: string;
+  exportData: () => void;
 }
 
 export const BrandHeader: React.FC<BrandHeaderProps> = ({
   email,
   signOut,
   className,
+  exportData,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const { user } = useUserState();
@@ -41,13 +43,13 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
         </button>
         {showSettings && (
           <div
-            className="absolute right-0 mt-2 bg-white rounded-md shadow-lg px-2 py-1 z-10"
+            className="absolute right-0 mt-2 bg-white rounded-md shadow-lg px-2 py-1 z-10 text-gray-700 text-sm"
             onMouseLeave={() => setShowSettings(false)}
             onClick={() => setShowSettings(false)}
           >
-            <p className="px-4 py-2 text-sm text-gray-700">{email}</p>
+            <p className="px-4 py-2 font-bold">{email}</p>
             <div className="px-4 py-2">
-              <p className="text-sm text-gray-800 mb-2">Currency</p>
+              <p className="text-gray-800 mb-2">Currency</p>
               <div className="flex rounded-md shadow-sm" role="group">
                 <button
                   type="button"
@@ -69,15 +71,21 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
                 </button>
               </div>
             </div>
+            <button
+              className="block w-full text-left px-4 py-2  hover:bg-gray-100"
+              onClick={exportData}
+            >
+              Export data (CVS)
+            </button>
             <FeedbackButton />
             <button
-              className="block w-full text-left px-4 py-2 text-sm text-lime-500 hover:bg-gray-100"
+              className="block w-full text-left px-4 py-2  hover:bg-gray-100"
               onClick={() => window.open("/privacy", "_blank")}
             >
               Privacy Policy
             </button>
             <button
-              className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
+              className="block w-full text-left px-4 py-2 text-red-700 hover:bg-gray-100"
               onClick={signOut}
             >
               Logout

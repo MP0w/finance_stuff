@@ -14,14 +14,10 @@ export interface TotalTableProps {
   onDeleteAccountingEntry: (entryId: string) => void;
 }
 
-const TotalTable: React.FC<TotalTableProps> = ({
-  title,
-  fiatAccounts,
-  investmentAccounts,
-  accountingEntries,
-  onDeleteAccountingEntry,
-  liveAccountingEntry,
-}) => {
+function makeHeaders(
+  fiatAccounts: Accounts[],
+  investmentAccounts: Accounts[]
+): TableHeaderContent[] {
   const headers: (TableHeaderContent | undefined)[] = [
     dateHeader,
     fiatAccounts.length
@@ -63,6 +59,17 @@ const TotalTable: React.FC<TotalTableProps> = ({
     "Change",
   ];
 
+  return headers.filter((h) => h !== undefined);
+}
+
+const TotalTable: React.FC<TotalTableProps> = ({
+  title,
+  fiatAccounts,
+  investmentAccounts,
+  accountingEntries,
+  onDeleteAccountingEntry,
+  liveAccountingEntry,
+}) => {
   const summaryData = makeSummaryData({
     fiatAccounts,
     investmentAccounts,
@@ -142,7 +149,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
   return (
     <Table
       title={title}
-      headers={headers.filter((h) => h !== undefined)}
+      headers={makeHeaders(fiatAccounts, investmentAccounts)}
       rows={summaryData.map((entry) => getCells(entry))}
       onAddEntry={undefined}
     />

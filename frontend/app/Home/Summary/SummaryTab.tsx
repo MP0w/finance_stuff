@@ -32,6 +32,29 @@ export type SummaryCell = {
   isLive: boolean;
 };
 
+export function makeCSV(rows: SummaryCell[]) {
+  const columns =
+    "Date,Liquid,Invested,Investments Value,Profits,Savings,Total,Change";
+
+  const data = rows.map((r) => [
+    r.date.toLocaleDateString(),
+    r.liquidTotal,
+    r.investmentsInvested,
+    r.investmentsTotal,
+    r.profits,
+    r.savings,
+    r.total,
+    r.change,
+  ]);
+
+  const csv = [columns];
+  data.forEach((row) => {
+    csv.push(row.join(","));
+  });
+
+  return csv.join("\n");
+}
+
 export function makeSummaryData(args: {
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];

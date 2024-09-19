@@ -24,7 +24,7 @@ import { ArcherContainer } from "react-archer";
 import OnboardingTips from "./OnboardingTips";
 import AddToCalendar from "../components/AddToCalendar";
 import { logAnalyticsEvent } from "../firebase";
-import SummaryTab from "./Summary/SummaryTab";
+import SummaryTab, { makeCSV, makeSummaryData } from "./Summary/SummaryTab";
 import ConnectorsTab from "./ConnectorTab";
 
 interface HomePageProps {
@@ -267,6 +267,38 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     setExpandedAddAccount(false);
   };
 
+  const createCSVContent = () => {
+    if (!accountingEntries) {
+      return;
+    }
+
+    const summaryData = makeSummaryData({
+      fiatAccounts,
+      investmentAccounts,
+      accountingEntries,
+      liveAccountingEntry: undefined,
+    });
+
+    return makeCSV(summaryData);
+  };
+
+  const exportData = () => {
+    const csvContent = createCSVContent();
+
+    if (!csvContent) {
+      return;
+    }
+
+    console.log(csvContent);
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "finance_stuff_export.csv";
+    a.click();
+  };
+
   const tabContent = {
     fiat: (
       <div>
@@ -432,6 +464,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             ]}
             activeTab={activeTab}
             setActiveTab={switchTab}
+            exportData={exportData}
           >
             {accountsError || entriesError ? (
               <p>Error loading data, retry</p>

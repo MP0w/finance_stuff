@@ -13,6 +13,7 @@ interface TabViewProps {
   setActiveTab: (tabId: string) => void;
   children: React.ReactNode;
   email?: string;
+  exportData: () => void;
   signOut: () => void;
 }
 
@@ -22,6 +23,7 @@ const TabView: React.FC<TabViewProps> = ({
   setActiveTab,
   children,
   email,
+  exportData,
   signOut,
 }) => {
   function renderTab(tab: Tab) {
@@ -44,13 +46,19 @@ const TabView: React.FC<TabViewProps> = ({
 
   return (
     <div>
-      <BrandHeader className="md:hidden" email={email} signOut={signOut} />
+      <BrandHeader
+        className="md:hidden"
+        email={email}
+        signOut={signOut}
+        exportData={exportData}
+      />
       <header className="flex border-b border-gray-200 mb-8">
         <div className="w-full">{tabs.map((tab) => renderTab(tab))}</div>
         <BrandHeader
           className="hidden md:flex"
           email={email}
           signOut={signOut}
+          exportData={exportData}
         />
       </header>
       <div>{children}</div>
