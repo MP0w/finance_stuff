@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FeedbackButton from "./FeedbackButton";
 import SettingsIcon from "./SettingsIcon";
-import { updateUser, useUserState } from "../UserState";
+import { getCurrencySymbol, updateUser, useUserState } from "../UserState";
 
 interface BrandHeaderProps {
   email?: string;
@@ -51,21 +51,21 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
               <div className="flex rounded-md shadow-sm" role="group">
                 <button
                   type="button"
-                  className={`px-4 py-2 text-xs font-medium text-gray-900 bg-gray-100 border border-gray-200 rounded-l-lg hover:bg-gray-400 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ${
+                  className={`px-6 py-1 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-200 rounded-l-lg hover:bg-gray-400 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ${
                     user?.currency === "USD" ? "bg-gray-800 text-white" : ""
                   }`}
                   onClick={() => handleCurrencyChange("USD")}
                 >
-                  USD
+                  {getCurrencySymbol("USD")}
                 </button>
                 <button
                   type="button"
-                  className={`px-4 py-2 text-xs font-medium text-gray-900 bg-gray-100 border border-gray-200 rounded-r-lg hover:bg-gray-400 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ${
-                    user?.currency === "EUR" ? "bg-gray-600 text-white" : ""
+                  className={`px-6 py-1 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-200 rounded-r-lg hover:bg-gray-400 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ${
+                    user?.currency === "EUR" ? "bg-gray-500 text-white" : ""
                   }`}
                   onClick={() => handleCurrencyChange("EUR")}
                 >
-                  EUR
+                  {getCurrencySymbol("EUR")}
                 </button>
               </div>
             </div>
