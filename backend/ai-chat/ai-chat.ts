@@ -1,6 +1,6 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { CoreMessage, streamText } from "ai";
-
+import { AIChatContext } from "../types";
 
 export class AIChat {
   id: string;
@@ -24,19 +24,24 @@ export class AIChat {
       IMPORTANT:You cannot really reply on anything else that is not the about the user personal finance and budgeting, in that case reply with a short message redirecting the topic.
 
       The user currency is: ${this.context.currency}
-      These is a CVS containing a summary of the user finances in the last months:
-      <cvs>
-      ${this.context.cvs}
-      </cvs>
+      These is a csv containing a summary of the user finances in the last months (the user sees a table, do not mention the csv):
+      <csv>
+      ${this.context.csv}
+      </csv>
 
       Some statistics about the user finances:
       <statistics>
-      ${this.context.stats}
+      - Average savings: ${this.context.stats.averageSavings}
+      - Average total net worth: ${this.context.stats.averageTotalNetWorth}
+      - Average profits: ${this.context.stats.averageProfits}
+      - Monthly income: ${this.context.stats.monthlyIncome}
       </statistics>
 
       The user current portfolio is:
       <portfolio>
-      ${this.context.currentPortfolio}
+      ${this.context.currentPortfolio
+        .map((portfolio) => `${portfolio.accountName}: ${portfolio.balance}`)
+        .join("\n")}
       </portfolio>
       `,
       messages: this.messages,
