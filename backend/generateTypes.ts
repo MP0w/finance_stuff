@@ -48,7 +48,7 @@ const transformer = new Transform({
 
     if (data.includes("//")) {
       this.push("\n");
-    } else if (data === "  type: string;\n") {
+    } else if (isAccountType && data === "  type: string;\n") {
       this.push("  type: AccountType;\n");
     } else {
       this.push(data);

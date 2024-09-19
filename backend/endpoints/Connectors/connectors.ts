@@ -62,6 +62,7 @@ async function getAllConnections(userId: string) {
   return await dbConnection<Connections>(Table.Connections)
     .select()
     .where({ user_id: userId })
+    .andWhereNot({ connector_id: "debank" })
     .limit(50);
 }
 
