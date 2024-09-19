@@ -301,6 +301,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             fiatAccounts={fiatAccounts}
             investmentAccounts={investmentAccounts}
             expandedAddAccount={expandedAddAccount}
+            isInvestments={false}
           />
         )}
         <AccountsTable
@@ -364,6 +365,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             fiatAccounts={fiatAccounts}
             investmentAccounts={investmentAccounts}
             expandedAddAccount={expandedAddAccount}
+            isInvestments={true}
           />
         )}
         {investmentAccounts.map((account) => (
