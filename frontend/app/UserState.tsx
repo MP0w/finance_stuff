@@ -8,27 +8,32 @@ import React, {
 import { auth, logAnalyticsEvent } from "./firebase";
 import { clearAuthToken, setAuthToken } from "./apiClient";
 import * as Sentry from "@sentry/nextjs";
+import { Accounts, Users } from "../../backend/types";
 
 export type UserStateContextType = {
   user:
     | {
         idToken: () => Promise<string>;
         id: string;
+        firebaseUid: string;
         email: string;
+        currency: string;
+        updateUser: (user: Users) => void;
       }
     | undefined;
   loaded: boolean;
 };
 
-export type User = {
-  id: string | undefined;
-  firebase_uid: string | undefined;
-  email: string | undefined;
-  currency: string | undefined;
-};
+export function getUserCurrencySymbol() {
+  return getCurrencySymbol(getCachedUser()?.currency ?? "USD");
+}
 
-export function getCurrencySymbol() {
-  return "€"; // TODO: get from user
+export function getCurrencySymbol(currency: string) {
+  return currency === "EUR" ? "€" : "$";
+}
+
+export function getAccountCurrencySymbol(account: Accounts) {
+  return getCurrencySymbol(account.currency);
 }
 
 const UserStateContext = createContext<UserStateContextType | undefined>(
@@ -49,16 +54,10 @@ function isTokenExpired(token: string): boolean {
 
 function getCachedUser() {
   const cachedUser = localStorage.getItem("user");
-  return cachedUser ? (JSON.parse(cachedUser) as User) : undefined;
+  return cachedUser ? (JSON.parse(cachedUser) as Users) : undefined;
 }
 
-const login = async (token: string, firebaseUid: string) => {
-  const cachedUser = getCachedUser();
-
-  if (cachedUser && cachedUser.firebase_uid === firebaseUid) {
-    return cachedUser;
-  }
-
+export const updateUser = async (token: string, currency?: string) => {
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/sign-in", {
       method: "POST",
@@ -66,17 +65,16 @@ const login = async (token: string, firebaseUid: string) => {
         "Content-Type": "application/json",
         Authorization: token,
       },
-      body: JSON.stringify({}),
+      body: JSON.stringify({ currency }),
     });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const result = await response.json();
+    const result: Users = await response.json();
     localStorage.setItem("user", JSON.stringify(result));
     console.log(result);
-    logAnalyticsEvent("sign-in");
 
     return result;
   } catch (error) {
@@ -85,11 +83,23 @@ const login = async (token: string, firebaseUid: string) => {
   }
 };
 
+const login = async (token: string, firebaseUid: string) => {
+  const cachedUser = getCachedUser();
+
+  if (cachedUser && cachedUser.firebase_uid === firebaseUid) {
+    return cachedUser;
+  }
+
+  const user = await updateUser(token, firebaseUid);
+  logAnalyticsEvent("sign-in");
+  return user;
+};
+
 export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [idToken, setIdToken] = useState<string | undefined>(undefined);
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<Users | undefined>(undefined);
   const [loaded, setLoaded] = useState<boolean>(false);
 
   const clearUser = () => {
@@ -98,6 +108,11 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
     setIdToken(undefined);
     setUser(undefined);
     clearAuthToken();
+  };
+
+  const updateUser = (user: Users) => {
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
   useEffect(() => {
@@ -116,8 +131,8 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
         if (userResult) {
           setAuthToken(token);
           setIdToken(token);
-          setUser(userResult);
-          localStorage.setItem("user", JSON.stringify(userResult));
+
+          updateUser(userResult);
           Sentry.setUser({
             fullName: user.displayName,
             email: user.email ?? undefined,
@@ -144,6 +159,9 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
             },
             id: user.id,
             email: user.email,
+            currency: user.currency,
+            firebaseUid: user.firebase_uid,
+            updateUser,
           },
           loaded,
         }

@@ -88,10 +88,11 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     async (type: AccountType) => {
       if (newAccountName.length > 0) {
         try {
-          await createAccount(newAccountName, type);
+          await createAccount(newAccountName, type, user?.currency ?? "USD");
           fetchAccounts();
           setNewAccountName("");
           toast.success("Account created", { position: "bottom-right" });
+          setExpandedAddAccount(false);
           logAnalyticsEvent("create_account_success");
         } catch (error) {
           console.error("Error creating account:", error);
@@ -101,7 +102,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         }
       }
     },
-    [newAccountName, createAccount, fetchAccounts]
+    [newAccountName, createAccount, fetchAccounts, user]
   );
 
   const handleCreateAccountingEntry = useCallback(

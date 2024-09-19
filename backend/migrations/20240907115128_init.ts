@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("username");
     table.string("name");
     table.string("photo");
-    table.string("currency").notNullable().defaultTo("EUR");
+    table.string("currency").notNullable().defaultTo("USD");
     table.timestamps(true, true);
   });
 

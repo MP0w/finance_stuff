@@ -8,14 +8,19 @@ export function usersRouter(app: Application) {
   app.post(
     "/sign-in",
     expressAsyncHandler(async (req, res) => {
+      const currency = req.body.currency;
+
+      const payload = {
+        id: getUuidByString(req.user.uid),
+        firebase_uid: req.user.uid,
+        email: req.user.email,
+        photo: null,
+        updated_at: new Date(),
+        ...(currency ? { currency } : {}),
+      };
+
       const users = await dbConnection<Users>(Table.Users)
-        .insert({
-          id: getUuidByString(req.user.uid),
-          firebase_uid: req.user.uid,
-          email: req.user.email,
-          photo: null,
-          updated_at: new Date(),
-        })
+        .insert(payload)
         .onConflict("id")
         .merge()
         .returning("*");

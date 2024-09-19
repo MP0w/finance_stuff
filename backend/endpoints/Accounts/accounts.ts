@@ -37,8 +37,9 @@ export function accountsRouter(app: Application) {
   async function upsertAccount(id: string, req: Request, res: Response) {
     const name = req.body.name;
     const type = req.body.type;
+    const currency = req.body.currency;
 
-    if (!name || !type) {
+    if (!name || !type || !currency) {
       throw Error("Invalid params");
     }
 
@@ -49,6 +50,7 @@ export function accountsRouter(app: Application) {
         name,
         type,
         updated_at: new Date(),
+        currency,
       })
       .onConflict("id")
       .merge();

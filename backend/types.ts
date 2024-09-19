@@ -55,6 +55,7 @@ export type Accounts = {
   type: AccountType;
   created_at: Date;
   updated_at: Date;
+  currency: string;
 };
 
 export type Connections = {
