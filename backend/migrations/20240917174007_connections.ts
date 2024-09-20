@@ -1,5 +1,5 @@
 import type { Knex } from "knex";
-import { Table } from "../../shared/types";
+import { Table } from "../types";
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable(Table.Connections, (table) => {

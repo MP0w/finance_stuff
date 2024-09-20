@@ -17,7 +17,7 @@
     "outDir": "./dist",
 
     // Specify the root directory of input files.
-    "rootDir": "..",
+    "rootDir": "./",
 
     // Enable all strict type-checking options.
     "strict": true,
@@ -87,6 +87,6 @@
     // This improves issue grouping in Sentry.
     "sourceRoot": "/"
   },
-  "include": ["**/*.ts", "../shared/**/*.ts"],
+  "include": ["./**/*.ts", "index.ts", "knexfile.ts"], // Include all TypeScript files in the "src" folder.
   "exclude": ["node_modules", "dist"] // Exclude "node_modules" and output directory.
 }

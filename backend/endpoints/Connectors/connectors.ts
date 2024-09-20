@@ -1,21 +1,23 @@
 import { Application, Request, Response } from "express";
 import expressAsyncHandler from "express-async-handler";
-import {
-  ConnectorId,
-  ConnectorProvider,
-  ConnectorProviderConfig,
-} from "finance_stuff_connectors";
+import { ConnectorId, ConnectorProvider } from "finance_stuff_connectors";
 import { dbConnection, generateUUID } from "../../dbConnection";
-import { Connections, Table } from "../../../shared/types";
+import { Connections, Table } from "../../types";
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 import { fillInMissingAccountingEntriesIfNeeded } from "../AccountingEntries/accountingEntries";
 
-const config: ConnectorProviderConfig = {
-  currencyAPIKey: process.env.CURRENCY_API_KEY!,
-  zapperAPIKey: process.env.ZAPPER_API_KEY!,
+const validatedENV = (keyName: string) => {
+  const key = process.env[keyName];
+  if (!key || key === "") {
+    throw Error("Invalid key " + keyName);
+  }
+  return key;
 };
 
-export const connectorProvider = new ConnectorProvider(config);
+export const connectorProvider = new ConnectorProvider({
+  zapperAPIKey: validatedENV("ZAPPER_API_KEY"),
+  currencyAPIKey: validatedENV("CURRENCY_API_KEY"),
+});
 
 export function encryptAndStringifySettings(settings: Record<string, unknown>) {
   const string = JSON.stringify(settings);

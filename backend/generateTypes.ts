@@ -57,7 +57,7 @@ const transformer = new Transform({
   },
 });
 
-const output = createWriteStream("../shared/types.ts");
+const output = createWriteStream("../../shared/types.ts");
 
 const combinedStream = new Writable({
   write(chunk, encoding, callback) {

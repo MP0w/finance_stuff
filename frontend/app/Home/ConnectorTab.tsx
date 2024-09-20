@@ -104,6 +104,7 @@ export const ConnectorsTab: React.FC<{
         setSelectedConnector(undefined);
         setFormData({});
         onAddConnection();
+        fetchConnections();
       } catch (error) {
         toast.error("Error creating connection: " + (error as Error).message, {
           id: "create-connection-error",

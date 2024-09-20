@@ -1,6 +1,6 @@
 import { Application, Request, Response } from "express";
 import { dbConnection, generateUUID } from "../../dbConnection";
-import { Entries, Table } from "../../../shared/types";
+import { Entries, Table } from "../../types";
 import expressAsyncHandler from "express-async-handler";
 
 export function entriesRouter(app: Application) {

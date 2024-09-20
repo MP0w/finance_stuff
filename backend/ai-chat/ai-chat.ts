@@ -1,6 +1,6 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { CoreMessage, streamText } from "ai";
-import { Table, Users } from "../../shared/types";
+import { Table, Users } from "../types";
 import { dbConnection } from "../dbConnection";
 import { AIChatContext, makeAIContext } from "./aiContext";
 
