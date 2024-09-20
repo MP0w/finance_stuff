@@ -42,6 +42,8 @@ async function liveEntries(userId: string, accountingEntryId: string) {
   const balances: Map<string, { value: number; cost: number | undefined }> =
     new Map();
 
+  let outdatedTTL: number | undefined;
+
   for (const c of connections) {
     try {
       const settings = c.settings;
@@ -53,6 +55,11 @@ async function liveEntries(userId: string, accountingEntryId: string) {
       );
 
       const value = await connector.getBalance();
+
+      if (value.outdated && value.ttl) {
+        outdatedTTL = Math.max(outdatedTTL ?? 0, value.ttl);
+      }
+
       const currentBalance = balances.get(c.account_id) ?? {
         value: 0,
         cost: undefined,
@@ -90,6 +97,7 @@ async function liveEntries(userId: string, accountingEntryId: string) {
   return {
     entries,
     failedConnections,
+    outdatedTTL,
   };
 }
 
@@ -247,6 +255,8 @@ export function accountingEntriesRouter(app: Application) {
       res.send({
         live: accountingEntryDTO,
         failedConnections: live.failedConnections,
+        hasOutdated: !!live.outdatedTTL,
+        outdatedTTL: live.outdatedTTL ? live.outdatedTTL + 5 : undefined,
       });
     })
   );

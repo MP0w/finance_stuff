@@ -11,8 +11,8 @@ import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 import { fillInMissingAccountingEntriesIfNeeded } from "../AccountingEntries/accountingEntries";
 
 const config: ConnectorProviderConfig = {
-  debankAPIKey: process.env.DEBANK_API_KEY!,
   currencyAPIKey: process.env.CURRENCY_API_KEY!,
+  zapperAPIKey: process.env.ZAPPER_API_KEY!,
 };
 
 export const connectorProvider = new ConnectorProvider(config);
@@ -62,7 +62,6 @@ async function getAllConnections(userId: string) {
   return await dbConnection<Connections>(Table.Connections)
     .select()
     .where({ user_id: userId })
-    .andWhereNot({ connector_id: "debank" })
     .limit(50);
 }
 

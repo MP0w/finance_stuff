@@ -64,6 +64,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { data: liveAccountingEntry, execute: fetchLiveAccountingEntry } =
     useGetLiveAccountingEntry();
 
+  const { live, hasOutdated, outdatedTTL } = liveAccountingEntry ?? {
+    hasOutdated: false,
+  };
+
   const { execute: createAccount } = useCreateAccount();
   const { execute: createAccountingEntry } = useCreateAccountingEntry();
   const { execute: createEntry } = useCreateEntry();
@@ -85,6 +89,16 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   useEffect(() => {
     if (accountingEntries) fetchLiveAccountingEntry();
   }, [accountingEntries, fetchLiveAccountingEntry]);
+
+  useEffect(() => {
+    if (hasOutdated && outdatedTTL) {
+      const timer = setTimeout(() => {
+        fetchLiveAccountingEntry();
+      }, outdatedTTL * 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [hasOutdated, outdatedTTL, fetchLiveAccountingEntry]);
 
   const handleCreateAccount = useCallback(
     async (type: AccountType) => {
@@ -409,7 +423,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             fiatAccounts={[]}
             investmentAccounts={investmentAccounts}
             accountingEntries={accountingEntries ?? []}
-            liveAccountingEntry={liveAccountingEntry?.live}
+            liveAccountingEntry={live}
             onAddEntry={handleCreateAccountingEntry}
             onDeleteAccountingEntry={handleDeleteAccountingEntry}
           />
@@ -421,7 +435,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         fiatAccounts={fiatAccounts}
         investmentAccounts={investmentAccounts}
         accountingEntries={accountingEntries ?? []}
-        liveAccountingEntry={liveAccountingEntry?.live}
+        liveAccountingEntry={live}
         onAddEntry={handleCreateAccountingEntry}
         onDeleteAccountingEntry={handleDeleteAccountingEntry}
       />

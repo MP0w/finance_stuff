@@ -13,7 +13,11 @@ export const useGetAccountingEntries = () => {
 // get live entry
 export const useGetLiveAccountingEntry = () => {
   return useApiCall(() =>
-    api.get<{ live?: AccountingEntriesDTO }>("/live_accounting_entry")
+    api.get<{
+      live?: AccountingEntriesDTO;
+      hasOutdated: boolean;
+      outdatedTTL?: number;
+    }>("/live_accounting_entry")
   );
 };
 

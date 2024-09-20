@@ -52,7 +52,6 @@ function useWebSocket(url: string) {
 
   const connectWebSocket = useCallback(() => {
     if (!token) {
-      console.log("token not set");
       return;
     }
 
@@ -149,7 +148,6 @@ function useWebSocket(url: string) {
 
   useEffect(() => {
     if (!token) {
-      console.log("token not set");
       ws.current?.close(1000, "token not set");
       return;
     }

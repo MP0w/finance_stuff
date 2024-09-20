@@ -218,8 +218,7 @@ export const ConnectorsTab: React.FC<{
                       disabled={
                         !selectedAccount ||
                         (selectedAccount.type !== connector.type &&
-                          connector.type !== undefined) ||
-                        connector.id === "debank"
+                          connector.type !== undefined)
                       }
                       onClick={() => setSelectedConnector(connector.id)}
                       className={`flex flex-col items-center justify-center p-4 border rounded-md transition-colors disabled:opacity-50 ${
