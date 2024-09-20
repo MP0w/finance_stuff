@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Accounts, ConnectionsDTO } from "../../../backend/types";
+import { Accounts, ConnectionsDTO } from "../../../shared/types";
 import {
   useGetConnectorsSettings,
   useCreateConnection,

@@ -1,5 +1,5 @@
 import { Application, Request, Response } from "express";
-import { Accounts, Table } from "../../types";
+import { Accounts, Table } from "../../../shared/types";
 import { dbConnection, generateUUID } from "../../dbConnection";
 import expressAsyncHandler from "express-async-handler";
 

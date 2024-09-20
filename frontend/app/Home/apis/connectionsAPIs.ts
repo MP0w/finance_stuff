@@ -1,4 +1,4 @@
-import { Connector, ConnectionsDTO } from "../../../../backend/types";
+import { Connector, ConnectionsDTO } from "../../../../shared/types";
 import apiClient, { useApiCall } from "../../apiClient";
 
 const api = apiClient;

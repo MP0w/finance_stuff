@@ -1,4 +1,4 @@
-import { Accounts, AccountType } from "../../../../backend/types"; // Assuming you have a types file
+import { Accounts, AccountType } from "../../../../shared/types"; // Assuming you have a types file
 import apiClient, { useApiCall } from "../../apiClient";
 
 const api = apiClient;

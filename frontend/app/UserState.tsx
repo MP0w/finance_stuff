@@ -8,7 +8,7 @@ import React, {
 import { auth, logAnalyticsEvent } from "./firebase";
 import { clearAuthToken, setAuthToken } from "./apiClient";
 import * as Sentry from "@sentry/nextjs";
-import { Accounts, Users } from "../../backend/types";
+import { Accounts, Users } from "../../shared/types";
 
 export type UserStateContextType = {
   user:

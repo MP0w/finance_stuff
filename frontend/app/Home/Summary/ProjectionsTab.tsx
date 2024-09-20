@@ -1,6 +1,7 @@
 import { LineChart } from "@mui/x-charts";
 import { getUserCurrencySymbol } from "@/app/UserState";
-import { makeStatistics, Summary } from "../../../../backend/userStats";
+import { makeStatistics, Summary } from "../../../../shared/userStats";
+import { DateTime } from "luxon";
 
 export interface ProjectionsTabProps {
   summaryCells: Summary[];
@@ -17,16 +18,23 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
     averageProfits,
     averageSavings,
     averageTotal,
-  } = makeStatistics(summaryCells);
+  } = makeStatistics(summaryCells, (startDate, endDate) => {
+    return DateTime.fromJSDate(endDate).diff(
+      DateTime.fromJSDate(startDate),
+      "months"
+    ).months;
+  });
 
   const nextYearDates = Array(12)
     .fill(1)
     .map((_, i) => {
-      return lastDate.plus({ months: i + 1 }).toJSDate();
+      return DateTime.fromJSDate(lastDate)
+        .plus({ months: i + 1 })
+        .toJSDate();
     });
 
   const projectionValues = [
-    { date: lastDate.toJSDate(), value: lastSummary?.total ?? 0 },
+    { date: lastDate, value: lastSummary?.total ?? 0 },
   ].concat(
     nextYearDates.map((date, index) => {
       const rand = Math.random() / (index + 1);

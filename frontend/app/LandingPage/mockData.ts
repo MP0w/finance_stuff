@@ -1,4 +1,4 @@
-import { AccountingEntriesDTO, Accounts } from "../../../backend/types";
+import { AccountingEntriesDTO, Accounts } from "../../../shared/types";
 
 export const mockFiatAccounts: Accounts[] = [
   {

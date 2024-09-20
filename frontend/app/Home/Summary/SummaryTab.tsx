@@ -1,10 +1,10 @@
 import React from "react";
-import { AccountingEntriesDTO, Accounts } from "../../../../backend/types";
+import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 import AddToCalendar from "../../components/AddToCalendar";
 import TotalTable from "./TotalTable";
 import { GraphsTab } from "./GraphsTab";
 import { ProjectionsTab } from "./ProjectionsTab";
-import { makeSummaryData } from "../../../../backend/userStats";
+import { makeSummaryData } from "../../../../shared/userStats";
 
 export const SummaryTab: React.FC<{
   liveAccountingEntry: AccountingEntriesDTO | undefined;

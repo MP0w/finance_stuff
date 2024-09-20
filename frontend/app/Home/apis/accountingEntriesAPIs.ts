@@ -1,4 +1,4 @@
-import { AccountingEntriesDTO } from "../../../../backend/types";
+import { AccountingEntriesDTO } from "../../../../shared/types";
 import apiClient, { useApiCall } from "../../apiClient";
 
 const api = apiClient;

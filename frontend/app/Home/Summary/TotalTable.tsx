@@ -1,8 +1,8 @@
 import React from "react";
 import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
-import { AccountingEntriesDTO, Accounts } from "../../../../backend/types";
+import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 import { colorForValue, stringForPercentage } from "../InvestmentTable";
-import { makeSummaryData, Summary } from "../../../../backend/userStats";
+import { makeSummaryData, Summary } from "../../../../shared/userStats";
 
 export interface TotalTableProps {
   title?: string;

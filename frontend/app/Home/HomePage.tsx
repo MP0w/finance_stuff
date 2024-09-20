@@ -13,7 +13,7 @@ import {
   useGetLiveAccountingEntry,
 } from "./apis/accountingEntriesAPIs";
 import { useCreateEntry, useUpdateEntry } from "./apis/entriesAPIs";
-import { AccountType } from "../../../backend/types";
+import { AccountType } from "../../../shared/types";
 import AccountsTable from "./AccountsTable";
 import InvestmentTable from "./InvestmentTable";
 import TotalTable from "./Summary/TotalTable";
@@ -27,7 +27,7 @@ import { logAnalyticsEvent } from "../firebase";
 import SummaryTab from "./Summary/SummaryTab";
 import ConnectorsTab from "./ConnectorTab";
 import ChatTab from "./ChatTab";
-import { createCSVContent } from "../../../backend/userStats";
+import { createCSVContent } from "../../../shared/userStats";
 
 interface HomePageProps {
   signOut: () => void;

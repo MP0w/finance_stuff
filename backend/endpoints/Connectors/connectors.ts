@@ -6,7 +6,7 @@ import {
   ConnectorProviderConfig,
 } from "finance_stuff_connectors";
 import { dbConnection, generateUUID } from "../../dbConnection";
-import { Connections, Table } from "../../types";
+import { Connections, Table } from "../../../shared/types";
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 import { fillInMissingAccountingEntriesIfNeeded } from "../AccountingEntries/accountingEntries";
 

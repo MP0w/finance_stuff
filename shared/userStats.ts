@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { AccountingEntriesDTO, Accounts } from "./types";
 
 export type PartialSummary = {
@@ -151,7 +150,10 @@ export const createCSVContent = (args: {
   return makeCSV(summaryData);
 };
 
-export function makeStatistics(summaries: Summary[]) {
+export function makeStatistics(
+  summaries: Summary[],
+  distanceBetweenEntries: (startDate: Date, endDate: Date) => number
+) {
   const sums = summaries.reduce(
     (acc, curr) => {
       return {
@@ -171,12 +173,12 @@ export function makeStatistics(summaries: Summary[]) {
   const averageTotal = sums.total / summaries.length;
   const averageProfits = sums.profits / (summaries.length - 1);
   const lastSummary = summaries.at(-1);
-  const firstDate = DateTime.fromJSDate(summaries.at(0)?.date ?? new Date());
-  const lastDate = DateTime.fromJSDate(lastSummary?.date ?? new Date());
-  const distanceBetweenEntries =
-    summaries.length > 1 ? lastDate.diff(firstDate, "months").months : 0;
+  const firstDate = summaries.at(0)?.date ?? new Date();
+  const lastDate = lastSummary?.date ?? new Date();
+  const distance =
+    summaries.length > 1 ? distanceBetweenEntries(firstDate, lastDate) : 0;
   const totalDiff = (lastSummary?.total ?? 0) - (summaries.at(0)?.total ?? 0);
-  const averageDiff = totalDiff / distanceBetweenEntries;
+  const averageDiff = totalDiff / distance;
 
   return {
     averageSavings,
@@ -185,6 +187,6 @@ export function makeStatistics(summaries: Summary[]) {
     averageDiff,
     lastDate,
     lastSummary,
-    distanceBetweenEntries,
+    distanceBetweenEntries: distance,
   };
 }

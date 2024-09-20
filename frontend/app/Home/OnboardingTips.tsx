@@ -1,6 +1,6 @@
 import React from "react";
 import { ArcherElement } from "react-archer";
-import { Accounts } from "../../../backend/types";
+import { Accounts } from "../../../shared/types";
 import { LineType } from "react-archer/lib/types";
 
 interface OnboardingTipsProps {

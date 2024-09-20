@@ -1,5 +1,5 @@
 import { Application } from "express";
-import { Table, Users } from "../../types";
+import { Table, Users } from "../../../shared/types";
 import { dbConnection } from "../../dbConnection";
 import getUuidByString from "uuid-by-string";
 import expressAsyncHandler from "express-async-handler";

@@ -6,7 +6,7 @@ import {
   Entries,
   Table,
   Users,
-} from "../../types";
+} from "../../../shared/types";
 import expressAsyncHandler from "express-async-handler";
 import {
   connectorProvider,

@@ -1,7 +1,12 @@
 import { dbConnection } from "../dbConnection";
 import { getAccoutingEntries } from "../endpoints/AccountingEntries/accountingEntries";
-import { Accounts, Table, Users } from "../types";
-import { makeCSV, makeStatistics, makeSummaryData } from "../userStats";
+import { Accounts, Table, Users } from "../../shared/types";
+import {
+  makeCSV,
+  makeStatistics,
+  makeSummaryData,
+} from "../../shared/userStats";
+import { DateTime } from "luxon";
 
 export type AIChatContext = {
   currency: string;
@@ -36,7 +41,12 @@ export async function makeAIContext(user: Users): Promise<AIChatContext> {
     liveAccountingEntry: undefined,
   });
 
-  const stats = makeStatistics(summaryData);
+  const stats = makeStatistics(summaryData, (startDate, endDate) => {
+    return DateTime.fromJSDate(endDate).diff(
+      DateTime.fromJSDate(startDate),
+      "months"
+    ).months;
+  });
 
   const currentPortfolio = () => {
     if (accountingEntries.length === 0 || accounts.length === 0) {
