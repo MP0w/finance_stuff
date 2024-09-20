@@ -124,53 +124,58 @@ export async function fillInMissingAccountingEntriesIfNeeded(userId: string) {
   await dbConnection<Entries>(Table.Entries).insert(missingEntries);
 }
 
+export async function getAccoutingEntries(userId: string) {
+  let accountingEntries = await dbConnection<AccountingEntries>(
+    Table.AccountingEntries
+  )
+    .select()
+    .where({ user_id: userId })
+    .orderBy("date", "asc")
+    .limit(1000);
+
+  if (accountingEntries.length === 0) {
+    await createAccountingEntriesForUser(userId);
+
+    accountingEntries = await dbConnection<AccountingEntries>(
+      Table.AccountingEntries
+    )
+      .select()
+      .where({ user_id: userId })
+      .orderBy("date", "asc")
+      .limit(1000);
+  }
+
+  const allEntries = await dbConnection<Entries>(Table.Entries)
+    .select()
+    .whereIn(
+      "accounting_entry_id",
+      accountingEntries.map((entry) => entry.id)
+    )
+    .andWhere({ user_id: userId });
+
+  const entriesByAccountingEntryId = allEntries.reduce((acc, entry) => {
+    if (!acc[entry.accounting_entry_id]) {
+      acc[entry.accounting_entry_id] = [];
+    }
+    acc[entry.accounting_entry_id].push(entry);
+    return acc;
+  }, {} as Record<string, Entries[]>);
+
+  const accountingEntriesDTO: AccountingEntriesDTO[] = accountingEntries.map(
+    (entry) => ({
+      ...entry,
+      entries: entriesByAccountingEntryId[entry.id] || [],
+    })
+  );
+
+  return accountingEntriesDTO;
+}
+
 export function accountingEntriesRouter(app: Application) {
   app.get(
     "/accounting_entries",
     expressAsyncHandler(async (req, res) => {
-      let accountingEntries = await dbConnection<AccountingEntries>(
-        Table.AccountingEntries
-      )
-        .select()
-        .where({ user_id: req.userId })
-        .orderBy("date", "asc")
-        .limit(1000);
-
-      if (accountingEntries.length === 0) {
-        await createAccountingEntriesForUser(req.userId);
-
-        accountingEntries = await dbConnection<AccountingEntries>(
-          Table.AccountingEntries
-        )
-          .select()
-          .where({ user_id: req.userId })
-          .orderBy("date", "asc")
-          .limit(1000);
-      }
-
-      const allEntries = await dbConnection<Entries>(Table.Entries)
-        .select()
-        .whereIn(
-          "accounting_entry_id",
-          accountingEntries.map((entry) => entry.id)
-        )
-        .andWhere({ user_id: req.userId });
-
-      const entriesByAccountingEntryId = allEntries.reduce((acc, entry) => {
-        if (!acc[entry.accounting_entry_id]) {
-          acc[entry.accounting_entry_id] = [];
-        }
-        acc[entry.accounting_entry_id].push(entry);
-        return acc;
-      }, {} as Record<string, Entries[]>);
-
-      const accountingEntriesDTO: AccountingEntriesDTO[] =
-        accountingEntries.map((entry) => ({
-          ...entry,
-          entries: entriesByAccountingEntryId[entry.id] || [],
-        }));
-
-      res.send(accountingEntriesDTO);
+      res.send(await getAccoutingEntries(req.userId));
     })
   );
 

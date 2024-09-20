@@ -24,8 +24,10 @@ import { ArcherContainer } from "react-archer";
 import OnboardingTips from "./OnboardingTips";
 import AddToCalendar from "../components/AddToCalendar";
 import { logAnalyticsEvent } from "../firebase";
-import SummaryTab, { makeCSV, makeSummaryData } from "./Summary/SummaryTab";
+import SummaryTab from "./Summary/SummaryTab";
 import ConnectorsTab from "./ConnectorTab";
+import ChatTab from "./ChatTab";
+import { createCSVContent } from "../../../backend/userStats";
 
 interface HomePageProps {
   signOut: () => void;
@@ -267,23 +269,12 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     setExpandedAddAccount(false);
   };
 
-  const createCSVContent = () => {
-    if (!accountingEntries) {
-      return;
-    }
-
-    const summaryData = makeSummaryData({
+  const exportData = () => {
+    const csvContent = createCSVContent({
+      accountingEntries: accountingEntries ?? undefined,
       fiatAccounts,
       investmentAccounts,
-      accountingEntries,
-      liveAccountingEntry: undefined,
     });
-
-    return makeCSV(summaryData);
-  };
-
-  const exportData = () => {
-    const csvContent = createCSVContent();
 
     if (!csvContent) {
       return;
@@ -443,6 +434,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         }}
       />
     ),
+    chat: <ChatTab />,
   };
 
   if (!user) {
@@ -461,6 +453,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               { id: "investments", label: "Investments" },
               { id: "summary", label: "Summary" },
               { id: "connectors", label: "Connectors" },
+              { id: "chat", label: "✨AI🔮" },
             ]}
             activeTab={activeTab}
             setActiveTab={switchTab}

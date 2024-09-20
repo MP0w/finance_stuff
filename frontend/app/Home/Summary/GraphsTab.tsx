@@ -2,12 +2,12 @@ import { PieChart, PieValueType } from "@mui/x-charts";
 import { AccountingEntriesDTO, Accounts } from "../../../../backend/types";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { stringForPercentage } from "../InvestmentTable";
-import { SummaryCell } from "./SummaryTab";
+import { Summary } from "../../../../backend/userStats";
 
 export interface GraphsTabProps {
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
-  summaryCells: SummaryCell[];
+  summaryCells: Summary[];
 }
 
 export const GraphsTab: React.FC<GraphsTabProps> = ({

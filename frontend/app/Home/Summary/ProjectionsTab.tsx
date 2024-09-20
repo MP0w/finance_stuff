@@ -1,41 +1,23 @@
-import { DateTime } from "luxon";
-import { SummaryCell } from "./SummaryTab";
 import { LineChart } from "@mui/x-charts";
 import { getUserCurrencySymbol } from "@/app/UserState";
+import { makeStatistics, Summary } from "../../../../backend/userStats";
 
 export interface ProjectionsTabProps {
-  summaryCells: SummaryCell[];
+  summaryCells: Summary[];
 }
 
 export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
   summaryCells,
 }) => {
-  const sums = summaryCells.reduce(
-    (acc, curr) => {
-      return {
-        total: acc.total + curr.total,
-        savings: acc.savings + (curr?.savings ?? 0),
-        profits:
-          acc.profits +
-          (curr.previous
-            ? curr.investmentsTotal - curr.previous.investmentsTotal
-            : 0),
-      };
-    },
-    { total: 0, savings: 0, profits: 0 }
-  );
-
-  const averageSavings = sums.savings / (summaryCells.length - 1);
-  const averageTotal = sums.total / summaryCells.length;
-  const averageProfits = sums.profits / (summaryCells.length - 1);
-  const lastSummary = summaryCells.at(-1);
-  const firstDate = DateTime.fromJSDate(summaryCells.at(0)?.date ?? new Date());
-  const lastDate = DateTime.fromJSDate(lastSummary?.date ?? new Date());
-  const distanceBetweenEntries =
-    summaryCells.length > 1 ? lastDate.diff(firstDate, "months").months : 0;
-  const totalDiff =
-    (lastSummary?.total ?? 0) - (summaryCells.at(0)?.total ?? 0);
-  const averageDiff = totalDiff / distanceBetweenEntries;
+  const {
+    lastDate,
+    lastSummary,
+    averageDiff,
+    distanceBetweenEntries,
+    averageProfits,
+    averageSavings,
+    averageTotal,
+  } = makeStatistics(summaryCells);
 
   const nextYearDates = Array(12)
     .fill(1)

@@ -5,21 +5,6 @@ export type AccountingEntriesDTO = AccountingEntries & { entries: Entries[] };
 
 export type AccountType = "fiat" | "investment";
 
-export type AIChatContext = {
-  currency: string;
-  csv: string;
-  stats: {
-    averageSavings: number;
-    averageTotalNetWorth: number;
-    averageProfits: number;
-    monthlyIncome: number;
-  };
-  currentPortfolio: {
-    accountName: string;
-    balance: number;
-  }[];
-};
-
 export type ConnectionsDTO = Omit<
   Connections,
   "settings" | "created_at" | "updated_at" | "user_id"
@@ -104,8 +89,8 @@ export type Users = {
   currency: string;
   created_at: Date;
   updated_at: Date;
-  used_ai_totoal_tokens: string;
-  used_ai_prompt_tokens: string;
-  available_ai_tokens: string;
+  used_ai_total_tokens: number;
+  used_ai_prompt_tokens: number;
+  available_ai_tokens: number;
 };
 

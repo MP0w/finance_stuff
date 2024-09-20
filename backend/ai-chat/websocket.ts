@@ -1,7 +1,7 @@
 import { WebSocketServer } from "ws";
 import { verifyToken } from "../endpoints/auth";
 import getUuidByString from "uuid-by-string";
-import { AIChat, defaultContext } from "./ai-chat";
+import { AIChat } from "./ai-chat";
 import { generateUUID } from "../dbConnection";
 import NodeCache from "node-cache";
 
@@ -35,8 +35,10 @@ export function startWebsocketServer() {
       return;
     }
 
-    const aiChat = (chatCache.get(userId) ??
-      new AIChat(defaultContext, id)) as AIChat;
+    const cachedChat = chatCache.get(userId) as AIChat | undefined;
+    cachedChat?.refreshContext();
+
+    const aiChat = cachedChat ?? (await AIChat.createChat(id, userId));
     chatCache.set(userId, aiChat);
 
     ws.send(JSON.stringify({ chatId: id, messages: aiChat.messages }));

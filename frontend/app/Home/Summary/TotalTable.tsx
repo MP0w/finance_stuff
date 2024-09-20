@@ -2,7 +2,7 @@ import React from "react";
 import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
 import { AccountingEntriesDTO, Accounts } from "../../../../backend/types";
 import { colorForValue, stringForPercentage } from "../InvestmentTable";
-import { makeSummaryData, SummaryCell } from "./SummaryTab";
+import { makeSummaryData, Summary } from "../../../../backend/userStats";
 
 export interface TotalTableProps {
   title?: string;
@@ -77,7 +77,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
     liveAccountingEntry,
   });
 
-  const getCells = (summary: SummaryCell): TableRowCell[] => {
+  const getCells = (summary: Summary): TableRowCell[] => {
     const cells: (TableRowCell | undefined)[] = [
       summary.isLive
         ? {
