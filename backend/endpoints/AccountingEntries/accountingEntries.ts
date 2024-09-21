@@ -191,7 +191,7 @@ export function accountingEntriesRouter(app: Application) {
     "/live_accounting_entry",
     expressAsyncHandler(async (req, res) => {
       const live = await liveEntries(req.userId, "live");
-      if (live.entries.length === 0) {
+      if (live.entries.length === 0 || live.failedConnections.length > 0) {
         res.send({});
         return;
       }
@@ -254,7 +254,6 @@ export function accountingEntriesRouter(app: Application) {
 
       res.send({
         live: accountingEntryDTO,
-        failedConnections: live.failedConnections,
         hasOutdated: !!live.outdatedTTL,
         outdatedTTL: live.outdatedTTL ? live.outdatedTTL + 5 : undefined,
       });
