@@ -140,7 +140,7 @@ export const ConnectorsTab: React.FC<{
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Connections</h2>
+      <h2>Connections</h2>
 
       {connectionsLoading && <p>Loading connections...</p>}
       {connectionsError && (
@@ -179,7 +179,7 @@ export const ConnectorsTab: React.FC<{
 
       {
         <div className="mt-8">
-          <h3 className="text-lg font-semibold mb-4">Add New Connector</h3>
+          <h3>Add New Connector</h3>
           {isLoading && <p>Loading connectors settings...</p>}
           {error && <p>Error loading connectors settings: {error.message}</p>}
           {!isLoading && !error && (
@@ -248,9 +248,7 @@ export const ConnectorsTab: React.FC<{
               </div>
               {selectedConnector && (
                 <div className="mt-6">
-                  <h3 className="text-lg font-semibold mb-4">
-                    Connector Settings
-                  </h3>
+                  <h3>Connector Settings</h3>
                   {connectorsSettings
                     ?.find((c) => c.id === selectedConnector)
                     ?.settings.map((setting) => (
@@ -314,7 +312,7 @@ export const ConnectorsTab: React.FC<{
         className="modal"
         overlayClassName="overlay"
       >
-        <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+        <h2>Confirm Deletion</h2>
         <p className="mb-6">
           Are you sure you want to delete the connection to
           <b> {connectionToDelete?.connector_id}</b> for account

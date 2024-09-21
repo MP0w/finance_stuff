@@ -307,7 +307,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const tabContent = {
     fiat: (
       <div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-8">
           <AddButton
             title="Add account"
             onClick={() => setExpandedAddAccount(!expandedAddAccount)}
@@ -316,7 +316,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         </div>
 
         {expandedAddAccount && (
-          <div className="mt-4 mb-4 flex">
+          <div className="mt-4 mb-8 flex">
             <input
               type="text"
               value={newAccountName}
@@ -487,7 +487,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           className="modal"
           overlayClassName="overlay"
         >
-          <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+          <h2>Confirm Deletion</h2>
           <p className="mb-6">
             Are you sure you want to delete the account
             <b> {accountToDelete?.name}</b>? <br />
@@ -515,9 +515,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           className="modal"
           overlayClassName="overlay"
         >
-          <h2 className="text-xl font-semibold mb-4">
-            Delete date from all accounts
-          </h2>
+          <h2>Delete date from all accounts</h2>
           <p className="mb-6">
             All the values for that date on each account will be removed. This
             action cannot be undone and

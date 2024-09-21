@@ -34,12 +34,12 @@ const ChatTab: React.FC = () => {
                 }`}
               >
                 <div
-                  className={`max-w-3/4 px-4 py-2 rounded-[20px] ${
+                  className={`max-w-3/4 px-4 py-2 pixel-corners ${
                     msg.role === "user"
-                      ? "bg-blue-400 text-white"
+                      ? "bg-blue-400 text-white border"
                       : msg.role === "assistant"
-                      ? "bg-gray-300 text-gray-800"
-                      : "bg-red-600 text-white"
+                      ? "bg-gray-200 border"
+                      : "bg-red-600 text-white border"
                   }`}
                 >
                   {msg.role === "user" && msg.content}
@@ -47,7 +47,7 @@ const ChatTab: React.FC = () => {
                     msg.content.length > 0 &&
                     msg.content}
                   {msg.role === "assistant" && msg.content.length === 0 && (
-                    <span className="flex items-center space-x-1">
+                    <span className="flex items-center space-x-1 py-2">
                       <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
                       <span
                         className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
@@ -63,7 +63,7 @@ const ChatTab: React.FC = () => {
                 </div>
               </div>
             ))}
-            <div ref={messagesEndRef} />
+            <div className="pb-8" ref={messagesEndRef} />
           </div>
         </div>
         {isConnecting && <div className="p-2 text-center">Connecting...</div>}

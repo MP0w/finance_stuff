@@ -59,7 +59,7 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
       <div className="w-full mt-8 flex gap-16 flex-wrap items-center justify-center">
         {isFinite(averageSavings) && (
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-lg font-semibold">Average Savings</h2>
+            <h3>Average Savings</h3>
             <p className="text-md">
               {getUserCurrencySymbol()} {averageSavings.toFixed(0)}
             </p>
@@ -67,7 +67,7 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
         )}
         {isFinite(averageProfits) && (
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-lg font-semibold">Average Total</h2>
+            <h3>Average Total</h3>
             <p className="text-md">
               {getUserCurrencySymbol()} {averageTotal.toFixed(0)}
             </p>
@@ -75,7 +75,7 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
         )}
         {isFinite(averageProfits) && averageProfits > 0 && (
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-lg font-semibold">Average Monthly Profits</h2>
+            <h3>Average Monthly Profits</h3>
             <p className="text-md">
               {getUserCurrencySymbol()} {averageProfits.toFixed(0)}
             </p>
@@ -83,7 +83,7 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
         )}
       </div>
 
-      <h2 className="text-xl font-semibold mt-16 text-center">Projection</h2>
+      <h2 className="mt-16 mb-0 text-center">Projection</h2>
       {distanceBetweenEntries < 6 ? (
         <blockquote className="border-l-4 border-gray-600 pl-4">
           We can only do projections if you have at least 6 months of data. You

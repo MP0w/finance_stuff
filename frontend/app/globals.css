@@ -16,6 +16,13 @@ h1 {
     --background: theme('colors.gray.50');
     --foreground: theme('colors.gray.600');
   }
+
+  h3 {
+    @apply text-lg font-semibold mb-4;
+  }
+  h2 {
+    @apply text-xl font-semibold mb-4;
+  }
 }
 
 body {
@@ -80,5 +87,38 @@ body {
     3px 3px,
     3px 6px,
     0px 6px
+  );
+}
+
+.pixel-corners {
+  clip-path: polygon(
+    0px calc(100% - 16px),
+    4px calc(100% - 16px),
+    4px calc(100% - 8px),
+    8px calc(100% - 8px),
+    8px calc(100% - 4px),
+    16px calc(100% - 4px),
+    16px 100%,
+    calc(100% - 16px) 100%,
+    calc(100% - 16px) calc(100% - 4px),
+    calc(100% - 8px) calc(100% - 4px),
+    calc(100% - 8px) calc(100% - 8px),
+    calc(100% - 4px) calc(100% - 8px),
+    calc(100% - 4px) calc(100% - 16px),
+    100% calc(100% - 16px),
+    100% 16px,
+    calc(100% - 4px) 16px,
+    calc(100% - 4px) 8px,
+    calc(100% - 8px) 8px,
+    calc(100% - 8px) 4px,
+    calc(100% - 16px) 4px,
+    calc(100% - 16px) 0px,
+    16px 0px,
+    16px 4px,
+    8px 4px,
+    8px 8px,
+    4px 8px,
+    4px 16px,
+    0px 16px
   );
 }

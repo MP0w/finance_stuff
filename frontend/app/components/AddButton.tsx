@@ -7,7 +7,7 @@ interface AddButtonProps {
 
 const AddButton: React.FC<AddButtonProps> = ({ title, onClick }) => {
   return (
-    <button className="flex items-center mb-2" onClick={onClick}>
+    <button className="flex items-center" onClick={onClick}>
       <div className="pixel-corners-small bg-gray-300 w-6 h-6 flex items-center justify-center">
         <span className="text-lg">+</span>
       </div>

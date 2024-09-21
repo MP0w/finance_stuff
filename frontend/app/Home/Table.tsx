@@ -64,9 +64,9 @@ const Table: React.FC<TableProps> = ({
           onMouseEnter={() => setIsHoveringHeader(!isHoveringHeader)}
           onMouseLeave={() => setIsHoveringHeader(false)}
         >
-          <h2 className="text-lg font-semibold mt-4">{title}</h2>
+          <h3 className="mt-8 mb-0">{title}</h3>
           {onDelete && isHoveringHeader && (
-            <DeleteIcon className="mt-4 ml-2" onClick={onDelete} />
+            <DeleteIcon className="mt-7 ml-2" onClick={onDelete} />
           )}
         </div>
       )}
