@@ -30,10 +30,8 @@ const TabView: React.FC<TabViewProps> = ({
     return (
       <button
         key={tab.id}
-        className={`py-4 px-4 font-medium text-sm md:text-md focus:outline-none ${
-          activeTab === tab.id
-            ? "border-b border-gray-800 text-gray-800"
-            : "text-gray-500 hover:text-gray-800 "
+        className={`py-4 px-4 text-sm md:text-md focus:outline-none hover:text-black ${
+          activeTab === tab.id ? " font-bold" : "font-medium"
         }`}
         onClick={() => setActiveTab(tab.id)}
       >
@@ -46,22 +44,26 @@ const TabView: React.FC<TabViewProps> = ({
 
   return (
     <div>
-      <BrandHeader
-        className="md:hidden"
-        email={email}
-        signOut={signOut}
-        exportData={exportData}
-      />
-      <header className="flex border-b border-gray-200 mb-8">
-        <div className="w-full">{tabs.map((tab) => renderTab(tab))}</div>
-        <BrandHeader
-          className="hidden md:flex"
-          email={email}
-          signOut={signOut}
-          exportData={exportData}
-        />
+      <header className="tallscreen:sticky tallscreen:top-0 tallscreen:z-10 bg-gray-100 shadow-md">
+        <div className="pt-2 mx-4">
+          <BrandHeader
+            className="md:hidden"
+            email={email}
+            signOut={signOut}
+            exportData={exportData}
+          />
+          <div className="flex">
+            <div className="w-full">{tabs.map((tab) => renderTab(tab))}</div>
+            <BrandHeader
+              className="hidden md:flex"
+              email={email}
+              signOut={signOut}
+              exportData={exportData}
+            />
+          </div>
+        </div>
       </header>
-      <div>{children}</div>
+      <div className="p-8">{children}</div>
     </div>
   );
 };

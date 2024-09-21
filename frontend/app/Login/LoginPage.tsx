@@ -31,11 +31,9 @@ const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen">
       <div className="w-full max-w-md bg-white m-4 p-4 rounded-lg shadow-lg">
-        <h1 className="text-center text-4xl mb-6 text-gray-600">
-          finance_stuff
-        </h1>
+        <h1 className="text-center text-4xl mb-6">finance_stuff</h1>
         {error && <p className="text-red-500">{error}</p>}
         <div className="mb-4 flex flex-col space-y-2">
           <form onSubmit={handleEmailSubmit} className="space-y-4 mb-4">
@@ -45,13 +43,13 @@ const LoginPage: React.FC<LoginPageProps> = ({
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-600 placeholder-gray-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 placeholder-gray-400"
                 required
               />
             )}
             {emailSent && (
               <div className="flex flex-col items-center">
-                <p className="text-gray-600 mb-4">
+                <p className="mb-4">
                   Email sent, check your inbox and click on the link to sign in.
                 </p>
                 <button

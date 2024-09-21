@@ -64,7 +64,7 @@ const Table: React.FC<TableProps> = ({
           onMouseEnter={() => setIsHoveringHeader(!isHoveringHeader)}
           onMouseLeave={() => setIsHoveringHeader(false)}
         >
-          <h2 className="text-lg text-gray-600 font-semibold mt-4">{title}</h2>
+          <h2 className="text-lg font-semibold mt-4">{title}</h2>
           {onDelete && isHoveringHeader && (
             <DeleteIcon className="mt-4 ml-2" onClick={onDelete} />
           )}
@@ -125,7 +125,7 @@ const Table: React.FC<TableProps> = ({
                           />
                           <div className="mt-4 flex justify-center">
                             <button
-                              className="bg-gray-300 text-gray-600 px-4 py-2 pixel-corners-small"
+                              className="bg-gray-300 px-4 py-2 pixel-corners-small"
                               onClick={() => setShowDatePicker(false)}
                             >
                               Cancel
@@ -371,7 +371,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
         {cells.map((value, index) => (
           <td
             key={index}
-            className={`text-gray-600 ${
+            className={` ${
               !value.onValueChange ? value.color ?? `bg-gray-100` : ""
             }${
               value.value === undefined && editingValues[index] === undefined

@@ -4,12 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.tiny5-regular {
-  font-family: "Tiny5", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
 h1 {
   font-family: "Tiny5", sans-serif;
   font-weight: 600;
@@ -17,15 +11,10 @@ h1 {
   font-size: 30px;
 }
 
-:root {
-  --background: #ededed;
-  --foreground: #0a0a0a;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #ededed;
-    --foreground: #0a0a0a;
+    --background: theme('colors.gray.50');
+    --foreground: theme('colors.gray.600');
   }
 }
 

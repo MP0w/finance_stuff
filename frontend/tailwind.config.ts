@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        tallscreen: { raw: "(min-height: 700px)" },
+      },
       fontFamily: {
         tiny5: ["Tiny5", "sans-serif"],
         sans: ["Courier New", "monospace"], // Add this line

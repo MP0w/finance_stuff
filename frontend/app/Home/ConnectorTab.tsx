@@ -140,7 +140,7 @@ export const ConnectorsTab: React.FC<{
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Connections</h2>
+      <h2 className="text-xl font-semibold mb-4">Connections</h2>
 
       {connectionsLoading && <p>Loading connections...</p>}
       {connectionsError && (
@@ -160,7 +160,7 @@ export const ConnectorsTab: React.FC<{
                 >
                   <div>
                     <p className="font-semibold">{connection.connector_id}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm">
                       ↪ {accountName(connection.account_id)}
                     </p>
                   </div>
@@ -179,7 +179,7 @@ export const ConnectorsTab: React.FC<{
 
       {
         <div className="mt-8">
-          <h3 className="text-xl font-bold mb-4">Add New Connector</h3>
+          <h3 className="text-lg font-semibold mb-4">Add New Connector</h3>
           {isLoading && <p>Loading connectors settings...</p>}
           {error && <p>Error loading connectors settings: {error.message}</p>}
           {!isLoading && !error && (
@@ -187,7 +187,7 @@ export const ConnectorsTab: React.FC<{
               <div>
                 <label
                   htmlFor="account"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-semibold mb-2"
                 >
                   Select an account:
                 </label>
@@ -207,7 +207,7 @@ export const ConnectorsTab: React.FC<{
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-semibold mb-2">
                   {connectorsSettings && "Select a connector:"}
                 </label>
 
@@ -260,7 +260,7 @@ export const ConnectorsTab: React.FC<{
                           className="block text-md font-bold text-gray-800 mb-1"
                         >
                           {setting.hint}
-                          <p className="text-gray-600 text-sm font-normal">
+                          <p className="text-sm font-normal">
                             {setting.extraInstructions}
                           </p>
                         </label>
@@ -289,7 +289,7 @@ export const ConnectorsTab: React.FC<{
                 </div>
               )}
               {!selectedConnector && selectedAccount && (
-                <div className="text-gray-600 text-sm font-normal">
+                <div className="text-sm font-normal">
                   <p className="mb-8">
                     If you don&apos;t see your favorite provider in the list,
                     you can send a feedback or email to us and we will consider

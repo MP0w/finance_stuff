@@ -66,9 +66,7 @@ const ChatTab: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
         </div>
-        {isConnecting && (
-          <div className="p-2 text-gray-600 text-center">Connecting...</div>
-        )}
+        {isConnecting && <div className="p-2 text-center">Connecting...</div>}
         <div className="p-4 bg-gray-100 rounded-t-lg border border-gray-200 shadow-lg fixed bottom-0 left-0 right-0 max-w-3xl mx-auto">
           <div className="flex space-x-2">
             <TextareaAutosize

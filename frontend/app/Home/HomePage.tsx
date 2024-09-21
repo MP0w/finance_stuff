@@ -379,12 +379,12 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
                 Add
               </button>
             </div>
-            <p className="text-sm text-gray-600 max-w-lg">
+            <p className="text-sm max-w-lg">
               After creating an account you can connect it to external accounts
               (e.g. banks, crypto exchanges, stock brokers, etc...) to autofill
               the amounts each time you create an entry.
             </p>
-            <p className="text-sm text-gray-600 max-w-lg">
+            <p className="text-sm max-w-lg">
               If we don&apos;t yet support one of your favorite providers yet
               feel free to use the feedback form or send an email to let us know
             </p>
@@ -456,7 +456,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pl-8 pr-8 pt-4 pb-8">
+    <div className="min-h-screen">
       <div className="mx-auto">
         <ArcherContainer strokeColor="gray">
           <TabView

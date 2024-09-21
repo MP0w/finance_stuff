@@ -33,12 +33,12 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
 
   return (
     <div className={`flex justify-between ${className}`}>
-      <h1 className="py-1 text-gray-600">finance_stuff</h1>
+      <h1 className="py-1">finance_stuff</h1>
       <div
         onMouseEnter={() => setShowSettings(true)}
         onClick={() => setShowSettings(!showSettings)}
       >
-        <button className="py-4 ml-4 text-gray-600 hover:text-gray-600 transition duration-200">
+        <button className="py-4 ml-4 transition duration-200">
           <SettingsIcon />
         </button>
         {showSettings && (
