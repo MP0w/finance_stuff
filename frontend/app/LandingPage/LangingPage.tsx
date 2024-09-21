@@ -49,7 +49,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
               },
               {
                 content:
-                  "Based on your income, a mortgage payment of up to 1200€/month should be manageable. Consider properties below 300,000€. Your savings could cover a 10-15% down payment. It's feasible.",
+                  "Based on your income, a mortgage payment of up to 1200€/month should be manageable. Consider properties below 300,000€. Your savings could cover a 10-15% down payment. It's feasible!",
                 role: "assistant",
               },
             ].map((msg, index) => (
@@ -93,16 +93,16 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
         </section>
       </main>
 
-      <div className="flex flex-col justify-center gap-4 text-center font-bold">
+      <div className="flex flex-col justify-center gap-4 text-center font-bold w-full max-w-sm">
         <button
           onClick={showLogin}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition duration-300 pixel-corners-small"
+          className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 g rounded transition duration-300 pixel-corners-small"
         >
           Get Started for Free
         </button>
         <button
           onClick={showLogin}
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-6 rounded transition duration-300 pixel-corners-small"
+          className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 px-6 rounded transition duration-300 pixel-corners-small"
         >
           Login
         </button>
