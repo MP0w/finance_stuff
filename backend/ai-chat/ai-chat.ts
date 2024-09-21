@@ -55,6 +55,10 @@ export class AIChat {
       .where({ id: this.userId });
   }
 
+  clear() {
+    this.messages = [];
+  }
+
   async *onUserMessage(message: string) {
     if (message.length > 5000) {
       const content = "your message is too long, please send a shorter message";

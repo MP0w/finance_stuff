@@ -46,7 +46,19 @@ export function startWebsocketServer() {
     // console.log(`Client connected: ${userId}`);
 
     ws.on("message", async (message) => {
-      const payload: { message: string } = JSON.parse(message.toString());
+      const payload: { message?: string; clear?: boolean } = JSON.parse(
+        message.toString()
+      );
+
+      if (payload.clear ?? false) {
+        aiChat.clear();
+        ws.send(JSON.stringify({ chatId: id, messages: aiChat.messages }));
+      }
+
+      if (!payload.message) {
+        return;
+      }
+
       const response = aiChat.onUserMessage(payload.message);
 
       ws.send("---ai-response-boundary---");

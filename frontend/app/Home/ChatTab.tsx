@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAIChat } from "../websocketClient";
 import TextareaAutosize from "react-textarea-autosize";
+import DeleteIcon from "../components/DeleteIcon";
 
 const ChatTab: React.FC = () => {
-  const { messages, sendMessage, isConnecting, liveMessage } = useAIChat();
+  const { messages, sendMessage, isConnecting, liveMessage, clear } =
+    useAIChat();
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -63,6 +65,12 @@ const ChatTab: React.FC = () => {
                 </div>
               </div>
             ))}
+            <div className="flex justify-end">
+              <button className="flex items-center space-x-2" onClick={clear}>
+                <div>Clear chat</div>
+                <DeleteIcon />
+              </button>
+            </div>
             <div className="pb-8" ref={messagesEndRef} />
           </div>
         </div>

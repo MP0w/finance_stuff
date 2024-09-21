@@ -19,8 +19,7 @@ function useWebSocket(url: string) {
     undefined
   );
   const liveMessageRef = useRef<ChatMessage | undefined>(undefined);
-
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const defaultMessages: ChatMessage[] = [
     {
       role: "assistant",
       content:
@@ -32,7 +31,8 @@ function useWebSocket(url: string) {
       content: "What are you looking for?",
       default: true,
     },
-  ]);
+  ];
+  const [messages, setMessages] = useState<ChatMessage[]>(defaultMessages);
   const [isConnected, setIsConnected] = useState<boolean | undefined>(
     undefined
   );
@@ -97,12 +97,9 @@ function useWebSocket(url: string) {
         const messages: { chatId: string; messages: ChatMessage[] } =
           JSON.parse(text);
 
-        setMessages((current) => {
-          if (
-            !messages.messages.length &&
-            current.every((msg) => msg.default)
-          ) {
-            return current;
+        setMessages(() => {
+          if (!messages.messages.length) {
+            return defaultMessages;
           }
 
           return messages.messages;
@@ -184,11 +181,21 @@ function useWebSocket(url: string) {
     return false;
   };
 
+  const clear = () => {
+    if (ws.current?.readyState === WebSocket.OPEN) {
+      ws.current.send(JSON.stringify({ clear: true }));
+      return true;
+    }
+
+    return false;
+  };
+
   return {
     messages,
     sendMessage,
     liveMessage,
     disconnected: isConnected === false,
     isConnecting: isConnected === undefined,
+    clear,
   };
 }
