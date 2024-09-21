@@ -223,7 +223,10 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
       >
         <tr className="bg-gray-200">
           {headers.map((header, index) => (
-            <th key={index} className="px-4 py-2 text-left text-gray-700">
+            <th
+              key={index}
+              className="first:px-4 px-2 py-2 text-left font-semibold text-sm"
+            >
               <div
                 className="flex items-center"
                 onMouseEnter={(e) => handleTipMouseEnter(e, getTip(header))}
@@ -233,8 +236,13 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
                 {getTip(header) && shouldShowTipIcon(getTip(header)) && (
                   <HiOutlineQuestionMarkCircle className="ml-2" />
                 )}
-                {isHoveringHeader && getOnDelete(header) && (
-                  <DeleteIcon className="ml-2" onClick={getOnDelete(header)} />
+                {getOnDelete(header) && (
+                  <DeleteIcon
+                    className={`ml-2 ${
+                      isHoveringHeader ? "opacity-100" : "opacity-0"
+                    }`}
+                    onClick={isHoveringHeader ? getOnDelete(header) : undefined}
+                  />
                 )}
               </div>
             </th>

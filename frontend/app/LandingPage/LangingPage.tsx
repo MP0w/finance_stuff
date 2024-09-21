@@ -28,7 +28,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
     <div className="p-8 md:p-16 flex flex-col items-center min-h-screen">
       <header className="text-center mb-12 max-w-4xl w-full">
         <h1 className="text-4xl md:text-6xl mb-2">finance_stuff</h1>
-        <p className="text-xl md:text-2xl text-gray-800">
+        <p className="text-xl md:text-2xl">
           10 minutes a month to keep your finances in order
         </p>
       </header>
@@ -58,7 +58,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  <span className="text-gray-700">{feature}</span>
+                  <span>{feature}</span>
                 </li>
               ))}
             </ul>
@@ -88,7 +88,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  <span className="text-gray-700">{feature}</span>
+                  <span>{feature}</span>
                 </li>
               ))}
             </ul>

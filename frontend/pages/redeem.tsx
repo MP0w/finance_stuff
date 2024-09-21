@@ -46,7 +46,7 @@ export default function Page() {
         <p className="text-red-500">{error}</p>
         <button
           onClick={() => router.push("/")}
-          className="mt-4 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold pixel-corners-small transition duration-200"
+          className="mt-4 px-4 py-2 bg-gray-600 hover:bg-gray-600 text-white font-semibold pixel-corners-small transition duration-200"
         >
           Return to Login
         </button>

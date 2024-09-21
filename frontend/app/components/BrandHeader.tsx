@@ -43,7 +43,7 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
         </button>
         {showSettings && (
           <div
-            className="absolute right-0 mt-2 bg-white rounded-md shadow-lg px-2 py-1 z-10 text-gray-700 text-sm"
+            className="absolute right-0 mt-2 bg-white rounded-md shadow-lg px-2 py-1 z-10 text-sm"
             onMouseLeave={() => setShowSettings(false)}
             onClick={() => setShowSettings(false)}
           >
@@ -53,8 +53,8 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
               <div className="flex rounded-md shadow-sm" role="group">
                 <button
                   type="button"
-                  className={`px-6 py-1 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-200 rounded-l-lg hover:bg-gray-400 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ${
-                    user?.currency === "USD" ? "bg-gray-800 text-white" : ""
+                  className={`px-6 py-1 text-sm font-md bg-gray-100 border border-gray-200 rounded-l-lg hover:bg-gray-400 focus:z-10 focus:ring-2 focus:ring-blue-600 focus:text-blue-600 ${
+                    user?.currency === "USD" ? "bg-gray-600 text-white" : ""
                   }`}
                   onClick={() => handleCurrencyChange("USD")}
                 >
@@ -62,8 +62,8 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
                 </button>
                 <button
                   type="button"
-                  className={`px-6 py-1 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-200 rounded-r-lg hover:bg-gray-400 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ${
-                    user?.currency === "EUR" ? "bg-gray-500 text-white" : ""
+                  className={`px-6 py-1 text-sm font-md bg-gray-100 border border-gray-200 rounded-r-lg hover:bg-gray-400 focus:z-10 focus:ring-2 focus:ring-blue-600 focus:text-blue-600 ${
+                    user?.currency === "EUR" ? "bg-gray-600 text-white" : ""
                   }`}
                   onClick={() => handleCurrencyChange("EUR")}
                 >

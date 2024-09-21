@@ -248,7 +248,7 @@ export const ConnectorsTab: React.FC<{
               </div>
               {selectedConnector && (
                 <div className="mt-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  <h3 className="text-lg font-semibold mb-4">
                     Connector Settings
                   </h3>
                   {connectorsSettings
@@ -257,7 +257,7 @@ export const ConnectorsTab: React.FC<{
                       <div key={setting.key} className="mb-4">
                         <label
                           htmlFor={setting.key}
-                          className="block text-md font-bold text-gray-800 mb-1"
+                          className="block text-md font-semibold mb-1"
                         >
                           {setting.hint}
                           <p className="text-sm font-normal">
@@ -324,7 +324,7 @@ export const ConnectorsTab: React.FC<{
         <div className="flex justify-end">
           <button
             onClick={() => setIsDeleteModalOpen(false)}
-            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md mr-2 hover:bg-gray-400"
+            className="bg-gray-200 px-4 py-2 rounded-md mr-2 hover:bg-gray-400"
           >
             Cancel
           </button>

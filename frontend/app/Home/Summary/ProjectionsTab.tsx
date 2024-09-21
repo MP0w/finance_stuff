@@ -50,7 +50,7 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
   return (
     <div>
       {distanceBetweenEntries < 6 && (
-        <blockquote className="text-gray-800 border-l-4 border-gray-600 pl-4">
+        <blockquote className="border-l-4 border-gray-600 pl-4">
           Your data covers {distanceBetweenEntries} months, statistics and
           projections will be more accurate the more data you will have. You can
           also enter data of previous months.
@@ -59,33 +59,33 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
       <div className="w-full mt-8 flex gap-16 flex-wrap items-center justify-center">
         {isFinite(averageSavings) && (
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-xl text-gray-800">Average Savings</h2>
-            <p className="text-md text-gray-500">
+            <h2 className="text-lg font-semibold">Average Savings</h2>
+            <p className="text-md">
               {getUserCurrencySymbol()} {averageSavings.toFixed(0)}
             </p>
           </div>
         )}
         {isFinite(averageProfits) && (
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-xl text-gray-800">Average Total</h2>
-            <p className="text-md text-gray-500">
+            <h2 className="text-lg font-semibold">Average Total</h2>
+            <p className="text-md">
               {getUserCurrencySymbol()} {averageTotal.toFixed(0)}
             </p>
           </div>
         )}
         {isFinite(averageProfits) && averageProfits > 0 && (
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-xl text-gray-800">Average Monthly Profits</h2>
-            <p className="text-md text-gray-500">
+            <h2 className="text-lg font-semibold">Average Monthly Profits</h2>
+            <p className="text-md">
               {getUserCurrencySymbol()} {averageProfits.toFixed(0)}
             </p>
           </div>
         )}
       </div>
 
-      <h2 className="text-xl text-gray-800 mt-16 text-center">Projection</h2>
+      <h2 className="text-xl font-semibold mt-16 text-center">Projection</h2>
       {distanceBetweenEntries < 6 ? (
-        <blockquote className="text-gray-800 border-l-4 border-gray-600 pl-4">
+        <blockquote className="border-l-4 border-gray-600 pl-4">
           We can only do projections if you have at least 6 months of data. You
           currently have {distanceBetweenEntries} months of data.
         </blockquote>

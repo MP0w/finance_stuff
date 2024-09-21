@@ -31,13 +31,13 @@ const TipElement: React.FC<{
           },
         ]}
       >
-        <div className="text-center mt-32 ml-64 bg-gray-200 text-gray-800 max-w-xs mx-auto pixel-corners-small px-2 py-2">
+        <div className="text-center mt-32 ml-64 bg-gray-200 max-w-xs mx-auto pixel-corners-small px-2 py-2">
           {children}
         </div>
       </ArcherElement>
     </div>
     {showOnSmallScreen && (
-      <div className="mt-8 px-4 py-2 sm:hidden bg-gray-200 text-gray-800 pixel-corners-small">
+      <div className="mt-8 px-4 py-2 sm:hidden bg-gray-200 pixel-corners-small">
         {children}
       </div>
     )}

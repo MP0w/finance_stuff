@@ -389,7 +389,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               feel free to use the feedback form or send an email to let us know
             </p>
             <button
-              className="mt-4 px-4 py-2 text-sm bg-purple-300 text-gray-800 hover:bg-purple-500 pixel-corners-small"
+              className="mt-4 px-4 py-2 text-sm bg-purple-200 hover:bg-purple-300 pixel-corners-small"
               onClick={() => {
                 switchTab("connectors");
               }}
@@ -497,7 +497,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           <div className="flex justify-end">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="bg-gray-300 text-gray-800 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
+              className="bg-gray-200 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
             >
               Cancel
             </button>
@@ -525,7 +525,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           <div className="flex justify-end">
             <button
               onClick={() => setIsDeleteEntryModalOpen(false)}
-              className="bg-gray-300 text-gray-800 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
+              className="bg-gray-200 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
             >
               Cancel
             </button>
