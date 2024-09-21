@@ -79,22 +79,30 @@ export default function Home() {
 
   return (
     <UserStateProvider>
-      {!showLogin && (
-        <LandingPage
-          showLogin={() => {
-            setShowLogin(true);
-          }}
-        />
+      {!showLogin ? (
+        <div className="transition-all duration-1000 ease-out opacity-100">
+          <LandingPage
+            showLogin={() => {
+              setShowLogin(true);
+            }}
+          />
+        </div>
+      ) : (
+        <div className="transition-all duration-1000 ease-out opacity-0"></div>
       )}
-      {showLogin && (
-        <LoginPage
-          error={error}
-          signInWithEmail={signInWithEmail}
-          signInWithApple={() => {
-            window.alert("soooon");
-          }}
-          signInWithGoogle={signInWithGoogle}
-        />
+      {showLogin ? (
+        <div className="transition-all duration-800 ease-in-out opacity-100 translate-y-0">
+          <LoginPage
+            error={error}
+            signInWithEmail={signInWithEmail}
+            signInWithApple={() => {
+              window.alert("soooon");
+            }}
+            signInWithGoogle={signInWithGoogle}
+          />
+        </div>
+      ) : (
+        <div className="transition-all duration-800 ease-in-out opacity-0 translate-y-20"></div>
       )}
       <HomePage signOut={signOut} />
     </UserStateProvider>
