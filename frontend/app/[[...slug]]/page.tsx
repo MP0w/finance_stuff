@@ -15,14 +15,17 @@ import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
 import HomePage from "../Home/HomePage";
 import LandingPage from "../LandingPage/LangingPage";
+import { usePathname } from "next/navigation";
 
 export default function Home() {
   const [error, setError] = useState<string | null>(null);
-  const [showLogin, setShowLogin] = useState(
-    window.location.pathname === "/login"
-  );
+  const path = usePathname();
+  const [showLogin, setShowLogin] = useState(path === "/login");
 
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
     const handlePathChange = () => {
       const pathname = window.location.pathname;
       setShowLogin(pathname === "/login");

@@ -3,6 +3,56 @@ import { useAIChat } from "../websocketClient";
 import TextareaAutosize from "react-textarea-autosize";
 import DeleteIcon from "../components/DeleteIcon";
 
+interface ChatMessageProps {
+  message: {
+    role: string;
+    content: string;
+  };
+  maxWidth?: number;
+}
+
+export const ChatMessage: React.FC<ChatMessageProps> = ({
+  message,
+  maxWidth,
+}) => {
+  return (
+    <div
+      className={`flex ${
+        message.role === "user" ? "justify-end" : "justify-start"
+      }`}
+    >
+      <div
+        className={`max-w-[${maxWidth ?? 80}%] px-4 py-2 pixel-corners ${
+          message.role === "user"
+            ? "bg-blue-400 text-white border"
+            : message.role === "assistant"
+            ? "bg-gray-200 border"
+            : "bg-red-600 text-white border"
+        }`}
+      >
+        {message.role === "user" && message.content}
+        {message.role === "assistant" &&
+          message.content.length > 0 &&
+          message.content}
+        {message.role === "assistant" && message.content.length === 0 && (
+          <span className="flex items-center space-x-1 py-2">
+            <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
+            <span
+              className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+              style={{ animationDelay: "0.2s" }}
+            ></span>
+            <span
+              className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+              style={{ animationDelay: "0.4s" }}
+            ></span>
+          </span>
+        )}
+        {message.role === "error" && message.content}
+      </div>
+    </div>
+  );
+};
+
 const ChatTab: React.FC = () => {
   const { messages, sendMessage, isConnecting, liveMessage, clear } =
     useAIChat();
@@ -29,41 +79,7 @@ const ChatTab: React.FC = () => {
         <div className="overflow-y-auto pb-16">
           <div className="space-y-4">
             {allMessages.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  msg.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`max-w-3/4 px-4 py-2 pixel-corners ${
-                    msg.role === "user"
-                      ? "bg-blue-400 text-white border"
-                      : msg.role === "assistant"
-                      ? "bg-gray-200 border"
-                      : "bg-red-600 text-white border"
-                  }`}
-                >
-                  {msg.role === "user" && msg.content}
-                  {msg.role === "assistant" &&
-                    msg.content.length > 0 &&
-                    msg.content}
-                  {msg.role === "assistant" && msg.content.length === 0 && (
-                    <span className="flex items-center space-x-1 py-2">
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
-                      <span
-                        className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
-                        style={{ animationDelay: "0.2s" }}
-                      ></span>
-                      <span
-                        className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
-                        style={{ animationDelay: "0.4s" }}
-                      ></span>
-                    </span>
-                  )}
-                  {msg.role === "error" && msg.content}
-                </div>
-              </div>
+              <ChatMessage key={index} message={msg} />
             ))}
             <div className="flex justify-end">
               <button className="flex items-center space-x-2" onClick={clear}>
