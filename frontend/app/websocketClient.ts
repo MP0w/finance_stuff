@@ -131,7 +131,7 @@ function useWebSocket(url: string) {
         ];
       });
     };
-  }, [url, token]);
+  }, [url, token, defaultMessages]);
 
   useEffect(() => {
     if (isConnected === false) {

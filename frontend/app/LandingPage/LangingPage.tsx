@@ -30,7 +30,9 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
       <header className="text-center mb-12 max-w-4xl w-full">
         <h1 className="text-4xl md:text-6xl mb-2">finance_stuff</h1>
         <p className="text-xl md:text-2xl">
-          10 minutes a month to keep your finances in order
+          Effortlessly Track & Grow your Finances
+          <br />
+          in just 10 minutes a month
         </p>
       </header>
 
