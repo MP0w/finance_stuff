@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Accounts, ConnectionsDTO } from "../../../shared/types";
 import {
   useGetConnectorsSettings,
@@ -49,10 +49,19 @@ export const ConnectorsTab: React.FC<{
   const { execute: deleteConnection, loading: isDeleting } =
     useDeleteConnection();
 
-  useEffect(() => {
-    getConnectorsSettings();
-    fetchConnections();
+  const reloadData = useCallback(async () => {
+    try {
+      await Promise.all([getConnectorsSettings(), fetchConnections()]);
+    } catch {
+      toast.error("Error loading connectors, retry", {
+        position: "bottom-right",
+      });
+    }
   }, [getConnectorsSettings, fetchConnections]);
+
+  useEffect(() => {
+    reloadData();
+  }, [reloadData]);
 
   useEffect(() => {
     if (connectionsData) {
@@ -123,15 +132,17 @@ export const ConnectorsTab: React.FC<{
     if (connectionToDelete) {
       try {
         await deleteConnection(connectionToDelete.id);
-        await fetchConnections();
+        fetchConnections();
         toast.success("Connection deleted successfully", {
           position: "bottom-right",
         });
       } catch (error) {
-        console.error("Error deleting connection:", error);
-        toast.error("Failed to delete connection. Please try again.", {
-          position: "bottom-right",
-        });
+        toast.error(
+          "Failed to delete connection: " + (error as Error).message,
+          {
+            position: "bottom-right",
+          }
+        );
       }
     }
     setIsDeleteModalOpen(false);
@@ -144,7 +155,15 @@ export const ConnectorsTab: React.FC<{
 
       {connectionsLoading && <p>Loading connections...</p>}
       {connectionsError && (
-        <p>Error loading connections: {connectionsError.message}</p>
+        <div>
+          <p>Error loading connections: {connectionsError.message}</p>
+          <button
+            onClick={reloadData}
+            className="px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Retry
+          </button>
+        </div>
       )}
 
       {!connectionsLoading && !connectionsError && (

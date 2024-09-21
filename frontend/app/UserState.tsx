@@ -9,6 +9,7 @@ import { auth, logAnalyticsEvent } from "./firebase";
 import { clearAuthToken, setAuthToken } from "./apiClient";
 import * as Sentry from "@sentry/nextjs";
 import { Accounts, Users } from "../../shared/types";
+import { error } from "console";
 
 export type UserStateContextType = {
   user:
@@ -69,7 +70,7 @@ export const updateUser = async (token: string, currency?: string) => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP status: ${response.status}`);
     }
 
     const result: Users = await response.json();
@@ -89,9 +90,11 @@ const login = async (token: string, firebaseUid: string) => {
   if (cachedUser && cachedUser.firebase_uid === firebaseUid) {
     return cachedUser;
   }
-
   const user = await updateUser(token, firebaseUid);
-  logAnalyticsEvent("sign-in");
+  if (user) {
+    logAnalyticsEvent("sign-in");
+  }
+
   return user;
 };
 

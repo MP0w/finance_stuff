@@ -39,9 +39,11 @@ export const useApiCall = <T, P extends unknown[]>(
 
       try {
         const response = await apiFunctionRef.current(...args);
-        setData(response.data);
-        return response.data;
+        const data: T | null = response.data;
+        setData(data);
+        return data;
       } catch (err) {
+        console.error("API call error", err);
         const axiosError = err as AxiosError;
         let errorMessage = axiosError.message;
         if (
@@ -50,11 +52,15 @@ export const useApiCall = <T, P extends unknown[]>(
           "error" in axiosError.response.data
         ) {
           errorMessage = axiosError.response.data.error as string;
+        } else if (axiosError.isAxiosError && !axiosError.response) {
+          errorMessage = "Network error, please retry";
+        } else {
+          errorMessage = "Something went wrong";
         }
 
         const error = new Error(errorMessage);
         setError(error);
-        throw error;
+        throw Error(error.message);
       } finally {
         setLoading(false);
       }

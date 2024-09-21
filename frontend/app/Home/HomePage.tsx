@@ -81,10 +81,14 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     accounts?.filter((account) => account.type === "investment") ?? [];
   const isLoading = accountsLoading || (entriesLoading && !accountingEntries);
 
-  useEffect(() => {
+  const reloadData = useCallback(() => {
     fetchAccounts();
     fetchAccountingEntries();
-  }, [fetchAccounts, fetchAccountingEntries, fetchLiveAccountingEntry]);
+  }, [fetchAccounts, fetchAccountingEntries]);
+
+  useEffect(() => {
+    reloadData();
+  }, [reloadData, fetchLiveAccountingEntry]);
 
   useEffect(() => {
     if (accountingEntries) fetchLiveAccountingEntry();
@@ -474,7 +478,15 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
             exportData={exportData}
           >
             {accountsError || entriesError ? (
-              <p>Error loading data, retry</p>
+              <div>
+                <p>Error loading data, retry</p>
+                <button
+                  onClick={reloadData}
+                  className="px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Retry
+                </button>
+              </div>
             ) : (
               tabContent[activeTab as keyof typeof tabContent]
             )}
