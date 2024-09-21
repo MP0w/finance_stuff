@@ -3,6 +3,7 @@ import { CoreMessage, streamText } from "ai";
 import { Table, Users } from "../types";
 import { dbConnection } from "../dbConnection";
 import { AIChatContext, makeAIContext } from "./aiContext";
+import { DateTime } from "luxon";
 
 export class AIChat {
   id: string;
@@ -11,12 +12,16 @@ export class AIChat {
   private context: AIChatContext;
   private user: Users;
 
-  static async createChat(id: string, userId: string) {
-    const user = await dbConnection<Users>(Table.Users)
+  static async getUser(id: string) {
+    return await dbConnection<Users>(Table.Users)
       .select()
-      .where({ id: userId })
+      .where({ id })
       .limit(1)
       .first();
+  }
+
+  static async createChat(id: string, userId: string) {
+    const user = await this.getUser(userId);
 
     if (!user) {
       throw Error("could not get user");
@@ -60,6 +65,8 @@ export class AIChat {
   }
 
   async *onUserMessage(message: string) {
+    this.messages.push({ role: "user", content: message });
+
     if (message.length > 5000) {
       const content = "your message is too long, please send a shorter message";
       yield content;
@@ -80,9 +87,12 @@ export class AIChat {
       return;
     }
 
-    if (this.user.available_ai_tokens <= 0) {
+    if (
+      this.context.stats.averageTotal === 0 ||
+      this.context.currentPortfolio.length === 0
+    ) {
       const content =
-        "you finished the credits available to use the AI assistant, you can buy more to keep using it!";
+        "You do not seem to have any accounting yet, add your accounts and entries to start using the AI assistant. The more you track your finances in the app the more accurate we can be. You can also add or import data from previous months/years!";
       yield content;
       this.messages.push({
         role: "assistant",
@@ -91,7 +101,33 @@ export class AIChat {
       return;
     }
 
-    this.messages.push({ role: "user", content: message });
+    if (
+      !this.context.lastEntryDate ||
+      DateTime.fromJSDate(this.context.lastEntryDate).diffNow("days").days < -60
+    ) {
+      const content =
+        "Your accounting data is too old, please add recent data to use the AI assistant. This will make sure it's going to be accurate!";
+      yield content;
+      this.messages.push({
+        role: "assistant",
+        content,
+      });
+      return;
+    }
+
+    if (this.user.available_ai_tokens <= 0) {
+      const content =
+        "you finished the credits available to use the AI assistant, you can buy more to keep using it!";
+      yield content;
+      this.messages.push({
+        role: "assistant",
+        content,
+      });
+
+      // Refresh user data in case tokens changed
+      this.user = (await AIChat.getUser(this.userId)) ?? this.user;
+      return;
+    }
 
     const result = await streamText({
       model: anthropic("claude-3-5-sonnet-20240620"),

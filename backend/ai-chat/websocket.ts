@@ -59,13 +59,17 @@ export function startWebsocketServer() {
         return;
       }
 
-      const response = aiChat.onUserMessage(payload.message);
+      try {
+        const response = aiChat.onUserMessage(payload.message);
 
-      ws.send("---ai-response-boundary---");
-      for await (const delta of response) {
-        ws.send(delta);
+        ws.send("---ai-response-boundary---");
+        for await (const delta of response) {
+          ws.send(delta);
+        }
+        ws.send("---ai-response-boundary-end---");
+      } catch (error) {
+        console.error(error);
       }
-      ws.send("---ai-response-boundary-end---");
     });
 
     ws.on("close", () => {

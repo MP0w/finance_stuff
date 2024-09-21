@@ -17,19 +17,19 @@ h1 {
     --foreground: theme('colors.gray.600');
   }
 
+  body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: "Courier New", monospace;
+    font-weight: 500;
+  }
+
   h3 {
     @apply text-lg font-semibold mb-4;
   }
   h2 {
     @apply text-xl font-semibold mb-4;
   }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: "Courier New", monospace;
-  font-weight: 500;
 }
 
 @layer utilities {

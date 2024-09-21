@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { auth } from "../app/firebase";
 
-export default function Page() {
+export default function RedeemPage() {
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const redeemEmailLink = async () => {
+      console.log("redeemEmailLink", window.location.href);
       if (isSignInWithEmailLink(auth, window.location.href)) {
         let email = window.localStorage.getItem("emailForSignIn");
         if (!email) {
@@ -23,7 +22,7 @@ export default function Page() {
             // Clear email from storage.
             window.localStorage.removeItem("emailForSignIn");
             // Redirect to home page or dashboard
-            router.push("/");
+            window.location.replace("/");
           } catch (err) {
             console.error(err);
             setError("Error signing in with email link. Please try again.");
@@ -37,7 +36,7 @@ export default function Page() {
     };
 
     redeemEmailLink();
-  }, [router]);
+  }, []);
 
   if (error) {
     return (
@@ -45,7 +44,7 @@ export default function Page() {
         <h1 className="text-2xl font-bold mb-4">Error</h1>
         <p className="text-red-500">{error}</p>
         <button
-          onClick={() => router.push("/")}
+          onClick={() => window.location.replace("/login")}
           className="mt-4 px-4 py-2 bg-gray-600 hover:bg-gray-600 text-white font-semibold pixel-corners-small transition duration-200"
         >
           Return to Login

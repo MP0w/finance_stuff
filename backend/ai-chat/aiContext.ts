@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 export type AIChatContext = {
   currency: string;
   csv: string;
+  lastEntryDate: Date | undefined;
   stats: {
     averageSavings: number;
     averageTotal: number;
@@ -67,6 +68,10 @@ export async function makeAIContext(user: Users): Promise<AIChatContext> {
 
   return {
     currency: user.currency,
+    lastEntryDate:
+      accountingEntries.length > 0
+        ? accountingEntries.at(accountingEntries.length - 1)?.date
+        : undefined,
     csv: makeCSV(summaryData),
     stats: {
       ...stats,
