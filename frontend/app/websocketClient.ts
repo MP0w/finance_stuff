@@ -12,6 +12,20 @@ export function useAIChat() {
   return useWebSocket(process.env.NEXT_PUBLIC_WS_URL!);
 }
 
+const defaultMessages: ChatMessage[] = [
+  {
+    role: "assistant",
+    content:
+      "I can help you with your personal finances, budgeting or accounting topics.",
+    default: true,
+  },
+  {
+    role: "assistant",
+    content: "What are you looking for?",
+    default: true,
+  },
+];
+
 function useWebSocket(url: string) {
   const { user } = useUserState();
   const [token, setToken] = useState<string | undefined>(undefined);
@@ -19,19 +33,6 @@ function useWebSocket(url: string) {
     undefined
   );
   const liveMessageRef = useRef<ChatMessage | undefined>(undefined);
-  const defaultMessages: ChatMessage[] = [
-    {
-      role: "assistant",
-      content:
-        "I can help you with your personal finances, budgeting or accounting topics.",
-      default: true,
-    },
-    {
-      role: "assistant",
-      content: "What are you looking for?",
-      default: true,
-    },
-  ];
   const [messages, setMessages] = useState<ChatMessage[]>(defaultMessages);
   const [isConnected, setIsConnected] = useState<boolean | undefined>(
     undefined
@@ -131,7 +132,7 @@ function useWebSocket(url: string) {
         ];
       });
     };
-  }, [url, token, defaultMessages]);
+  }, [url, token]);
 
   useEffect(() => {
     if (isConnected === false) {
