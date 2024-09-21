@@ -65,7 +65,7 @@ export const updateUser = async (token: string, currency?: string) => {
         "Content-Type": "application/json",
         Authorization: token,
       },
-      body: JSON.stringify({ currency }),
+      body: JSON.stringify(currency ? { currency } : {}),
     });
 
     if (!response.ok) {
@@ -89,7 +89,7 @@ const login = async (token: string, firebaseUid: string) => {
   if (cachedUser && cachedUser.firebase_uid === firebaseUid) {
     return cachedUser;
   }
-  const user = await updateUser(token, firebaseUid);
+  const user = await updateUser(token, undefined);
   if (user) {
     logAnalyticsEvent("sign-in");
   }
