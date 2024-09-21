@@ -53,7 +53,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
                 role: "assistant",
               },
             ].map((msg, index) => (
-              <ChatMessage key={index} message={msg} maxWidth={90} />
+              <ChatMessage key={index} message={msg} small={true} />
             ))}
           </div>
         </section>

@@ -8,13 +8,10 @@ interface ChatMessageProps {
     role: string;
     content: string;
   };
-  maxWidth?: number;
+  small?: boolean;
 }
 
-export const ChatMessage: React.FC<ChatMessageProps> = ({
-  message,
-  maxWidth,
-}) => {
+export const ChatMessage: React.FC<ChatMessageProps> = ({ message, small }) => {
   return (
     <div
       className={`flex ${
@@ -22,7 +19,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       }`}
     >
       <div
-        className={`max-w-[${maxWidth ?? 80}%] px-4 py-2 pixel-corners ${
+        className={`${
+          small === true ? "max-w-[90%]" : "max-w-[70%]"
+        } px-4 py-2 pixel-corners ${
           message.role === "user"
             ? "bg-blue-400 text-white border"
             : message.role === "assistant"
