@@ -10,6 +10,7 @@ import Link from "next/link";
 
 const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   const { user, loaded } = useUserState();
+
   if (user || !loaded) {
     return <></>;
   }

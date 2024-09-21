@@ -1,22 +1,43 @@
 "use client";
 
-import { auth } from "./firebase";
+import { auth } from "../firebase";
 import {
   ActionCodeSettings,
   GoogleAuthProvider,
   sendSignInLinkToEmail,
   signInWithPopup,
 } from "firebase/auth";
-import LoginPage from "./Login/LoginPage";
-import { UserStateProvider } from "./UserState";
+import LoginPage from "../Login/LoginPage";
+import { UserStateProvider } from "../UserState";
 import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
-import HomePage from "./Home/HomePage";
-import LandingPage from "./LandingPage/LangingPage";
+import { useEffect, useState } from "react";
+import HomePage from "../Home/HomePage";
+import LandingPage from "../LandingPage/LangingPage";
 
 export default function Home() {
   const [error, setError] = useState<string | null>(null);
-  const [showLogin, setShowLogin] = useState(false);
+  const [showLogin, setShowLogin] = useState(
+    window.location.pathname === "/login"
+  );
+
+  useEffect(() => {
+    const handlePathChange = () => {
+      const pathname = window.location.pathname;
+      setShowLogin(pathname === "/login");
+    };
+
+    handlePathChange();
+
+    window.addEventListener("popstate", handlePathChange);
+
+    return () => {
+      window.removeEventListener("popstate", handlePathChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.history.pushState(null, "", showLogin ? "/login" : "/");
+  }, [showLogin]);
 
   const signInWithEmail = async (email: string) => {
     try {
@@ -58,7 +79,13 @@ export default function Home() {
 
   return (
     <UserStateProvider>
-      {!showLogin && <LandingPage showLogin={() => setShowLogin(true)} />}
+      {!showLogin && (
+        <LandingPage
+          showLogin={() => {
+            setShowLogin(true);
+          }}
+        />
+      )}
       {showLogin && (
         <LoginPage
           error={error}

@@ -65,6 +65,12 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { execute: deleteAccount } = useDeleteAccount();
   const { execute: deleteAccountingEntry } = useDeleteAccountingEntry();
 
+  useEffect(() => {
+    if (user && window.location.pathname === "/login") {
+      window.history.replaceState(null, "", "/");
+    }
+  }, [user]);
+
   const reloadData = useCallback(async () => {
     try {
       await Promise.all([fetchAccounts(), fetchAccountingEntries()]);
