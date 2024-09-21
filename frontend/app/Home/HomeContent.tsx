@@ -188,7 +188,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" id="home-content">
       <div className="mx-auto">
         <ArcherContainer strokeColor="gray">
           <TabView
@@ -206,11 +206,11 @@ const HomeContent: React.FC<HomeContentProps> = ({
             exportData={exportData}
           >
             {accountsError || entriesError ? (
-              <div>
-                <p>Error loading data, retry</p>
+              <div className="flex flex-col items-center">
+                <p className="mt-16">Error loading data</p>
                 <button
                   onClick={reloadData}
-                  className="px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="mt-4 px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   Retry
                 </button>
@@ -226,6 +226,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
           onRequestClose={() => setIsDeleteModalOpen(false)}
           className="modal"
           overlayClassName="overlay"
+          appElement={document.getElementById("home-content") as HTMLElement}
         >
           <h2>Confirm Deletion</h2>
           <p className="mb-6">
@@ -254,6 +255,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
           onRequestClose={() => setIsDeleteEntryModalOpen(false)}
           className="modal"
           overlayClassName="overlay"
+          appElement={document.getElementById("home-content") as HTMLElement}
         >
           <h2>Delete date from all accounts</h2>
           <p className="mb-6">

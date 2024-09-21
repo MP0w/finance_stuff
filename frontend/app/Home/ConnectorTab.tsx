@@ -52,11 +52,7 @@ export const ConnectorsTab: React.FC<{
   const reloadData = useCallback(async () => {
     try {
       await Promise.all([getConnectorsSettings(), fetchConnections()]);
-    } catch {
-      toast.error("Error loading connectors, retry", {
-        position: "bottom-right",
-      });
-    }
+    } catch {}
   }, [getConnectorsSettings, fetchConnections]);
 
   useEffect(() => {
@@ -330,6 +326,7 @@ export const ConnectorsTab: React.FC<{
         onRequestClose={() => setIsDeleteModalOpen(false)}
         className="modal"
         overlayClassName="overlay"
+        appElement={document.getElementById("home-content") as HTMLElement}
       >
         <h2>Confirm Deletion</h2>
         <p className="mb-6">

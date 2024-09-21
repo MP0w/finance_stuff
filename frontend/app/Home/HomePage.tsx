@@ -65,9 +65,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { execute: deleteAccount } = useDeleteAccount();
   const { execute: deleteAccountingEntry } = useDeleteAccountingEntry();
 
-  const reloadData = useCallback(() => {
-    fetchAccounts();
-    fetchAccountingEntries();
+  const reloadData = useCallback(async () => {
+    try {
+      await Promise.all([fetchAccounts(), fetchAccountingEntries()]);
+    } catch {}
   }, [fetchAccounts, fetchAccountingEntries]);
 
   useEffect(() => {
@@ -75,7 +76,14 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   }, [reloadData, fetchLiveAccountingEntry]);
 
   useEffect(() => {
-    if (accountingEntries) fetchLiveAccountingEntry();
+    const fetch = async () => {
+      if (accountingEntries) {
+        try {
+          await fetchLiveAccountingEntry();
+        } catch {}
+      }
+    };
+    fetch();
   }, [accountingEntries, fetchLiveAccountingEntry]);
 
   useEffect(() => {
@@ -130,7 +138,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         logAnalyticsEvent("create_accounting_entry_success");
       } catch (error) {
         toast.error(
-          "Failed to create accounting entry. Make sure to pick a new date.",
+          "Failed to create accounting entry. " + (error as Error).message,
           {
             position: "bottom-right",
           }

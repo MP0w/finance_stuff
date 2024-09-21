@@ -59,7 +59,7 @@ const ChatTab: React.FC = () => {
                       ></span>
                     </span>
                   )}
-                  {msg.role === "error" && `Error: ${msg.content}`}
+                  {msg.role === "error" && msg.content}
                 </div>
               </div>
             ))}

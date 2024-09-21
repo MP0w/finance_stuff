@@ -117,13 +117,22 @@ function useWebSocket(url: string) {
     ws.current.onclose = (e) => {
       console.log("Disconnected from WebSocket server", e);
       setIsConnected(false);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          role: "error",
-          content: "Disconnected, we will try to recconect",
-        },
-      ]);
+      setMessages((prevMessages) => {
+        if (
+          prevMessages.length > 0 &&
+          prevMessages[prevMessages.length - 1].role === "error"
+        ) {
+          return prevMessages;
+        }
+
+        return [
+          ...prevMessages,
+          {
+            role: "error",
+            content: "Disconnected, we will try to recconect",
+          },
+        ];
+      });
     };
   }, [url, token]);
 
