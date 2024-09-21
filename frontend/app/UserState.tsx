@@ -9,7 +9,6 @@ import { auth, logAnalyticsEvent } from "./firebase";
 import { clearAuthToken, setAuthToken } from "./apiClient";
 import * as Sentry from "@sentry/nextjs";
 import { Accounts, Users } from "../../shared/types";
-import { error } from "console";
 
 export type UserStateContextType = {
   user:

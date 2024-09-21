@@ -14,20 +14,8 @@ import {
 } from "./apis/accountingEntriesAPIs";
 import { useCreateEntry, useUpdateEntry } from "./apis/entriesAPIs";
 import { AccountType } from "../../../shared/types";
-import AccountsTable from "./AccountsTable";
-import InvestmentTable from "./InvestmentTable";
-import TotalTable from "./Summary/TotalTable";
-import TabView from "./TabView";
-import AddButton from "../components/AddButton";
-import Modal from "react-modal";
-import { ArcherContainer } from "react-archer";
-import OnboardingTips from "./OnboardingTips";
-import AddToCalendar from "../components/AddToCalendar";
 import { logAnalyticsEvent } from "../firebase";
-import SummaryTab from "./Summary/SummaryTab";
-import ConnectorsTab from "./ConnectorTab";
-import ChatTab from "./ChatTab";
-import { createCSVContent } from "../../../shared/userStats";
+import HomeContent from "./HomeContent";
 
 interface HomePageProps {
   signOut: () => void;
@@ -35,9 +23,9 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { user } = useUserState();
+  // UI states
   const [expandedAddAccount, setExpandedAddAccount] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
-  const [activeTab, setActiveTab] = useState("fiat");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [accountToDelete, setAccountToDelete] = useState<{
     id: string;
@@ -48,6 +36,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     string | null
   >(null);
 
+  // data
   const {
     data: accounts,
     loading: accountsLoading,
@@ -64,22 +53,17 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { data: liveAccountingEntry, execute: fetchLiveAccountingEntry } =
     useGetLiveAccountingEntry();
 
-  const { live, hasOutdated, outdatedTTL } = liveAccountingEntry ?? {
+  const { hasOutdated, outdatedTTL } = liveAccountingEntry ?? {
     hasOutdated: false,
   };
 
+  // APIs
   const { execute: createAccount } = useCreateAccount();
   const { execute: createAccountingEntry } = useCreateAccountingEntry();
   const { execute: createEntry } = useCreateEntry();
   const { execute: updateEntry } = useUpdateEntry();
   const { execute: deleteAccount } = useDeleteAccount();
   const { execute: deleteAccountingEntry } = useDeleteAccountingEntry();
-
-  const fiatAccounts =
-    accounts?.filter((account) => account.type === "fiat") ?? [];
-  const investmentAccounts =
-    accounts?.filter((account) => account.type === "investment") ?? [];
-  const isLoading = accountsLoading || (entriesLoading && !accountingEntries);
 
   const reloadData = useCallback(() => {
     fetchAccounts();
@@ -115,7 +99,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           setExpandedAddAccount(false);
           logAnalyticsEvent("create_account_success");
         } catch (error) {
-          console.error("Error creating account:", error);
           toast.error("Failed to create account. Please try again.", {
             position: "bottom-right",
           });
@@ -146,7 +129,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
 
         logAnalyticsEvent("create_accounting_entry_success");
       } catch (error) {
-        console.error("Error creating accounting entry:", error);
         toast.error(
           "Failed to create accounting entry. Make sure to pick a new date.",
           {
@@ -184,26 +166,35 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         return;
       }
 
-      if (existingEntry) {
-        const investmentValue = invested ? cellValue : existingEntry.invested;
-        const value = invested ? existingEntry.value : cellValue;
+      try {
+        if (existingEntry) {
+          const investmentValue = invested ? cellValue : existingEntry.invested;
+          const value = invested ? existingEntry.value : cellValue;
 
-        await updateEntry(
-          existingEntry.id,
-          accountId,
-          accountingEntryId,
-          value,
-          investmentValue ?? undefined
-        );
-      } else {
-        await createEntry(
-          accountId,
-          accountingEntryId,
-          invested ? 0 : cellValue,
-          invested ? cellValue : undefined
-        );
+          await updateEntry(
+            existingEntry.id,
+            accountId,
+            accountingEntryId,
+            value,
+            investmentValue ?? undefined
+          );
+        } else {
+          await createEntry(
+            accountId,
+            accountingEntryId,
+            invested ? 0 : cellValue,
+            invested ? cellValue : undefined
+          );
+        }
+      } catch {
+        toast.error("Failed to update entry. Please try again.", {
+          position: "bottom-right",
+        });
       }
-      await fetchAccountingEntries();
+
+      try {
+        await fetchAccountingEntries();
+      } catch {}
     },
     [accountingEntries, updateEntry, createEntry, fetchAccountingEntries]
   );
@@ -252,7 +243,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           position: "bottom-right",
         });
       } catch (error) {
-        console.error("Error deleting account:", error);
         toast.error("Failed to delete account. Please try again.", {
           position: "bottom-right",
         });
@@ -271,7 +261,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           position: "bottom-right",
         });
       } catch (error) {
-        console.error("Error deleting accountingentry:", error);
         toast.error("Failed to delete entry. Please try again.", {
           position: "bottom-right",
         });
@@ -281,274 +270,39 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     setAccountingEntryToDelete(null);
   };
 
-  const switchTab = (id: string) => {
-    setActiveTab(id);
-    setNewAccountName("");
-    setExpandedAddAccount(false);
-  };
-
-  const exportData = () => {
-    const csvContent = createCSVContent({
-      accountingEntries: accountingEntries ?? undefined,
-      fiatAccounts,
-      investmentAccounts,
-    });
-
-    if (!csvContent) {
-      return;
-    }
-
-    console.log(csvContent);
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "finance_stuff_export.csv";
-    a.click();
-  };
-
-  const tabContent = {
-    fiat: (
-      <div>
-        <div className="flex justify-between items-center mb-8">
-          <AddButton
-            title="Add account"
-            onClick={() => setExpandedAddAccount(!expandedAddAccount)}
-          />
-          <AddToCalendar />
-        </div>
-
-        {expandedAddAccount && (
-          <div className="mt-4 mb-8 flex">
-            <input
-              type="text"
-              value={newAccountName}
-              onChange={(e) => setNewAccountName(e.target.value)}
-              placeholder="Cash, Bank, etc."
-              className="border rounded px-2 py-1 mr-2"
-            />
-            <button
-              onClick={() => handleCreateAccount("fiat")}
-              className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={newAccountName.length === 0}
-            >
-              Create
-            </button>
-          </div>
-        )}
-
-        {!isLoading && fiatAccounts.length === 0 && (
-          <OnboardingTips
-            fiatAccounts={fiatAccounts}
-            investmentAccounts={investmentAccounts}
-            expandedAddAccount={expandedAddAccount}
-            isInvestments={false}
-          />
-        )}
-        <AccountsTable
-          accounts={fiatAccounts}
-          accountingEntries={accountingEntries ?? []}
-          handleCellChange={handleCellChange}
-          onAddEntry={handleCreateAccountingEntry}
-          onDeleteAccount={handleDeleteAccount}
-          onDeleteAccountingEntry={handleDeleteAccountingEntry}
-        />
-      </div>
-    ),
-    investments: (
-      <>
-        <div className="flex justify-between items-center">
-          <AddButton
-            title="Add account"
-            onClick={() => setExpandedAddAccount(!expandedAddAccount)}
-          />
-          <AddToCalendar />
-        </div>
-        {expandedAddAccount && (
-          <div>
-            <div className="mb-4 mt-4 flex">
-              <input
-                type="text"
-                value={newAccountName}
-                onChange={(e) => setNewAccountName(e.target.value)}
-                placeholder="Crypto, Stocks, Bonds, etc."
-                className="border rounded px-2 py-1 mr-2"
-              />
-              <button
-                onClick={() => handleCreateAccount("investment")}
-                className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={newAccountName.length === 0}
-              >
-                Add
-              </button>
-            </div>
-            <p className="text-sm max-w-lg">
-              After creating an account you can connect it to external accounts
-              (e.g. banks, crypto exchanges, stock brokers, etc...) to autofill
-              the amounts each time you create an entry.
-            </p>
-            <p className="text-sm max-w-lg">
-              If we don&apos;t yet support one of your favorite providers yet
-              feel free to use the feedback form or send an email to let us know
-            </p>
-            <button
-              className="mt-4 px-4 py-2 text-sm bg-purple-200 hover:bg-purple-300 pixel-corners-small"
-              onClick={() => {
-                switchTab("connectors");
-              }}
-            >
-              Connect external accounts
-            </button>
-          </div>
-        )}
-        {!isLoading && investmentAccounts.length === 0 && (
-          <OnboardingTips
-            fiatAccounts={fiatAccounts}
-            investmentAccounts={investmentAccounts}
-            expandedAddAccount={expandedAddAccount}
-            isInvestments={true}
-          />
-        )}
-        {investmentAccounts.map((account) => (
-          <InvestmentTable
-            key={account.id}
-            account={account}
-            accountingEntries={accountingEntries ?? []}
-            handleCellChange={handleCellChange}
-            onAddEntry={handleCreateAccountingEntry}
-            onDeleteAccount={handleDeleteAccount}
-            onDeleteAccountingEntry={handleDeleteAccountingEntry}
-          />
-        ))}
-        {investmentAccounts.length > 0 && (
-          <TotalTable
-            title="Investments Total"
-            fiatAccounts={[]}
-            investmentAccounts={investmentAccounts}
-            accountingEntries={accountingEntries ?? []}
-            liveAccountingEntry={live}
-            onAddEntry={handleCreateAccountingEntry}
-            onDeleteAccountingEntry={handleDeleteAccountingEntry}
-          />
-        )}
-      </>
-    ),
-    summary: (
-      <SummaryTab
-        fiatAccounts={fiatAccounts}
-        investmentAccounts={investmentAccounts}
-        accountingEntries={accountingEntries ?? []}
-        liveAccountingEntry={live}
-        onAddEntry={handleCreateAccountingEntry}
-        onDeleteAccountingEntry={handleDeleteAccountingEntry}
-      />
-    ),
-    connectors: (
-      <ConnectorsTab
-        accounts={accounts ?? []}
-        onAddConnection={() => {
-          fetchAccountingEntries();
-        }}
-      />
-    ),
-    chat: <ChatTab />,
-  };
-
-  if (!user) {
-    return <></>;
-  }
-
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto">
-        <ArcherContainer strokeColor="gray">
-          <TabView
-            email={user?.email}
-            signOut={signOut}
-            tabs={[
-              { id: "fiat", label: "Bank Accounts" },
-              { id: "investments", label: "Investments" },
-              { id: "summary", label: "Summary" },
-              { id: "connectors", label: "Connectors" },
-              { id: "chat", label: "✨AI🔮" },
-            ]}
-            activeTab={activeTab}
-            setActiveTab={switchTab}
-            exportData={exportData}
-          >
-            {accountsError || entriesError ? (
-              <div>
-                <p>Error loading data, retry</p>
-                <button
-                  onClick={reloadData}
-                  className="px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  Retry
-                </button>
-              </div>
-            ) : (
-              tabContent[activeTab as keyof typeof tabContent]
-            )}
-            {isLoading && <p className="mt-8 mb-8">Loading...</p>}
-          </TabView>
-        </ArcherContainer>
-        <Modal
-          isOpen={isDeleteModalOpen}
-          onRequestClose={() => setIsDeleteModalOpen(false)}
-          className="modal"
-          overlayClassName="overlay"
-        >
-          <h2>Confirm Deletion</h2>
-          <p className="mb-6">
-            Are you sure you want to delete the account
-            <b> {accountToDelete?.name}</b>? <br />
-            This action cannot be undone and all the entries for that account
-            will also be deleted.
-          </p>
-          <div className="flex justify-end">
-            <button
-              onClick={() => setIsDeleteModalOpen(false)}
-              className="bg-gray-200 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={confirmDeleteAccount}
-              className="bg-red-500 text-white px-4 py-2 pixel-corners-small hover:bg-red-600"
-            >
-              Delete
-            </button>
-          </div>
-        </Modal>
-        <Modal
-          isOpen={isDeleteEntryModalOpen}
-          onRequestClose={() => setIsDeleteEntryModalOpen(false)}
-          className="modal"
-          overlayClassName="overlay"
-        >
-          <h2>Delete date from all accounts</h2>
-          <p className="mb-6">
-            All the values for that date on each account will be removed. This
-            action cannot be undone and
-          </p>
-          <div className="flex justify-end">
-            <button
-              onClick={() => setIsDeleteEntryModalOpen(false)}
-              className="bg-gray-200 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={confirmDeleteAccountingEntry}
-              className="bg-red-500 text-white px-4 py-2 pixel-corners-small hover:bg-red-600"
-            >
-              Delete
-            </button>
-          </div>
-        </Modal>
-      </div>
-    </div>
+    <HomeContent
+      uiState={{
+        expandedAddAccount,
+        setExpandedAddAccount,
+        newAccountName,
+        setNewAccountName,
+        isDeleteModalOpen,
+        setIsDeleteModalOpen,
+        accountToDelete,
+        isDeleteEntryModalOpen,
+        setIsDeleteEntryModalOpen,
+      }}
+      actions={{
+        handleCreateAccount,
+        handleCellChange,
+        handleCreateAccountingEntry,
+        handleDeleteAccount,
+        handleDeleteAccountingEntry,
+        confirmDeleteAccount,
+        confirmDeleteAccountingEntry,
+      }}
+      data={{
+        accounts,
+        accountingEntries,
+        liveAccountingEntry: liveAccountingEntry?.live,
+        accountsLoading,
+        entriesLoading,
+        accountsError,
+        entriesError,
+      }}
+      apis={{ fetchAccountingEntries, reloadData, signOut }}
+    />
   );
 };
 
