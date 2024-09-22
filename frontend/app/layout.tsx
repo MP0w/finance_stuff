@@ -4,10 +4,12 @@ import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "finance_stuff",
-  description: "Financial accounting made simple for the average person.",
+  description:
+    "Effortlessly Track & Grow your Finances in just 10 minutes a month. AI Insights, Statistics, Graphs, and more.",
   keywords: [
     "finance_stuff",
     "finance stuff",
+    "ai personal finance",
     "personal finance",
     "budgeting",
     "financial management",
