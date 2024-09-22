@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import "../app/globals.css";
 
 const TermsAndConditions: React.FC = () => {
   return (

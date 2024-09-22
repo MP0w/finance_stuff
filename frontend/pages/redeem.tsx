@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { auth } from "../app/firebase";
+import "../app/globals.css";
 
 export default function RedeemPage() {
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +43,7 @@ export default function RedeemPage() {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen">
         <h1 className="text-2xl font-bold mb-4">Error</h1>
-        <p className="text-red-500">{error}</p>
+        <p>{error}</p>
         <button
           onClick={() => window.location.replace("/login")}
           className="mt-4 px-4 py-2 bg-gray-600 hover:bg-gray-600 text-white font-semibold pixel-corners-small transition duration-200"
