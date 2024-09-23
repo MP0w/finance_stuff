@@ -164,23 +164,50 @@ async function getImportProposal(
     duplicatesNewAccountingEntries
   );
 
+  const allAccounts = state.userAccountState.accounts.concat(
+    state.userAccountState.investments
+  );
+  const allNewAccounts = result.object.newAccounts.concat(
+    result.object.newInvestments
+  );
+  const accountsByName = allAccounts.reduce((acc, curr) => {
+    acc[curr.name] = curr.id;
+    return acc;
+  }, {} as Record<string, string>);
+
+  const duplicatesNewAccounts = allNewAccounts
+    .filter((a) => accountsByName[a.name])
+    .reduce((acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {} as Record<string, { id: string; name: string }>);
+
+  function idForAccount(accountId: string) {
+    const dupe = duplicatesNewAccounts[accountId];
+    return dupe ? accountsByName[dupe.name] : accountId;
+  }
+
+  function idForAccountingEntry(accountingEntryId: string) {
+    const dupe = duplicatesNewAccountingEntries[accountingEntryId];
+    return dupe ? accountingEntriesByDate[dupe.date] : accountingEntryId;
+  }
+
   return {
     id: state.id,
     newAccountingEntries: result.object.newAccountingEntries.filter(
       (entry) => !duplicatesNewAccountingEntriesIds.includes(entry.id)
     ),
-    newAccounts: result.object.newAccounts,
-    newInvestments: result.object.newInvestments,
+    newAccounts: result.object.newAccounts.filter(
+      (a) => !duplicatesNewAccounts[a.id]
+    ),
+    newInvestments: result.object.newInvestments.filter(
+      (a) => !duplicatesNewAccounts[a.id]
+    ),
     newEntries: result.object.newEntries.map((entry) => {
       return {
         ...entry,
-        accountingEntryId: duplicatesNewAccountingEntries[
-          entry.accountingEntryId
-        ]
-          ? accountingEntriesByDate[
-              duplicatesNewAccountingEntries[entry.accountingEntryId].date
-            ]
-          : entry.accountingEntryId,
+        accountId: idForAccount(entry.accountId),
+        accountingEntryId: idForAccountingEntry(entry.accountingEntryId),
       };
     }),
   };
@@ -295,9 +322,8 @@ export function importRouter(app: Application) {
         return;
       }
 
-      // import
-      try {
-        dbConnection.transaction(async (trx) => {
+      await dbConnection.transaction(async (trx) => {
+        try {
           const newAccountsIds = proposal.newAccounts
             .concat(proposal.newInvestments)
             .reduce((acc, curr) => {
@@ -372,16 +398,18 @@ export function importRouter(app: Application) {
               ]),
               updated_at: new Date(),
             });
-        });
-      } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: "Error importing" });
-        return;
-      }
 
-      importCache.del(state.id);
+          await trx.commit();
 
-      res.send({});
+          importCache.del(state.id);
+          res.send({});
+        } catch (error) {
+          console.log("ROLLING BACK");
+          console.error(error);
+          await trx.rollback();
+          res.status(500).send({ error: "Error importing" });
+        }
+      });
     })
   );
 }
