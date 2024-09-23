@@ -1,6 +1,6 @@
 import React from "react";
-import Table, { dateHeader, TableHeaderContent, TableRowCell } from "./Table";
-import { AccountingEntriesDTO, Accounts } from "../../../shared/types";
+import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
+import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 
 interface InvestmentTableProps {
   account: Accounts;

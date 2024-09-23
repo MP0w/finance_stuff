@@ -1,7 +1,10 @@
 import React from "react";
 import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
 import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
-import { colorForValue, stringForPercentage } from "../InvestmentTable";
+import {
+  colorForValue,
+  stringForPercentage,
+} from "../Investments/InvestmentTable";
 import { makeSummaryData, Summary } from "../../../../shared/userStats";
 
 export interface TotalTableProps {

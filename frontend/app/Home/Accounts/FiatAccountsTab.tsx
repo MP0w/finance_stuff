@@ -1,13 +1,13 @@
 import React from "react";
-import AddButton from "../components/AddButton";
-import AddToCalendar from "../components/AddToCalendar";
-import OnboardingTips from "./OnboardingTips";
+import AddButton from "../../components/AddButton";
+import AddToCalendar from "../../components/AddToCalendar";
+import OnboardingTips from "../OnboardingTips";
 import AccountsTable from "./AccountsTable";
 import {
   AccountType,
   AccountingEntriesDTO,
   Accounts,
-} from "../../../shared/types";
+} from "../../../../shared/types";
 
 interface FiatAccountsTabProps {
   expandedAddAccount: boolean;
@@ -49,7 +49,7 @@ const FiatAccountsTab: React.FC<FiatAccountsTabProps> = ({
     <div>
       <div className="flex justify-between items-center mb-8">
         <AddButton
-          title="Add account"
+          title="Add Account"
           onClick={() => setExpandedAddAccount(!expandedAddAccount)}
         />
         <AddToCalendar />

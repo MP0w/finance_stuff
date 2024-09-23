@@ -162,9 +162,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       invested: boolean
     ) => {
       if (Number.isNaN(cellValue)) {
-        toast.error("Invalid value", {
-          position: "bottom-right",
-        });
         return;
       }
 

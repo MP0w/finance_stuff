@@ -1,7 +1,7 @@
 import { PieChart, PieValueType } from "@mui/x-charts";
 import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { stringForPercentage } from "../InvestmentTable";
+import { stringForPercentage } from "../Investments/InvestmentTable";
 import { Summary } from "../../../../shared/userStats";
 
 export interface GraphsTabProps {

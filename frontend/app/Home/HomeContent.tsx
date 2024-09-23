@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { ArcherContainer } from "react-archer";
 import Modal from "react-modal";
 import TabView from "./TabView";
-import FiatAccountsTab from "./FiatAccountsTab";
-import InvestmentsAccountsTab from "./InvestmentsAccountsTab";
+import FiatAccountsTab from "./Accounts/FiatAccountsTab";
+import InvestmentsAccountsTab from "./Investments/InvestmentsAccountsTab";
 import SummaryTab from "./Summary/SummaryTab";
-import ConnectorsTab from "./ConnectorTab";
-import ChatTab from "./ChatTab";
+import ConnectorsTab from "./Connectors/ConnectorTab";
+import ChatTab from "./Chat/ChatTab";
 import { createCSVContent } from "../../../shared/userStats";
 import {
   AccountingEntriesDTO,

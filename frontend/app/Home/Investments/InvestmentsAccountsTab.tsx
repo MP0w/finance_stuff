@@ -3,12 +3,12 @@ import {
   AccountingEntriesDTO,
   Accounts,
   AccountType,
-} from "../../../shared/types";
-import AddButton from "../components/AddButton";
-import AddToCalendar from "../components/AddToCalendar";
-import OnboardingTips from "./OnboardingTips";
+} from "../../../../shared/types";
+import AddButton from "../../components/AddButton";
+import AddToCalendar from "../../components/AddToCalendar";
+import OnboardingTips from "../OnboardingTips";
 import InvestmentTable from "./InvestmentTable";
-import TotalTable from "./Summary/TotalTable";
+import TotalTable from "../Summary/TotalTable";
 
 interface InvestmentsAccountsTabProps {
   expandedAddAccount: boolean;
@@ -54,7 +54,7 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
     <>
       <div className="flex justify-between items-center">
         <AddButton
-          title="Add account"
+          title="Add Investment Account"
           onClick={() => setExpandedAddAccount(!expandedAddAccount)}
         />
         <AddToCalendar />
@@ -80,11 +80,7 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
           <p className="text-sm max-w-lg">
             After creating an account you can connect it to external accounts
             (e.g. banks, crypto exchanges, stock brokers, etc...) to autofill
-            the amounts each time you create an entry.
-          </p>
-          <p className="text-sm max-w-lg">
-            If we don&apos;t yet support one of your favorite providers yet feel
-            free to use the feedback form or send an email to let us know
+            the amounts each time you create an entry and see live data.
           </p>
           <button
             className="mt-4 px-4 py-2 text-sm bg-purple-200 hover:bg-purple-300 pixel-corners-small"

@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Accounts, ConnectionsDTO } from "../../../shared/types";
+import { Accounts, ConnectionsDTO } from "../../../../shared/types";
 import {
   useGetConnectorsSettings,
   useCreateConnection,
   useGetConnections,
   useDeleteConnection,
-} from "./apis/connectionsAPIs";
+} from "../apis/connectionsAPIs";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import Modal from "react-modal";
-import DeleteIcon from "../components/DeleteIcon";
+import DeleteIcon from "../../components/DeleteIcon";
+import Linkify from "react-linkify";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
@@ -110,6 +111,9 @@ export const ConnectorsTab: React.FC<{
         setFormData({});
         onAddConnection();
         fetchConnections();
+        toast.success("Connection created successfully", {
+          position: "bottom-right",
+        });
       } catch (error) {
         toast.error("Error creating connection: " + (error as Error).message, {
           id: "create-connection-error",
@@ -174,7 +178,11 @@ export const ConnectorsTab: React.FC<{
                   className="flex items-center justify-between bg-white p-4 rounded-md shadow"
                 >
                   <div>
-                    <p className="font-semibold">{connection.connector_id}</p>
+                    <p className="font-semibold">
+                      {connectorsSettings?.find(
+                        (c) => c.id === connection.connector_id
+                      )?.name ?? connection.connector_id}
+                    </p>
                     <p className="text-sm">
                       ↪ {accountName(connection.account_id)}
                     </p>
@@ -273,9 +281,25 @@ export const ConnectorsTab: React.FC<{
                           className="block text-md font-semibold mb-1"
                         >
                           {setting.hint}
-                          <p className="text-sm font-normal">
-                            {setting.extraInstructions}
-                          </p>
+                          <Linkify
+                            componentDecorator={(
+                              decoratedHref,
+                              decoratedText,
+                              key
+                            ) => (
+                              <a
+                                href={decoratedHref}
+                                key={key}
+                                className="text-blue-600"
+                              >
+                                {decoratedText}
+                              </a>
+                            )}
+                          >
+                            <p className="text-sm font-normal">
+                              {setting.extraInstructions}
+                            </p>
+                          </Linkify>
                         </label>
                         <input
                           type={setting.type === "number" ? "number" : "text"}

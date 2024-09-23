@@ -84,7 +84,7 @@ const AddToCalendar: React.FC = () => {
           styleLight="--btn-background: transparent; --btn-text: #222; --font: 'Courier New',monospace; --btn-font-weight: 200; --btn-border: none; --btn-shadow: none;"
           label="Add Reminder to calendar"
           size={window.innerWidth < 500 ? "0" : "2"}
-          name="fill out finance_stuff"
+          name="Monthly accounting @ finance_stuff"
           trigger="click"
           hideBranding={true}
           hideCheckmark={true}

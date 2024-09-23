@@ -7,7 +7,7 @@ import {
   mockInvestmentsAccounts,
 } from "./mockData";
 import Link from "next/link";
-import { ChatMessage } from "../Home/ChatTab";
+import { ChatMessage } from "../Home/Chat/ChatTab";
 
 const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   const { user, loaded } = useUserState();

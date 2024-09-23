@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useAIChat } from "../websocketClient";
+import { useAIChat } from "../../websocketClient";
 import TextareaAutosize from "react-textarea-autosize";
-import DeleteIcon from "../components/DeleteIcon";
+import DeleteIcon from "../../components/DeleteIcon";
 
 interface ChatMessageProps {
   message: {
@@ -29,11 +29,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, small }) => {
             : "bg-red-600 text-white border"
         }`}
       >
-        {message.role === "user" && message.content}
-        {message.role === "assistant" &&
-          message.content.length > 0 &&
-          message.content}
-        {message.role === "assistant" && message.content.length === 0 && (
+        {message.content.length === 0 && (
           <span className="flex items-center space-x-1 py-2">
             <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
             <span
@@ -46,7 +42,13 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, small }) => {
             ></span>
           </span>
         )}
-        {message.role === "error" && message.content}
+        {message.content.length > 0 && (
+          <div>
+            {message.content.split("\n").map((line, index) => (
+              <p key={index}>{line}</p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
