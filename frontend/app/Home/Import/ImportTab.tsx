@@ -171,6 +171,12 @@ export const ImportTab: React.FC<ImportTabProps> = ({
     useConfirmImport();
 
   const isLoading = createLoading || updateLoading || confirmLoading;
+  const emptyProposal =
+    latestProposal &&
+    latestProposal.newAccountingEntries.length === 0 &&
+    latestProposal.newAccounts.length === 0 &&
+    latestProposal.newInvestments.length === 0 &&
+    latestProposal.newEntries.length === 0;
 
   const tables = useMemo(() => {
     if (!latestProposal) {
@@ -304,7 +310,16 @@ export const ImportTab: React.FC<ImportTabProps> = ({
           </div>
         </div>
       )}
-      {tables && !isLoading && (
+      {emptyProposal && (
+        <div>
+          <p>
+            No proposal was generated, that might mean there is nothing to
+            import from your spreadsheet because you already have all data.
+            Otherwise try with another CSV.
+          </p>
+        </div>
+      )}
+      {tables && !isLoading && !emptyProposal && (
         <div>
           <p>
             Review the proposal and click Import if all looks good otherwise
