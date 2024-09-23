@@ -3,6 +3,7 @@ import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { stringForPercentage } from "../Investments/InvestmentTable";
 import { Summary } from "../../../../shared/userStats";
+import { DateTime } from "luxon";
 
 export interface GraphsTabProps {
   investmentAccounts: Accounts[];
@@ -45,7 +46,9 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
       <LineChart
         xAxis={[
           {
-            data: summaryCells.map((p) => p.date),
+            data: summaryCells.map((p) =>
+              DateTime.fromFormat(p.date, "yyyy-MM-dd").toJSDate()
+            ),
             valueFormatter: (d: Date) =>
               new Date(d).toLocaleDateString(undefined, {
                 day: "numeric",
@@ -53,8 +56,14 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
                 year: "2-digit",
               }),
             tickMinStep: 3600 * 1000 * 24 * 30 * (summaryCells.length / 3),
-            min: summaryCells[0].date,
-            max: summaryCells[summaryCells.length - 1].date,
+            min: DateTime.fromFormat(
+              summaryCells[0].date,
+              "yyyy-MM-dd"
+            ).toJSDate(),
+            max: DateTime.fromFormat(
+              summaryCells[summaryCells.length - 1].date,
+              "yyyy-MM-dd"
+            ).toJSDate(),
           },
         ]}
         series={[

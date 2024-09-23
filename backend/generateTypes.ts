@@ -28,6 +28,21 @@ export type Connector = {
     extraInstructions?: string;
     type: "string" | "number" | "boolean";
   }[];
+};
+
+export type ImportProposal = {
+  newAccountingEntries: {
+    id: string;
+    date: string;
+  }[];
+  newAccounts: { id: string; name: string }[];
+  newInvestments: { id: string; name: string }[];
+  newEntries: {
+    accountId: string;
+    accountingEntryId: string;
+    value: number;
+    invested?: number;
+  }[];
 };`;
 
 const transformer = new Transform({
@@ -57,7 +72,7 @@ const transformer = new Transform({
   },
 });
 
-const output = createWriteStream("../../shared/types.ts");
+const output = createWriteStream("../shared/types.ts");
 
 const combinedStream = new Writable({
   write(chunk, encoding, callback) {

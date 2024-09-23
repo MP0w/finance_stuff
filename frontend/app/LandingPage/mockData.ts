@@ -46,7 +46,7 @@ export const mockAccountingEntries: AccountingEntriesDTO[] = [
   {
     id: "1",
     user_id: "string",
-    date: new Date("2024-01-01"),
+    date: "2024-01-01",
     created_at: new Date(),
     updated_at: new Date(),
     entries: [
@@ -95,7 +95,7 @@ export const mockAccountingEntries: AccountingEntriesDTO[] = [
   {
     id: "2",
     user_id: "string",
-    date: new Date("2024-02-01"),
+    date: "2024-02-01",
     created_at: new Date(),
     updated_at: new Date(),
     entries: [
@@ -144,7 +144,7 @@ export const mockAccountingEntries: AccountingEntriesDTO[] = [
   {
     id: "3",
     user_id: "string",
-    date: new Date("2024-03-01"),
+    date: "2024-03-01",
     created_at: new Date(),
     updated_at: new Date(),
     entries: [
@@ -193,7 +193,7 @@ export const mockAccountingEntries: AccountingEntriesDTO[] = [
   {
     id: "4",
     user_id: "string",
-    date: new Date("2024-04-01"),
+    date: "2024-04-01",
     created_at: new Date(),
     updated_at: new Date(),
     entries: [

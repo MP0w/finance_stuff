@@ -9,6 +9,7 @@ import getUuidByString from "uuid-by-string";
 import cors from "cors";
 import expressAsyncHandler from "express-async-handler";
 import { connectorsRouter } from "./Connectors/connectors";
+import { importRouter } from "./Import/import";
 
 declare global {
   namespace Express {
@@ -57,4 +58,5 @@ export function router(app: Application) {
   accountingEntriesRouter(app);
   entriesRouter(app);
   connectorsRouter(app);
+  importRouter(app);
 }

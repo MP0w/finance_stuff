@@ -24,6 +24,21 @@ export type Connector = {
   }[];
 };
 
+export type ImportProposal = {
+  newAccountingEntries: {
+    id: string;
+    date: string;
+  }[];
+  newAccounts: { id: string; name: string }[];
+  newInvestments: { id: string; name: string }[];
+  newEntries: {
+    accountId: string;
+    accountingEntryId: string;
+    value: number;
+    invested?: number;
+  }[];
+};
+
 export enum Table {
   AccountingEntries = "accounting_entries",
   Accounts = "accounts",
@@ -33,17 +48,17 @@ export enum Table {
 }
 
 export type Tables = {
-  "accounting_entries": AccountingEntries,
-  "accounts": Accounts,
-  "connections": Connections,
-  "entries": Entries,
-  "users": Users,
+  accounting_entries: AccountingEntries;
+  accounts: Accounts;
+  connections: Connections;
+  entries: Entries;
+  users: Users;
 };
 
 export type AccountingEntries = {
   id: string;
   user_id: string;
-  date: Date;
+  date: string;
   created_at: Date;
   updated_at: Date;
 };

@@ -13,12 +13,10 @@ import {
   getConnectionWithDecryptedSettings,
 } from "../Connectors/connectors";
 import { ConnectorId } from "finance_stuff_connectors";
+import { DateTime } from "luxon";
 
-function isDateRecentEnough(date: Date): boolean {
-  const daysFromToday =
-    (date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
-
-  return daysFromToday > -15;
+function isDateRecentEnough(date: DateTime): boolean {
+  return date.diffNow("days").days > -15;
 }
 
 async function liveEntries(userId: string, accountingEntryId: string) {
@@ -110,7 +108,12 @@ export async function fillInMissingAccountingEntriesIfNeeded(userId: string) {
       .limit(1)
   ).at(0);
 
-  if (!lastAccountingEntry || !isDateRecentEnough(lastAccountingEntry.date)) {
+  if (
+    !lastAccountingEntry ||
+    !isDateRecentEnough(
+      DateTime.fromFormat(lastAccountingEntry.date, "yyyy-MM-dd")
+    )
+  ) {
     return;
   }
 
@@ -246,7 +249,7 @@ export function accountingEntriesRouter(app: Application) {
       const accountingEntryDTO: AccountingEntriesDTO = {
         id: "mock",
         user_id: req.userId,
-        date: new Date(),
+        date: DateTime.now().toFormat("yyyy-MM-dd"),
         created_at: new Date(),
         updated_at: new Date(),
         entries: mergedEntries,
@@ -297,11 +300,11 @@ export function accountingEntriesRouter(app: Application) {
     id: string,
     req: Request,
     res: Response,
-    successHandler?: (date: Date) => Promise<void>
+    successHandler?: (date: string) => Promise<void>
   ) {
-    const date = req.body.date ? new Date(req.body.date) : undefined;
+    const date: string | undefined = req.body.date;
 
-    if (!date) {
+    if (!date || !DateTime.fromFormat(req.body.date, "yyyy-MM-dd").isValid) {
       throw Error("Invalid params");
     }
 
@@ -339,7 +342,9 @@ export function accountingEntriesRouter(app: Application) {
     expressAsyncHandler(async (req, res) => {
       const id = generateUUID();
       upsertEntry(id, req, res, async (date) => {
-        const isRecent = isDateRecentEnough(date);
+        const isRecent = isDateRecentEnough(
+          DateTime.fromFormat(date, "yyyy-MM-dd")
+        );
 
         if (!isRecent) {
           res.send({});
@@ -414,7 +419,7 @@ export async function createAccountingEntriesForUser(userId: string) {
   await dbConnection<AccountingEntries>(Table.AccountingEntries).insert(
     datesToAdd.map((date) => ({
       id: generateUUID(),
-      date,
+      date: DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
       user_id: userId,
       updated_at: new Date(),
     }))

@@ -30,11 +30,11 @@ export const useGetAccountingEntry = () => {
 
 // Create a new accounting entry
 export const useCreateAccountingEntry = () => {
-  return useApiCall((date: Date) =>
+  return useApiCall((date: string) =>
     api.post<{ failedConnections: { connectorId: string }[] }>(
       "/accounting_entry",
       {
-        date: date.toLocaleDateString("en-US"),
+        date,
       }
     )
   );

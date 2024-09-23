@@ -8,6 +8,7 @@ import { FiAlertCircle } from "react-icons/fi";
 import { createPortal } from "react-dom";
 import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
 import { getUserCurrencySymbol } from "../UserState";
+import { DateTime } from "luxon";
 
 export type TableHeaderContent = {
   title: string;
@@ -59,7 +60,7 @@ interface TableProps {
   title?: string;
   headers: TableHeaderContent[];
   rows: TableRowCell[][];
-  onAddEntry?: (date: Date) => void;
+  onAddEntry?: (date: string) => void;
   onDelete?: () => void;
 }
 
@@ -76,7 +77,7 @@ const Table: React.FC<TableProps> = ({
 
   const handleAddEntry = () => {
     if (onAddEntry) {
-      onAddEntry(selectedDate);
+      onAddEntry(DateTime.fromJSDate(selectedDate).toFormat("yyyy-MM-dd"));
       setShowDatePicker(false);
     }
   };

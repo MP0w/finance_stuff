@@ -6,7 +6,11 @@ import { generateUUID } from "../dbConnection";
 import NodeCache from "node-cache";
 
 let wss: WebSocketServer;
-const chatCache = new NodeCache({ stdTTL: 60 * 60 });
+const chatCache = new NodeCache({
+  stdTTL: 60 * 60,
+  checkperiod: 60 * 60,
+  deleteOnExpire: true,
+});
 
 async function auth(token: string): Promise<string | undefined> {
   const user = await verifyToken(token);

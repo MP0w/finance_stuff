@@ -13,6 +13,7 @@ import {
   stringForPercentage,
 } from "../Investments/InvestmentTable";
 import { makeSummaryData, Summary } from "../../../../shared/userStats";
+import { DateTime } from "luxon";
 
 export interface TotalTableProps {
   title?: string;
@@ -20,7 +21,7 @@ export interface TotalTableProps {
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
   liveAccountingEntry: AccountingEntriesDTO | undefined;
-  onAddEntry: (date: Date) => void;
+  onAddEntry: (date: string) => void;
   onDeleteAccountingEntry: (entryId: string) => void;
 }
 
@@ -104,7 +105,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
             color: "bg-red-100",
           }
         : {
-            value: summary.date,
+            value: DateTime.fromFormat(summary.date, "yyyy-MM-dd").toJSDate(),
             warningText: summary.isMissingValues
               ? "🚨 You are missing some values in your accounts for this entry, check the glowing red cells in Bank Accounts & Investments for this date"
               : undefined,

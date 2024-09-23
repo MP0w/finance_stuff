@@ -14,6 +14,7 @@ import {
   AccountType,
 } from "../../../shared/types";
 import { useUserState } from "../UserState";
+import ImportTab from "./Import/Import";
 
 interface HomeContentProps {
   uiState: {
@@ -35,7 +36,7 @@ interface HomeContentProps {
       cellValue: number,
       invested: boolean
     ) => Promise<void>;
-    handleCreateAccountingEntry: (date: Date) => Promise<void>;
+    handleCreateAccountingEntry: (date: string) => Promise<void>;
     handleDeleteAccount: (accountId: string) => Promise<void>;
     handleDeleteAccountingEntry: (accountingEntryId: string) => Promise<void>;
     confirmDeleteAccount: () => Promise<void>;
@@ -181,6 +182,13 @@ const HomeContent: React.FC<HomeContentProps> = ({
       />
     ),
     chat: <ChatTab />,
+    import: (
+      <ImportTab
+        fiatAccounts={fiatAccounts}
+        investmentAccounts={investmentAccounts}
+        accountingEntries={accountingEntries ?? []}
+      />
+    ),
   };
 
   if (!user) {

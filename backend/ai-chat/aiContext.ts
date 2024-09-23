@@ -7,7 +7,7 @@ import { DateTime } from "luxon";
 export type AIChatContext = {
   currency: string;
   csv: string;
-  lastEntryDate: Date | undefined;
+  lastEntryDate: string | undefined;
   stats: {
     averageSavings: number;
     averageTotal: number;

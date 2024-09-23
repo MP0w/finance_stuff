@@ -1,6 +1,7 @@
 import React from "react";
 import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
 import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
+import { DateTime } from "luxon";
 
 interface AccountsTableProps {
   accounts: Accounts[];
@@ -11,7 +12,7 @@ interface AccountsTableProps {
     value: number,
     invested: boolean
   ) => Promise<void>;
-  onAddEntry: (date: Date) => void;
+  onAddEntry: (date: string) => void;
   onDeleteAccount: (accountId: string) => void;
   onDeleteAccountingEntry: (entryId: string) => void;
 }
@@ -64,7 +65,7 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
 
     return [
       {
-        value: new Date(entry.date),
+        value: DateTime.fromFormat(entry.date, "yyyy-MM-dd").toJSDate(),
         onDelete: () => {
           onDeleteAccountingEntry(entry.id);
         },

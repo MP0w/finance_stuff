@@ -123,7 +123,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   );
 
   const handleCreateAccountingEntry = useCallback(
-    async (date: Date) => {
+    async (date: string) => {
       try {
         const response = await createAccountingEntry(date);
         fetchAccountingEntries();

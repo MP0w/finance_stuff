@@ -11,7 +11,7 @@ export const SummaryTab: React.FC<{
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntriesDTO[];
-  onAddEntry: (date: Date) => void;
+  onAddEntry: (date: string) => void;
   onDeleteAccountingEntry: (entryId: string) => void;
 }> = ({
   liveAccountingEntry,

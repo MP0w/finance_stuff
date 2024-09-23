@@ -25,7 +25,7 @@ interface FiatAccountsTabProps {
     cellValue: number,
     invested: boolean
   ) => Promise<void>;
-  handleCreateAccountingEntry: (date: Date) => Promise<void>;
+  handleCreateAccountingEntry: (date: string) => Promise<void>;
   handleDeleteAccount: (accountId: string) => Promise<void>;
   handleDeleteAccountingEntry: (accountingEntryId: string) => Promise<void>;
 }

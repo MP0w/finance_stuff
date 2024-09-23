@@ -103,7 +103,9 @@ export class AIChat {
 
     if (
       !this.context.lastEntryDate ||
-      DateTime.fromJSDate(this.context.lastEntryDate).diffNow("days").days < -60
+      DateTime.fromFormat(this.context.lastEntryDate, "yyyy-MM-dd").diffNow(
+        "days"
+      ).days < -60
     ) {
       const content =
         "Your accounting data is too old, please add recent data to use the AI assistant. This will make sure it's going to be accurate!";

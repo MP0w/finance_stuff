@@ -2,7 +2,7 @@ import { AccountingEntriesDTO, Accounts } from "./types";
 
 export type PartialSummary = {
   id: string;
-  date: Date;
+  date: string;
   liquidTotal: number;
   investmentsTotal: number;
   investmentsInvested: number;
@@ -23,7 +23,7 @@ export function makeCSV(rows: Summary[]) {
     "Date,Liquid,Invested,Investments Value,Profits,Savings,Total,Change";
 
   const data = rows.map((r) => [
-    r.date.toLocaleDateString(),
+    r.date,
     r.liquidTotal,
     r.investmentsInvested,
     r.investmentsTotal,
@@ -89,7 +89,7 @@ export function makeSummaryData(args: {
 
     return {
       id: entry.id,
-      date: new Date(entry.date),
+      date: entry.date,
       liquidTotal,
       investmentsTotal,
       investmentsInvested,
@@ -173,8 +173,9 @@ export function makeStatistics(
   const averageTotal = sums.total / summaries.length;
   const averageProfits = sums.profits / (summaries.length - 1);
   const lastSummary = summaries.at(-1);
-  const firstDate = summaries.at(0)?.date ?? new Date();
-  const lastDate = lastSummary?.date ?? new Date();
+  const firstSummary = summaries.at(0);
+  const firstDate = firstSummary ? new Date(firstSummary.date) : new Date();
+  const lastDate = lastSummary ? new Date(lastSummary.date) : new Date();
   const distance =
     summaries.length > 1 ? distanceBetweenEntries(firstDate, lastDate) : 0;
   const totalDiff = (lastSummary?.total ?? 0) - (summaries.at(0)?.total ?? 0);

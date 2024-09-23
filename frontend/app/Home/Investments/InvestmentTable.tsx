@@ -8,6 +8,7 @@ import Table, {
   TableRowCell,
 } from "../Table";
 import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
+import { DateTime } from "luxon";
 
 interface InvestmentTableProps {
   account: Accounts;
@@ -18,7 +19,7 @@ interface InvestmentTableProps {
     value: number,
     invested: boolean
   ) => Promise<void>;
-  onAddEntry: (date: Date) => void;
+  onAddEntry: (date: string) => void;
   onDeleteAccount: (accountId: string) => void;
   onDeleteAccountingEntry: (entryId: string) => void;
 }
@@ -104,7 +105,10 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
 
     return [
       {
-        value: new Date(accountingEntry.date),
+        value: DateTime.fromFormat(
+          accountingEntry.date,
+          "yyyy-MM-dd"
+        ).toJSDate(),
         onDelete: () => {
           onDeleteAccountingEntry(accountingEntry.id);
         },
