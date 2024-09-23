@@ -77,6 +77,14 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
               Add
             </button>
           </div>
+          <p className="mb-8 max-w-prose">
+            Unlike Bank accounts, Investments accounts are accounts{" "}
+            <b>where you expect value to fluctuate</b> even if you won&apos;t
+            add or remove money.
+            <br />
+            For example: stocks, crypto, bonds. You initially invest an amount,
+            might add/remove each month but their value also fluctuates.
+          </p>
           <p className="text-sm max-w-lg">
             After creating an account you can connect it to external accounts
             (e.g. banks, crypto exchanges, stock brokers, etc...) to autofill

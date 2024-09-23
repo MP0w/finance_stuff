@@ -169,7 +169,7 @@ export const ConnectorsTab: React.FC<{
       {!connectionsLoading && !connectionsError && (
         <>
           {connections.length === 0 ? (
-            <p>No connections found. Add a new connector to get started.</p>
+            <p>You don&apos;t have any connections yet.</p>
           ) : (
             <ul className="mb-6 space-y-4">
               {connections.map((connection) => (

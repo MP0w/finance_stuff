@@ -49,14 +49,14 @@ const FiatAccountsTab: React.FC<FiatAccountsTabProps> = ({
     <div>
       <div className="flex justify-between items-center mb-8">
         <AddButton
-          title="Add Account"
+          title="Add Bank Account"
           onClick={() => setExpandedAddAccount(!expandedAddAccount)}
         />
         <AddToCalendar />
       </div>
 
       {expandedAddAccount && (
-        <div className="mt-4 mb-8 flex">
+        <div className="my-4 flex">
           <input
             type="text"
             value={newAccountName}
@@ -72,6 +72,16 @@ const FiatAccountsTab: React.FC<FiatAccountsTabProps> = ({
             Create
           </button>
         </div>
+      )}
+      {expandedAddAccount && (
+        <p className="mb-8 max-w-prose">
+          Any account where, unlike investment acocunts,{" "}
+          <b>you don&apos;t expect the value to fluctuate</b> unless you
+          add/spend/remove money from it.
+          <br />
+          For example: bank accounts, cash, even loans or debt you have with
+          someone (using negative values)
+        </p>
       )}
 
       {!isLoading && fiatAccounts.length === 0 && (
