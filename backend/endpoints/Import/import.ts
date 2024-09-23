@@ -108,35 +108,50 @@ async function getImportProposal(
   const result = await generateObject({
     model: anthropic("claude-3-5-sonnet-20240620"),
     schema: z.object({
-      newAccountingEntries: z.array(
-        z.object({
-          id: z.string(),
-          date: z.string(),
-        })
-      ),
-      newAccounts: z.array(
-        z.object({
-          id: z.string(),
-          name: z.string(),
-        })
-      ),
-      newInvestments: z.array(
-        z.object({
-          id: z.string(),
-          name: z.string(),
-        })
-      ),
-      newEntries: z.array(
-        z.object({
-          accountId: z.string(),
-          accountingEntryId: z.string(),
-          value: z.number(),
-          invested: z.number().optional(),
-        })
-      ),
+      newAccountingEntries: z
+        .array(
+          z.object({
+            id: z.string(),
+            date: z.string(),
+          })
+        )
+        .optional(),
+      newAccounts: z
+        .array(
+          z.object({
+            id: z.string(),
+            name: z.string(),
+          })
+        )
+        .optional(),
+      newInvestments: z
+        .array(
+          z.object({
+            id: z.string(),
+            name: z.string(),
+          })
+        )
+        .optional(),
+      newEntries: z
+        .array(
+          z.object({
+            accountId: z.string(),
+            accountingEntryId: z.string(),
+            value: z.number(),
+            invested: z.number().optional(),
+          })
+        )
+        .optional(),
     }),
     messages: promptMessages.concat(stateMessages),
   });
+
+  const proposal = {
+    newAccountingEntries: result.object.newAccountingEntries ?? [],
+    newAccounts: result.object.newAccounts ?? [],
+    newInvestments: result.object.newInvestments ?? [],
+    newEntries: result.object.newEntries ?? [],
+  };
 
   const accountingEntriesByDate =
     state.userAccountState.accountingEntries.reduce((acc, curr) => {
@@ -144,7 +159,7 @@ async function getImportProposal(
       return acc;
     }, {} as Record<string, string>);
 
-  const duplicatesNewAccountingEntries = result.object.newAccountingEntries
+  const duplicatesNewAccountingEntries = proposal.newAccountingEntries
     .filter((entry) => accountingEntriesByDate[entry.date])
     .reduce(
       (acc, curr) => {
@@ -167,9 +182,7 @@ async function getImportProposal(
   const allAccounts = state.userAccountState.accounts.concat(
     state.userAccountState.investments
   );
-  const allNewAccounts = result.object.newAccounts.concat(
-    result.object.newInvestments
-  );
+  const allNewAccounts = proposal.newAccounts.concat(proposal.newInvestments);
   const accountsByName = allAccounts.reduce((acc, curr) => {
     acc[curr.name] = curr.id;
     return acc;
@@ -194,16 +207,16 @@ async function getImportProposal(
 
   return {
     id: state.id,
-    newAccountingEntries: result.object.newAccountingEntries.filter(
+    newAccountingEntries: proposal.newAccountingEntries.filter(
       (entry) => !duplicatesNewAccountingEntriesIds.includes(entry.id)
     ),
-    newAccounts: result.object.newAccounts.filter(
+    newAccounts: proposal.newAccounts.filter(
       (a) => !duplicatesNewAccounts[a.id]
     ),
-    newInvestments: result.object.newInvestments.filter(
+    newInvestments: proposal.newInvestments.filter(
       (a) => !duplicatesNewAccounts[a.id]
     ),
-    newEntries: result.object.newEntries.map((entry) => {
+    newEntries: proposal.newEntries.map((entry) => {
       return {
         ...entry,
         accountId: idForAccount(entry.accountId),
