@@ -331,33 +331,37 @@ export function importRouter(app: Application) {
               return acc;
             }, {} as Record<string, string>);
 
-          await trx<Accounts>(Table.Accounts)
-            .insert(
-              proposal.newAccounts.map((a) => ({
-                id: newAccountsIds[a.id],
-                user_id: req.userId,
-                name: a.name,
-                type: "fiat",
-                updated_at: new Date(),
-                currency: "EUR",
-              }))
-            )
-            .onConflict("id")
-            .merge();
+          if (proposal.newAccounts.length > 0) {
+            await trx<Accounts>(Table.Accounts)
+              .insert(
+                proposal.newAccounts.map((a) => ({
+                  id: newAccountsIds[a.id],
+                  user_id: req.userId,
+                  name: a.name,
+                  type: "fiat",
+                  updated_at: new Date(),
+                  currency: "EUR",
+                }))
+              )
+              .onConflict("id")
+              .merge();
+          }
 
-          await trx<Accounts>(Table.Accounts)
-            .insert(
-              proposal.newInvestments.map((a) => ({
-                id: newAccountsIds[a.id],
-                user_id: req.userId,
-                name: a.name,
-                type: "investment",
-                updated_at: new Date(),
-                currency: "EUR",
-              }))
-            )
-            .onConflict("id")
-            .merge();
+          if (proposal.newInvestments.length > 0) {
+            await trx<Accounts>(Table.Accounts)
+              .insert(
+                proposal.newInvestments.map((a) => ({
+                  id: newAccountsIds[a.id],
+                  user_id: req.userId,
+                  name: a.name,
+                  type: "investment",
+                  updated_at: new Date(),
+                  currency: "EUR",
+                }))
+              )
+              .onConflict("id")
+              .merge();
+          }
 
           const newAccountingEntriesIds = proposal.newAccountingEntries.reduce(
             (acc, curr) => {
@@ -367,37 +371,42 @@ export function importRouter(app: Application) {
             {} as Record<string, string>
           );
 
-          await trx<AccountingEntries>(Table.AccountingEntries)
-            .insert(
-              proposal.newAccountingEntries.map((a) => ({
-                id: newAccountingEntriesIds[a.id],
-                date: a.date,
-                user_id: req.userId,
-                updated_at: new Date(),
-              }))
-            )
-            .onConflict("date")
-            .ignore();
+          if (proposal.newAccountingEntries.length > 0) {
+            await trx<AccountingEntries>(Table.AccountingEntries)
+              .insert(
+                proposal.newAccountingEntries.map((a) => ({
+                  id: newAccountingEntriesIds[a.id],
+                  date: a.date,
+                  user_id: req.userId,
+                  updated_at: new Date(),
+                }))
+              )
+              .onConflict("date")
+              .ignore();
+          }
 
-          await trx<Entries>(Table.Entries)
-            .insert(
-              proposal.newEntries.map((e) => ({
-                id: generateUUID(),
-                account_id: newAccountsIds[e.accountId],
-                accounting_entry_id:
-                  newAccountingEntriesIds[e.accountingEntryId],
-                value: e.value,
-                invested: e.invested,
-              }))
-            )
-            .onConflict(["account_id", "accounting_entry_id"])
-            .merge({
-              value: trx.raw("excluded.value"),
-              invested: trx.raw("COALESCE(excluded.invested, ??)", [
-                "invested",
-              ]),
-              updated_at: new Date(),
-            });
+          if (proposal.newEntries.length > 0) {
+            await trx<Entries>(Table.Entries)
+              .insert(
+                proposal.newEntries.map((e) => ({
+                  id: generateUUID(),
+                  account_id: newAccountsIds[e.accountId] ?? e.accountId,
+                  accounting_entry_id:
+                    newAccountingEntriesIds[e.accountingEntryId] ??
+                    e.accountingEntryId,
+                  value: e.value,
+                  invested: e.invested,
+                }))
+              )
+              .onConflict(["account_id", "accounting_entry_id"])
+              .merge({
+                value: trx.raw("excluded.value"),
+                invested: trx.raw("COALESCE(excluded.invested, ??)", [
+                  "invested",
+                ]),
+                updated_at: new Date(),
+              });
+          }
 
           await trx.commit();
 
