@@ -16,3 +16,8 @@ export const useUpdateImport = () => {
     api.put<ImportProposal>(`/import/${id}`, { input })
   );
 };
+
+// Confirm an existing import
+export const useConfirmImport = () => {
+  return useApiCall((id: string) => api.post(`/import/${id}/confirm`));
+};

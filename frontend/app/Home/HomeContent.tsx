@@ -14,7 +14,7 @@ import {
   AccountType,
 } from "../../../shared/types";
 import { useUserState } from "../UserState";
-import ImportTab from "./Import/Import";
+import ImportTab from "./Import/ImportTab";
 
 interface HomeContentProps {
   uiState: {
@@ -187,6 +187,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
         fiatAccounts={fiatAccounts}
         investmentAccounts={investmentAccounts}
         accountingEntries={accountingEntries ?? []}
+        refresh={reloadData}
       />
     ),
   };

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { getFeedback } from "@sentry/nextjs";
 
 export default function FeedbackButton() {
   const [feedback, setFeedback] =
-    useState<ReturnType<typeof Sentry.getFeedback>>(undefined);
+    useState<ReturnType<typeof getFeedback>>(undefined);
 
   useEffect(() => {
-    setFeedback(Sentry.getFeedback());
+    setFeedback(getFeedback());
   }, []);
 
   if (!feedback) {

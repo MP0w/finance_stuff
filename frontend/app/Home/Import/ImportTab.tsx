@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
-import { useCreateImport } from "../apis/import";
+import {
+  useConfirmImport,
+  useCreateImport,
+  useUpdateImport,
+} from "../apis/import";
 import {
   AccountingEntries,
   Accounts,
@@ -14,6 +18,7 @@ type ImportTabProps = {
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntries[];
+  refresh: () => void;
 };
 
 function mergedData(current: ImportTabProps, proposal: ImportProposal) {
@@ -152,14 +157,20 @@ export const ImportTab: React.FC<ImportTabProps> = ({
   fiatAccounts,
   investmentAccounts,
   accountingEntries,
+  refresh,
 }) => {
   const [csv, setCsv] = useState<string | undefined>(undefined);
   const [latestProposal, setLatestProposal] = useState<
     ImportProposal | undefined
   >(undefined);
+  const [inputMessage, setInputMessage] = useState<string>("");
 
-  const { loading, execute: createImport } = useCreateImport();
-  //   const { execute: updateImport } = useUpdateImport();
+  const { loading: createLoading, execute: createImport } = useCreateImport();
+  const { loading: updateLoading, execute: updateImport } = useUpdateImport();
+  const { loading: confirmLoading, execute: confirmImport } =
+    useConfirmImport();
+
+  const isLoading = createLoading || updateLoading || confirmLoading;
 
   const tables = useMemo(() => {
     if (!latestProposal) {
@@ -167,18 +178,29 @@ export const ImportTab: React.FC<ImportTabProps> = ({
     }
     return makeTables(
       mergedData(
-        { fiatAccounts, investmentAccounts, accountingEntries },
+        { fiatAccounts, investmentAccounts, accountingEntries, refresh },
         latestProposal
       )
     );
-  }, [fiatAccounts, investmentAccounts, accountingEntries, latestProposal]);
+  }, [
+    fiatAccounts,
+    investmentAccounts,
+    accountingEntries,
+    latestProposal,
+    refresh,
+  ]);
 
   useEffect(() => {
     if (!csv) {
       return;
     }
 
-    console.log("csv", csv);
+    if (csv.length > 3000) {
+      toast.error(
+        "CSV too large, split your tables in multiple csv and import one at a time"
+      );
+      return;
+    }
 
     async function fetchData(csv: string) {
       try {
@@ -195,7 +217,6 @@ export const ImportTab: React.FC<ImportTabProps> = ({
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     // Handle the uploaded files here
-    console.log(acceptedFiles);
     const file = acceptedFiles[0];
     const reader = new FileReader();
     reader.onload = () => {
@@ -212,9 +233,54 @@ export const ImportTab: React.FC<ImportTabProps> = ({
     },
   });
 
+  const handleConfirmImport = async () => {
+    if (!latestProposal) {
+      return;
+    }
+
+    try {
+      await confirmImport(latestProposal.id);
+      toast.success("Data imported!");
+      setLatestProposal(undefined);
+      setCsv(undefined);
+      setInputMessage("");
+      refresh();
+    } catch (error) {
+      toast.error("Failed to confirm import, retry");
+    }
+  };
+
+  const handleRequestNewProposal = async () => {
+    if (!latestProposal || inputMessage.length < 20) {
+      toast.error("Please provide more context to request a new proposal", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    if (inputMessage.length > 400) {
+      toast.error("Message too long", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    try {
+      const newProposal = await updateImport(latestProposal.id, inputMessage);
+      setLatestProposal(newProposal);
+      setInputMessage("");
+      toast.success("New proposal requested!");
+    } catch (error) {
+      toast.error("Failed to request new proposal, retry");
+    }
+  };
+
   return (
     <div>
-      {loading && <p>Creating an import proposal...</p>}
+      {(createLoading || updateLoading) && (
+        <p>Creating an import proposal...</p>
+      )}
+      {confirmLoading && <p>Importing data...</p>}
       {!csv && (
         <div>
           <p className="mb-8">
@@ -238,7 +304,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
           </div>
         </div>
       )}
-      {tables && (
+      {tables && !isLoading && (
         <div>
           <p>
             Review the proposal and click Import if all looks good otherwise
@@ -252,6 +318,34 @@ export const ImportTab: React.FC<ImportTabProps> = ({
               rows={table.rows}
             />
           ))}
+          <div className="mt-16 mb-8">
+            <button
+              onClick={handleConfirmImport}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600  pixel-corners-small"
+            >
+              Confirm Import
+            </button>
+            <div className="mt-4">
+              <p className="mb-2">
+                If you need to make changes to the proposal, explain what is
+                wrong and what changes you would like so that our AI can attempt
+                a new proposal.
+              </p>
+              <textarea
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                placeholder="Enter message for new proposal"
+                className="w-full p-2 border border-gray-300 rounded mb-2"
+              />
+              <button
+                onClick={handleRequestNewProposal}
+                disabled={inputMessage.length < 20}
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 pixel-corners-small disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Request New Proposal
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

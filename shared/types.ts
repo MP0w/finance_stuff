@@ -25,6 +25,7 @@ export type Connector = {
 };
 
 export type ImportProposal = {
+  id: string;
   newAccountingEntries: {
     id: string;
     date: string;
