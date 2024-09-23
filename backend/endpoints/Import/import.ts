@@ -372,17 +372,14 @@ export function importRouter(app: Application) {
           );
 
           if (proposal.newAccountingEntries.length > 0) {
-            await trx<AccountingEntries>(Table.AccountingEntries)
-              .insert(
-                proposal.newAccountingEntries.map((a) => ({
-                  id: newAccountingEntriesIds[a.id],
-                  date: a.date,
-                  user_id: req.userId,
-                  updated_at: new Date(),
-                }))
-              )
-              .onConflict("date")
-              .ignore();
+            await trx<AccountingEntries>(Table.AccountingEntries).insert(
+              proposal.newAccountingEntries.map((a) => ({
+                id: newAccountingEntriesIds[a.id],
+                date: a.date,
+                user_id: req.userId,
+                updated_at: new Date(),
+              }))
+            );
           }
 
           if (proposal.newEntries.length > 0) {
