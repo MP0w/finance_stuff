@@ -1,5 +1,12 @@
 import React from "react";
-import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
+import Table, {
+  dateHeader,
+  differenceHeader,
+  percentageHeader,
+  profitsHeader,
+  TableHeaderContent,
+  TableRowCell,
+} from "../Table";
 import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 
 interface InvestmentTableProps {
@@ -60,9 +67,9 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
         id: "investment-talble-value",
       },
     },
-    "Profits",
-    "Change",
-    "%",
+    profitsHeader,
+    differenceHeader,
+    percentageHeader,
   ];
 
   function getLinkedEntries(accountingEntries: AccountingEntriesDTO[]) {

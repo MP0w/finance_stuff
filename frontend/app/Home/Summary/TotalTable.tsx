@@ -1,5 +1,12 @@
 import React from "react";
-import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
+import Table, {
+  dateHeader,
+  differenceHeader,
+  percentageHeader,
+  profitsHeader,
+  TableHeaderContent,
+  TableRowCell,
+} from "../Table";
 import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 import {
   colorForValue,
@@ -47,8 +54,8 @@ function makeHeaders(
           },
         }
       : undefined,
-    investmentAccounts.length ? "Profits" : undefined,
-    investmentAccounts.length ? "%" : undefined,
+    investmentAccounts.length ? profitsHeader : undefined,
+    investmentAccounts.length ? percentageHeader : undefined,
     fiatAccounts.length
       ? {
           title: "Savings",
@@ -58,8 +65,17 @@ function makeHeaders(
           },
         }
       : undefined,
-    fiatAccounts.length && investmentAccounts.length ? "Total" : undefined,
-    "Change",
+    fiatAccounts.length && investmentAccounts.length
+      ? {
+          title: "Total",
+          tip: {
+            text: "Your total net worth, the sum of your liquidity and investments values",
+            id: "total-net-worth",
+            noIcon: true,
+          },
+        }
+      : undefined,
+    differenceHeader,
   ];
 
   return headers.filter((h) => h !== undefined);

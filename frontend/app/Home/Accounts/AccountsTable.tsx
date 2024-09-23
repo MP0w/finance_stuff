@@ -34,7 +34,14 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
         },
       };
     }),
-    "Total",
+    {
+      title: "Total",
+      tip: {
+        text: "The sum of all the accounts values",
+        id: "accounts-table-total",
+        noIcon: true,
+      },
+    },
   ];
 
   const getEntryValue = (entry: AccountingEntriesDTO, accountId: string) => {

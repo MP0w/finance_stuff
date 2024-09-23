@@ -9,23 +9,48 @@ import { createPortal } from "react-dom";
 import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
 import { getUserCurrencySymbol } from "../UserState";
 
-export type TableHeaderContent =
-  | string
-  | {
-      title: string;
-      tip?: {
-        text: string;
-        id: string;
-        noIcon?: boolean;
-      };
-      onDelete?: () => void;
-    };
+export type TableHeaderContent = {
+  title: string;
+  tip?: {
+    text: string;
+    id: string;
+    noIcon?: boolean;
+  };
+  onDelete?: () => void;
+};
 
 export const dateHeader = {
   title: "Date",
   tip: {
     text: "The date of the accounting entry, we suggest to do it monthly, for example at the end of each month, but you can do it weekly or as you like. When you are ready to add a new entry, click the Add entry button and choose the date.",
     id: "date-header-tip",
+    noIcon: true,
+  },
+};
+
+export const profitsHeader = {
+  title: "Profits",
+  tip: {
+    text: "Profits or losses of investments based on the amount invested",
+    id: "profits-header-tip",
+    noIcon: true,
+  },
+};
+
+export const percentageHeader = {
+  title: "%",
+  tip: {
+    text: "The percentage of your investments profits against the amount invested",
+    id: "percentage-header-tip",
+    noIcon: true,
+  },
+};
+
+export const differenceHeader = {
+  title: "Difference",
+  tip: {
+    text: "The difference compared to the previous entry",
+    id: "diff-header-tip",
     noIcon: true,
   },
 };
@@ -164,27 +189,6 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const getHeaderTitle = (header: TableHeaderContent) => {
-    if (typeof header === "string") {
-      return header;
-    }
-    return header.title;
-  };
-
-  const getTip = (header: TableHeaderContent) => {
-    if (typeof header === "string") {
-      return undefined;
-    }
-    return header.tip;
-  };
-
-  const getOnDelete = (header: TableHeaderContent) => {
-    if (typeof header === "string") {
-      return undefined;
-    }
-    return header.onDelete;
-  };
-
   const shouldShowTipIcon = (
     tip: { id: string; noIcon?: boolean } | undefined
   ) => {
@@ -229,19 +233,19 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
             >
               <div
                 className="flex items-center"
-                onMouseEnter={(e) => handleTipMouseEnter(e, getTip(header))}
+                onMouseEnter={(e) => handleTipMouseEnter(e, header.tip)}
                 onMouseLeave={handleTipMouseLeave}
               >
-                {getHeaderTitle(header)}
-                {getTip(header) && shouldShowTipIcon(getTip(header)) && (
+                {header.title}
+                {header.tip && shouldShowTipIcon(header.tip) && (
                   <HiOutlineQuestionMarkCircle className="ml-2" />
                 )}
-                {getOnDelete(header) && (
+                {header.onDelete && (
                   <DeleteIcon
                     className={`ml-2 ${
                       isHoveringHeader ? "opacity-100" : "opacity-0"
                     }`}
-                    onClick={isHoveringHeader ? getOnDelete(header) : undefined}
+                    onClick={isHoveringHeader ? header.onDelete : undefined}
                   />
                 )}
               </div>
