@@ -228,117 +228,140 @@ export const ConnectorsTab: React.FC<{
                     </option>
                   ))}
                 </select>
+                {!selectedAccount && (
+                  <p className="text-sm mt-4">
+                    Your last entry for the selected account will be auto-filled
+                    if empty and recent. Otherwise, when you create a new entry,
+                    with a recent date, it will be <b>auto-filled</b>.
+                    <br />
+                    You will also start seeing <b>live data in the Summary</b>.
+                    <br />
+                    <br />
+                    <b>Tip:</b> you can add multiple connections to a single
+                    account, they will be summed up
+                  </p>
+                )}
               </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2">
-                  {connectorsSettings && "Select a connector:"}
-                </label>
+              {selectedAccount && (
+                <>
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      {connectorsSettings && "Select a connector:"}
+                    </label>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {connectorsSettings?.map((connector) => (
-                    <button
-                      key={connector.id}
-                      type="button"
-                      disabled={
-                        !selectedAccount ||
-                        (selectedAccount.type !== connector.type &&
-                          connector.type !== undefined)
-                      }
-                      onClick={() => setSelectedConnector(connector.id)}
-                      className={`flex flex-col items-center justify-center p-4 border rounded-md transition-colors disabled:opacity-50 ${
-                        selectedConnector === connector.id
-                          ? "bg-indigo-100 border-indigo-300"
-                          : "bg-white border-gray-300 hover:bg-gray-50"
-                      }`}
-                    >
-                      {connector.icon && (
-                        <div className="m-2 rounded-xl border border-gray-300 overflow-hidden">
-                          <Image
-                            src={connector.icon}
-                            alt={connector.name}
-                            width={60}
-                            height={60}
-                            className="rounded-md"
-                          />
-                        </div>
-                      )}
-                      <span className="text-sm font-medium text-gray-900">
-                        {connector.name}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {selectedConnector && (
-                <div className="mt-6">
-                  <h3>Connector Settings</h3>
-                  {connectorsSettings
-                    ?.find((c) => c.id === selectedConnector)
-                    ?.settings.map((setting) => (
-                      <div key={setting.key} className="mb-4">
-                        <label
-                          htmlFor={setting.key}
-                          className="block text-md font-semibold mb-1"
-                        >
-                          {setting.hint}
-                          <Linkify
-                            componentDecorator={(
-                              decoratedHref,
-                              decoratedText,
-                              key
-                            ) => (
-                              <a
-                                href={decoratedHref}
-                                key={key}
-                                className="text-blue-600"
-                              >
-                                {decoratedText}
-                              </a>
-                            )}
-                          >
-                            <p className="text-sm font-normal">
-                              {setting.extraInstructions}
-                            </p>
-                          </Linkify>
-                        </label>
-                        <input
-                          type={setting.type === "number" ? "number" : "text"}
-                          id={setting.key}
-                          value={formData[setting.key] || ""}
-                          onChange={(e) =>
-                            handleInputChange(setting.key, e.target.value)
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {connectorsSettings?.map((connector) => (
+                        <button
+                          key={connector.id}
+                          type="button"
+                          disabled={
+                            !selectedAccount ||
+                            (selectedAccount.type !== connector.type &&
+                              connector.type !== undefined)
                           }
-                          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                          required={setting.optional ? false : true}
-                        />
-                      </div>
-                    ))}
-                  <p className="text-sm">
-                    All connectors settings are encrypted and stored securely.
-                  </p>
-                  <button
-                    type="submit"
-                    disabled={!isFormValid || isCreating}
-                    className="w-full mt-8 flex justify-center py-2 px-4 border border-transparent shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 pixel-corners-small disabled:opacity-50"
-                  >
-                    {isCreating ? "Connecting..." : "Connect"}
-                  </button>
-                </div>
-              )}
-              {!selectedConnector && selectedAccount && (
-                <div className="text-sm font-normal">
-                  <p className="mb-8">
-                    If you don&apos;t see your favorite provider in the list,
-                    you can send a feedback or email to us and we will consider
-                    adding it!
-                  </p>
-                  <Link href="https://github.com/MP0w/finance_stuff_connectors">
-                    You can also contribute, it&apos;s easy!
-                    <p className="break-all">
-                      https://github.com/MP0w/finance_stuff_connectors
-                    </p>
-                  </Link>
-                </div>
+                          onClick={() => setSelectedConnector(connector.id)}
+                          className={`flex flex-col items-center justify-center p-4 border rounded-md transition-colors disabled:opacity-50 ${
+                            selectedConnector === connector.id
+                              ? "bg-indigo-100 border-indigo-300"
+                              : "bg-white border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          {connector.icon && (
+                            <div className="m-2 rounded-xl border border-gray-300 overflow-hidden">
+                              <Image
+                                src={connector.icon}
+                                alt={connector.name}
+                                width={60}
+                                height={60}
+                                className="rounded-md"
+                              />
+                            </div>
+                          )}
+                          <span className="text-sm font-medium text-gray-900">
+                            {connector.name}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {selectedConnector && (
+                    <div className="mt-6">
+                      <h3>Connector Settings</h3>
+                      {connectorsSettings
+                        ?.find((c) => c.id === selectedConnector)
+                        ?.settings.map((setting) => (
+                          <div key={setting.key} className="mb-4">
+                            <label
+                              htmlFor={setting.key}
+                              className="block text-md font-semibold mb-1"
+                            >
+                              {setting.hint}
+                              <Linkify
+                                componentDecorator={(
+                                  decoratedHref,
+                                  decoratedText,
+                                  key
+                                ) => (
+                                  <a
+                                    href={decoratedHref}
+                                    key={key}
+                                    className="text-blue-600"
+                                  >
+                                    {decoratedText}
+                                  </a>
+                                )}
+                              >
+                                <p className="text-sm font-normal">
+                                  {setting.extraInstructions}
+                                </p>
+                              </Linkify>
+                            </label>
+                            <input
+                              type={
+                                setting.type === "number" ? "number" : "text"
+                              }
+                              id={setting.key}
+                              value={formData[setting.key] || ""}
+                              onChange={(e) =>
+                                handleInputChange(setting.key, e.target.value)
+                              }
+                              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                              required={setting.optional ? false : true}
+                            />
+                          </div>
+                        ))}
+                      <p className="text-sm">
+                        All connectors settings are encrypted and stored
+                        securely.
+                      </p>
+                      <button
+                        type="submit"
+                        disabled={!isFormValid || isCreating}
+                        className="w-full mt-8 flex justify-center py-2 px-4 border border-transparent shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 pixel-corners-small disabled:opacity-50"
+                      >
+                        {isCreating ? "Connecting..." : "Connect"}
+                      </button>
+                    </div>
+                  )}
+                  {!selectedConnector && selectedAccount && (
+                    <div className="text-sm font-normal">
+                      <p className="mb-8">
+                        If you don&apos;t see your favorite provider in the
+                        list, you can send a feedback or email to us and we will
+                        consider adding it!
+                      </p>
+                      You can also contribute, it&apos;s easy!
+                      <Link
+                        className="text-blue-600"
+                        href="https://github.com/MP0w/finance_stuff_connectors"
+                      >
+                        <p className="break-all">
+                          https://github.com/MP0w/finance_stuff_connectors
+                        </p>
+                      </Link>
+                    </div>
+                  )}
+                </>
               )}
             </form>
           )}
