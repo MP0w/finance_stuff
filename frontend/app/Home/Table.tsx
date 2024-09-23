@@ -229,7 +229,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
           {headers.map((header, index) => (
             <th
               key={index}
-              className="first:px-4 px-2 py-2 text-left font-semibold text-sm"
+              className="first:px-4 px-2 py-2 text-left font-semibold text-sm border-r border-gray-300"
             >
               <div
                 className="flex items-center"
@@ -383,7 +383,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
         {cells.map((value, index) => (
           <td
             key={index}
-            className={` ${
+            className={`border-r border-gray-300 ${
               !value.onValueChange ? value.color ?? `bg-gray-100` : ""
             }${
               value.value === undefined && editingValues[index] === undefined
