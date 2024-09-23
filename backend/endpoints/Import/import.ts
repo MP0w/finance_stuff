@@ -398,9 +398,9 @@ export function importRouter(app: Application) {
               .onConflict(["account_id", "accounting_entry_id"])
               .merge({
                 value: trx.raw("excluded.value"),
-                invested: trx.raw("COALESCE(excluded.invested, ??)", [
-                  "invested",
-                ]),
+                invested: trx.raw(
+                  "COALESCE(excluded.invested, entries.invested)"
+                ),
                 updated_at: new Date(),
               });
           }
