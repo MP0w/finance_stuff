@@ -387,12 +387,14 @@ export function importRouter(app: Application) {
               .insert(
                 proposal.newEntries.map((e) => ({
                   id: generateUUID(),
+                  user_id: req.userId,
                   account_id: newAccountsIds[e.accountId] ?? e.accountId,
                   accounting_entry_id:
                     newAccountingEntriesIds[e.accountingEntryId] ??
                     e.accountingEntryId,
                   value: e.value,
                   invested: e.invested,
+                  updated_at: new Date(),
                 }))
               )
               .onConflict(["account_id", "accounting_entry_id"])
