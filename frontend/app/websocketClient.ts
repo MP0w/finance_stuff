@@ -70,40 +70,44 @@ function useWebSocket(url: string) {
     };
 
     ws.current.onmessage = (event) => {
-      const text = event.data.toString();
-      if (text === "---ai-response-boundary---") {
-        liveMessageRef.current = {
-          role: "assistant",
-          content: "",
-        };
-        setLiveMessage(liveMessageRef.current);
-      } else if (text === "---ai-response-boundary-end---") {
-        if (liveMessageRef.current) {
-          const liveMessage = {
-            role: liveMessageRef.current.role,
-            content: liveMessageRef.current.content,
+      const eventString = event.data.toString();
+      const payload:
+        | { type: "chat-state"; chatId: string; messages: ChatMessage[] }
+        | { type: "message"; start?: boolean; end?: boolean; chunk?: string } =
+        JSON.parse(eventString);
+
+      if (payload.type === "message") {
+        if (payload.start) {
+          liveMessageRef.current = {
+            role: "assistant",
+            content: "",
           };
+          setLiveMessage(liveMessageRef.current);
+        } else if (payload.end) {
+          if (liveMessageRef.current) {
+            const liveMessage = {
+              role: liveMessageRef.current.role,
+              content: liveMessageRef.current.content,
+            };
 
-          setMessages((prevMessages) => [...prevMessages, liveMessage]);
+            setMessages((prevMessages) => [...prevMessages, liveMessage]);
+          }
+          liveMessageRef.current = undefined;
+          setLiveMessage(undefined);
+        } else if (liveMessageRef.current && payload.chunk) {
+          liveMessageRef.current = {
+            ...liveMessageRef.current,
+            content: (liveMessageRef.current?.content || "") + payload.chunk,
+          };
+          setLiveMessage(liveMessageRef.current);
         }
-        liveMessageRef.current = undefined;
-        setLiveMessage(undefined);
-      } else if (liveMessageRef.current) {
-        liveMessageRef.current = {
-          ...liveMessageRef.current,
-          content: (liveMessageRef.current?.content || "") + text,
-        };
-        setLiveMessage(liveMessageRef.current);
-      } else {
-        const messages: { chatId: string; messages: ChatMessage[] } =
-          JSON.parse(text);
-
+      } else if (payload.type === "chat-state") {
         setMessages(() => {
-          if (!messages.messages.length) {
+          if (!payload.messages.length) {
             return defaultMessages;
           }
 
-          return messages.messages;
+          return payload.messages;
         });
       }
     };

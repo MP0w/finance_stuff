@@ -41,9 +41,17 @@ export function startWebsocketServer() {
     const aiChat = cachedChat ?? (await AIChat.createChat(id, userId));
     chatCache.set(userId, aiChat);
 
-    ws.send(JSON.stringify({ chatId: id, messages: aiChat.messages }));
+    function sendChatState() {
+      ws.send(
+        JSON.stringify({
+          type: "chat-state",
+          chatId: id,
+          messages: aiChat.messages,
+        })
+      );
+    }
 
-    // console.log(`Client connected: ${userId}`);
+    sendChatState();
 
     ws.on("message", async (message) => {
       const payload: { message?: string; clear?: boolean } = JSON.parse(
@@ -52,7 +60,7 @@ export function startWebsocketServer() {
 
       if (payload.clear ?? false) {
         aiChat.clear();
-        ws.send(JSON.stringify({ chatId: id, messages: aiChat.messages }));
+        sendChatState();
       }
 
       if (!payload.message) {
@@ -62,11 +70,11 @@ export function startWebsocketServer() {
       try {
         const response = aiChat.onUserMessage(payload.message);
 
-        ws.send("---ai-response-boundary---");
+        ws.send(JSON.stringify({ type: "message", start: true }));
         for await (const delta of response) {
-          ws.send(delta);
+          ws.send(JSON.stringify({ type: "message", chunk: delta }));
         }
-        ws.send("---ai-response-boundary-end---");
+        ws.send(JSON.stringify({ type: "message", end: true }));
       } catch (error) {
         console.error(error);
       }
@@ -74,7 +82,6 @@ export function startWebsocketServer() {
 
     ws.on("close", () => {
       chatCache.set(userId, aiChat);
-      // console.log(`Client disconnected: ${userId}`);
     });
   });
 
