@@ -215,7 +215,10 @@ export const ImportTab: React.FC<ImportTabProps> = ({
       } catch (error) {
         console.error(error);
         setCsv(undefined);
-        toast.error("Failed to create import, retry");
+        toast.error(
+          "Failed to create import" +
+            ((error as Error).message ? `: ${(error as Error).message}` : "")
+        );
       }
     }
     fetchData(csv);
@@ -252,7 +255,10 @@ export const ImportTab: React.FC<ImportTabProps> = ({
       setInputMessage("");
       refresh();
     } catch (error) {
-      toast.error("Failed to confirm import, retry");
+      toast.error(
+        "Failed to confirm import" +
+          ((error as Error).message ? `: ${(error as Error).message}` : "")
+      );
     }
   };
 
@@ -277,7 +283,10 @@ export const ImportTab: React.FC<ImportTabProps> = ({
       setInputMessage("");
       toast.success("New proposal requested!");
     } catch (error) {
-      toast.error("Failed to request new proposal, retry");
+      toast.error(
+        "Failed to request new proposal" +
+          ((error as Error).message ? `: ${(error as Error).message}` : "")
+      );
     }
   };
 

@@ -1,9 +1,9 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { CoreMessage, streamText } from "ai";
-import { Table, Users } from "../types";
-import { dbConnection } from "../dbConnection";
+import { Users } from "../types";
 import { AIChatContext, makeAIContext } from "./aiContext";
 import { DateTime } from "luxon";
+import { getUser, updateUser } from "../endpoints/Users/users";
 
 export class AIChat {
   id: string;
@@ -12,16 +12,8 @@ export class AIChat {
   private context: AIChatContext;
   private user: Users;
 
-  static async getUser(id: string) {
-    return await dbConnection<Users>(Table.Users)
-      .select()
-      .where({ id })
-      .limit(1)
-      .first();
-  }
-
   static async createChat(id: string, userId: string) {
-    const user = await this.getUser(userId);
+    const user = await getUser(userId);
 
     if (!user) {
       throw Error("could not get user");
@@ -46,18 +38,6 @@ export class AIChat {
     } catch {
       console.error("failed to refresh context");
     }
-  }
-
-  async updateUser(args: {
-    used_ai_total_tokens: number;
-    used_ai_prompt_tokens: number;
-    available_ai_tokens: number;
-  }) {
-    await dbConnection<Users>(Table.Users)
-      .update({
-        ...args,
-      })
-      .where({ id: this.userId });
   }
 
   clear() {
@@ -127,7 +107,7 @@ export class AIChat {
       });
 
       // Refresh user data in case tokens changed
-      this.user = (await AIChat.getUser(this.userId)) ?? this.user;
+      this.user = (await getUser(this.userId)) ?? this.user;
       return;
     }
 
@@ -183,7 +163,7 @@ export class AIChat {
         this.user.used_ai_prompt_tokens + usage.promptTokens,
       available_ai_tokens: this.user.available_ai_tokens - usage.totalTokens,
     };
-    await this.updateUser(aiTokensUsage);
+    await updateUser(this.userId, aiTokensUsage);
     this.user = {
       ...this.user,
       ...aiTokensUsage,

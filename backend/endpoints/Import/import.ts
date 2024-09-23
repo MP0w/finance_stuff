@@ -12,6 +12,7 @@ import {
   Entries,
 } from "../../types";
 import { z } from "zod";
+import { getUser, updateUser } from "../Users/users";
 
 type UserAccountState = {
   accountingEntries: { id: string; date: string }[];
@@ -36,8 +37,19 @@ const importCache = new NodeCache({
 });
 
 async function getImportProposal(
+  userId: string,
   state: ImportProposalState
 ): Promise<ImportProposal> {
+  const user = await getUser(userId);
+
+  if (!user) {
+    throw Error("could not get user");
+  }
+
+  if (user.available_ai_tokens <= 0) {
+    throw Error("not have AI credits");
+  }
+
   const stateMessages: CoreMessage[] = state.steps.map((step) => ({
     role: step.type === "input" ? "user" : "assistant",
     content:
@@ -145,6 +157,17 @@ async function getImportProposal(
     }),
     messages: promptMessages.concat(stateMessages),
   });
+
+  try {
+    const usage = result.usage;
+    await updateUser(userId, {
+      used_ai_total_tokens: user.used_ai_total_tokens + usage.totalTokens,
+      used_ai_prompt_tokens: user.used_ai_prompt_tokens + usage.promptTokens,
+      available_ai_tokens: user.available_ai_tokens - usage.totalTokens,
+    });
+  } catch {
+    console.error("failed to update user credits");
+  }
 
   const proposal = {
     newAccountingEntries: result.object.newAccountingEntries ?? [],
@@ -263,7 +286,7 @@ export function importRouter(app: Application) {
         steps: [],
       };
 
-      const proposal = await getImportProposal(state);
+      const proposal = await getImportProposal(req.userId, state);
 
       state.steps.push({ type: "proposal", proposal });
       importCache.set(state.id, state);
@@ -299,7 +322,7 @@ export function importRouter(app: Application) {
       };
 
       state.steps.push({ type: "input", message: input });
-      const newProposal = await getImportProposal(state);
+      const newProposal = await getImportProposal(req.userId, state);
       state.steps.push({ type: "proposal", proposal: newProposal });
       importCache.set(state.id, state);
 
