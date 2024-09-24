@@ -15,6 +15,7 @@ import {
 } from "../../../shared/types";
 import { useUserState } from "../UserState";
 import ImportTab from "./Import/ImportTab";
+import Loading from "../components/Loading";
 
 interface HomeContentProps {
   uiState: {
@@ -228,7 +229,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
             ) : (
               tabContent[activeTab as keyof typeof tabContent]
             )}
-            {isLoading && <p className="mt-8 mb-8">Loading...</p>}
+            {isLoading && <Loading message="Loading data..." />}
           </TabView>
         </ArcherContainer>
         <Modal

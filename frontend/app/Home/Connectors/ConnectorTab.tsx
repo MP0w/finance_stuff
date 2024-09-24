@@ -12,6 +12,7 @@ import Link from "next/link";
 import Modal from "react-modal";
 import DeleteIcon from "../../components/DeleteIcon";
 import Linkify from "react-linkify";
+import Loading from "@/app/components/Loading";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
@@ -203,7 +204,7 @@ export const ConnectorsTab: React.FC<{
       {
         <div className="mt-8">
           <h3>Add New Connector</h3>
-          {isLoading && <p>Loading connectors settings...</p>}
+          {isLoading && <Loading message="Loading connectors settings..." />}
           {error && <p>Error loading connectors settings: {error.message}</p>}
           {!isLoading && !error && (
             <form onSubmit={handleSubmit} className="space-y-6">
