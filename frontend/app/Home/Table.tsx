@@ -341,12 +341,17 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
     []
   );
 
-  const formattedValue = (value: string | number | Date | undefined) => {
+  const formattedValue = (
+    value: string | number | Date | undefined,
+    currency: boolean = true
+  ) => {
     if (!value) {
       return "";
     }
     if (typeof value === "number") {
-      return `${getUserCurrencySymbol()} ${value.toFixed(0)}`;
+      return `${currency ? getUserCurrencySymbol() + " " : ""}${value.toFixed(
+        0
+      )}`;
     }
 
     if (value instanceof Date) {
@@ -409,11 +414,12 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
                   )}
                   <input
                     type="text"
-                    value={
+                    value={formattedValue(
                       editingValues[index] !== undefined
                         ? editingValues[index]
-                        : value.value?.toString() ?? ""
-                    }
+                        : value.value ?? "",
+                      false
+                    )}
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onBlur={(e) => handleInputBlur(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(e)}
