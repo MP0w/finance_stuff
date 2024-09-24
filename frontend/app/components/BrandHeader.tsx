@@ -8,6 +8,7 @@ interface BrandHeaderProps {
   signOut: () => void;
   className?: string;
   exportData: () => void;
+  importData: () => void;
 }
 
 export const BrandHeader: React.FC<BrandHeaderProps> = ({
@@ -15,6 +16,7 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
   signOut,
   className,
   exportData,
+  importData,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const { user } = useUserState();
@@ -76,6 +78,12 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
               onClick={exportData}
             >
               Export data (CSV)
+            </button>
+            <button
+              className="block w-full text-left px-4 py-2  hover:bg-gray-100"
+              onClick={importData}
+            >
+              Import from sheet
             </button>
             <FeedbackButton />
             <button

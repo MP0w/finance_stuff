@@ -210,7 +210,6 @@ const HomeContent: React.FC<HomeContentProps> = ({
               { id: "summary", label: "Summary" },
               { id: "connectors", label: "Connectors" },
               { id: "chat", label: "✨AI🔮" },
-              //   { id: "import", label: "import" },
             ]}
             activeTab={activeTab}
             setActiveTab={switchTab}

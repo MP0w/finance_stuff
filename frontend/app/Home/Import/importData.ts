@@ -3,8 +3,12 @@ import { ImportProposal } from "../../../../shared/types";
 import { ImportTabProps } from "./ImportTab";
 import { TableHeaderContent, TableRowCell } from "../Table";
 
-export function tableData(current: ImportTabProps, proposal: ImportProposal) {
-  return makeTables(mergedData(current, proposal));
+export function importTableData(
+  current: ImportTabProps,
+  proposal: ImportProposal,
+  onDelete: (id: string) => void
+) {
+  return makeTables(mergedData(current, proposal), onDelete);
 }
 
 function mergedData(current: ImportTabProps, proposal: ImportProposal) {
@@ -82,11 +86,20 @@ function mergedData(current: ImportTabProps, proposal: ImportProposal) {
 }
 
 function makeTables(
-  data: ReturnType<typeof mergedData>
-): { title: string; headers: TableHeaderContent[]; rows: TableRowCell[][] }[] {
+  data: ReturnType<typeof mergedData>,
+  onDelete: (id: string) => void
+): {
+  id: string;
+  title: string;
+  onDelete?: () => void;
+  headers: TableHeaderContent[];
+  rows: TableRowCell[][];
+}[] {
   const investmentsTables = data.investmentAccounts.map((account) => {
     return {
+      id: account.id,
       title: account.name + `${account.new ? " (new)" : ""}`,
+      onDelete: account.new ? () => onDelete(account.id) : undefined,
       headers: [
         { title: "Date" },
         { title: "Invested" },
@@ -116,7 +129,9 @@ function makeTables(
 
   const accountsTables = data.fiatAccounts.map((account) => {
     return {
+      id: account.id,
       title: account.name + `${account.new ? " (new)" : ""}`,
+      onDelete: account.new ? () => onDelete(account.id) : undefined,
       headers: [{ title: "Date" }, { title: "Value" }],
       rows: data.accountingEntries.map((aEntry) => {
         const entry = data.entryMapByAccountingEntryId

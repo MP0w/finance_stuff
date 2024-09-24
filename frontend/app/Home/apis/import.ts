@@ -19,5 +19,7 @@ export const useUpdateImport = () => {
 
 // Confirm an existing import
 export const useConfirmImport = () => {
-  return useApiCall((id: string) => api.post(`/import/${id}/confirm`));
+  return useApiCall((id: string, deletedTables: string[]) =>
+    api.post(`/import/${id}/confirm`, { deletedTables })
+  );
 };

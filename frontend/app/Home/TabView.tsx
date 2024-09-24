@@ -51,6 +51,7 @@ const TabView: React.FC<TabViewProps> = ({
             email={email}
             signOut={signOut}
             exportData={exportData}
+            importData={() => setActiveTab("import")}
           />
           <div className="flex">
             <div className="w-full">{tabs.map((tab) => renderTab(tab))}</div>
@@ -59,6 +60,7 @@ const TabView: React.FC<TabViewProps> = ({
               email={email}
               signOut={signOut}
               exportData={exportData}
+              importData={() => setActiveTab("import")}
             />
           </div>
         </div>

@@ -358,6 +358,8 @@ export function importRouter(app: Application) {
         return;
       }
 
+      const deletedTables = new Set((req.body.deletedTables as string[]) ?? []);
+
       await dbConnection.transaction(async (trx) => {
         try {
           const newAccountsIds = proposal.newAccounts
@@ -367,10 +369,14 @@ export function importRouter(app: Application) {
               return acc;
             }, {} as Record<string, string>);
 
-          if (proposal.newAccounts.length > 0) {
+          const newAccounts = proposal.newAccounts.filter(
+            (a) => !deletedTables.has(a.id)
+          );
+
+          if (newAccounts.length > 0) {
             await trx<Accounts>(Table.Accounts)
               .insert(
-                proposal.newAccounts.map((a) => ({
+                newAccounts.map((a) => ({
                   id: newAccountsIds[a.id],
                   user_id: req.userId,
                   name: a.name,
@@ -383,10 +389,14 @@ export function importRouter(app: Application) {
               .merge();
           }
 
-          if (proposal.newInvestments.length > 0) {
+          const newInvestments = proposal.newInvestments.filter(
+            (a) => !deletedTables.has(a.id)
+          );
+
+          if (newInvestments.length > 0) {
             await trx<Accounts>(Table.Accounts)
               .insert(
-                proposal.newInvestments.map((a) => ({
+                newInvestments.map((a) => ({
                   id: newAccountsIds[a.id],
                   user_id: req.userId,
                   name: a.name,
@@ -418,10 +428,14 @@ export function importRouter(app: Application) {
             );
           }
 
-          if (proposal.newEntries.length > 0) {
+          const newEntries = proposal.newEntries.filter(
+            (e) => !deletedTables.has(e.accountId)
+          );
+
+          if (newEntries.length > 0) {
             await trx<Entries>(Table.Entries)
               .insert(
-                proposal.newEntries.map((e) => ({
+                newEntries.map((e) => ({
                   id: generateUUID(),
                   user_id: req.userId,
                   account_id: newAccountsIds[e.accountId] ?? e.accountId,

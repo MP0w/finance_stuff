@@ -12,7 +12,7 @@ import {
   ImportProposal,
 } from "../../../../shared/types";
 import Table from "../Table";
-import { tableData } from "./importProcessing";
+import { importTableData } from "./importData";
 import Loading from "@/app/components/Loading";
 
 export type ImportTabProps = {
@@ -38,30 +38,42 @@ export const ImportTab: React.FC<ImportTabProps> = ({
   const { loading: updateLoading, execute: updateImport } = useUpdateImport();
   const { loading: confirmLoading, execute: confirmImport } =
     useConfirmImport();
+  const [deletedTables, setDeletedTables] = useState<Set<string>>(new Set());
 
   const isLoading = createLoading || updateLoading || confirmLoading;
-  const emptyProposal =
-    latestProposal &&
-    latestProposal.newAccountingEntries.length === 0 &&
-    latestProposal.newAccounts.length === 0 &&
-    latestProposal.newInvestments.length === 0 &&
-    latestProposal.newEntries.length === 0;
 
   const tables = useMemo(() => {
     if (!latestProposal) {
       return undefined;
     }
-    return tableData(
+    return importTableData(
       { fiatAccounts, investmentAccounts, accountingEntries, refresh },
-      latestProposal
-    );
+      latestProposal,
+      (id) => {
+        setDeletedTables((prev) => {
+          const newSet = new Set(prev);
+          newSet.add(id);
+          return newSet;
+        });
+      }
+    ).filter((table) => !deletedTables.has(table.id));
   }, [
     fiatAccounts,
     investmentAccounts,
     accountingEntries,
     latestProposal,
     refresh,
+    setDeletedTables,
+    deletedTables,
   ]);
+
+  const emptyProposal =
+    latestProposal &&
+    ((latestProposal.newAccountingEntries.length === 0 &&
+      latestProposal.newAccounts.length === 0 &&
+      latestProposal.newInvestments.length === 0 &&
+      latestProposal.newEntries.length === 0) ||
+      (tables && tables.length === 0));
 
   useEffect(() => {
     if (!csv) {
@@ -79,6 +91,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
     async function fetchData(csv: string) {
       try {
         const proposal = await createImport(csv);
+        setDeletedTables(new Set());
         setLatestProposal(proposal);
       } catch (error) {
         console.error(error);
@@ -94,7 +107,13 @@ export const ImportTab: React.FC<ImportTabProps> = ({
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     // Handle the uploaded files here
-    const file = acceptedFiles[0];
+    const file = acceptedFiles.at(0);
+    if (!file) {
+      toast.error("Invalid file, select a CSV file", {
+        position: "bottom-right",
+      });
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       const fileContent = reader.result as string;
@@ -116,8 +135,9 @@ export const ImportTab: React.FC<ImportTabProps> = ({
     }
 
     try {
-      await confirmImport(latestProposal.id);
+      await confirmImport(latestProposal.id, Array.from(deletedTables));
       toast.success("Data imported!");
+      setDeletedTables(new Set());
       setLatestProposal(undefined);
       setCsv(undefined);
       setInputMessage("");
@@ -147,6 +167,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
 
     try {
       const newProposal = await updateImport(latestProposal.id, inputMessage);
+      setDeletedTables(new Set());
       setLatestProposal(newProposal);
       setInputMessage("");
       toast.success("New proposal requested!");
@@ -205,6 +226,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
           {tables.map((table) => (
             <Table
               title={table.title}
+              onDelete={table.onDelete}
               key={table.title}
               headers={table.headers}
               rows={table.rows}
