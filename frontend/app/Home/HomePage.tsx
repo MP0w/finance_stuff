@@ -16,6 +16,7 @@ import { useCreateEntry, useUpdateEntry } from "./apis/entriesAPIs";
 import { AccountType } from "../../../shared/types";
 import { logAnalyticsEvent } from "../firebase";
 import HomeContent from "./HomeContent";
+// import Onboarding, { didCompleteOnboarding } from "../Onboarding/Onboarding";
 
 interface HomePageProps {
   signOut: () => void;
@@ -280,6 +281,31 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     setIsDeleteEntryModalOpen(false);
     setAccountingEntryToDelete(null);
   };
+
+  // const [onboardingCompleted, setOnboardingCompleted] = useState(false);
+
+  // if (
+  //   user &&
+  //   !didCompleteOnboarding(user.onboarding_step) &&
+  //   !onboardingCompleted &&
+  //   accounts &&
+  //   accountingEntries
+  // ) {
+  //   return (
+  //     <Onboarding
+  //       props={{
+  //         actions: {
+  //           handleCreateAccount,
+  //           handleCellChange,
+  //           handleCreateAccountingEntry,
+  //         },
+  //         data: { accounts, accountingEntries },
+  //         apis: { reloadData: reloadData },
+  //       }}
+  //       setOnboardingCompleted={setOnboardingCompleted}
+  //     />
+  //   );
+  // }
 
   return (
     <HomeContent

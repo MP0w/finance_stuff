@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FeedbackButton from "./FeedbackButton";
 import SettingsIcon from "./SettingsIcon";
-import { getCurrencySymbol, updateUser, useUserState } from "../UserState";
+import { getCurrencySymbol, useUserState } from "../UserState";
 
 interface BrandHeaderProps {
   email?: string;
@@ -22,15 +22,7 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
   const { user } = useUserState();
 
   const handleCurrencyChange = async (currency: string) => {
-    if (!user) {
-      return;
-    }
-    const token = await user.idToken();
-
-    const result = await updateUser(token, { currency });
-    if (result) {
-      user.updateUser(result);
-    }
+    user?.updateUserPrefs({ currency });
   };
 
   return (

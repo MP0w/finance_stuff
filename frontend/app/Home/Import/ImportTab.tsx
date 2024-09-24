@@ -20,6 +20,7 @@ export type ImportTabProps = {
   investmentAccounts: Accounts[];
   accountingEntries: AccountingEntries[];
   refresh: () => void;
+  onComplete?: () => void;
 };
 
 export const ImportTab: React.FC<ImportTabProps> = ({
@@ -27,6 +28,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
   investmentAccounts,
   accountingEntries,
   refresh,
+  onComplete,
 }) => {
   const [csv, setCsv] = useState<string | undefined>(undefined);
   const [latestProposal, setLatestProposal] = useState<
@@ -142,6 +144,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
       setCsv(undefined);
       setInputMessage("");
       refresh();
+      onComplete?.();
     } catch (error) {
       toast.error(
         "Failed to confirm import" +

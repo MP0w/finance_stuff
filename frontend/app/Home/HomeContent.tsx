@@ -202,7 +202,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
       <div className="mx-auto">
         <ArcherContainer strokeColor="gray">
           <TabView
-            email={user?.email}
+            email={user?.email ?? undefined}
             signOut={signOut}
             tabs={[
               { id: "fiat", label: "Bank Accounts" },

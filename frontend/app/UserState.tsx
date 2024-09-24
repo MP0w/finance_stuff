@@ -12,14 +12,10 @@ import { Accounts, Users } from "../../shared/types";
 
 export type UserStateContextType = {
   user:
-    | {
+    | (Users & {
         idToken: () => Promise<string>;
-        id: string;
-        firebaseUid: string;
-        email: string;
-        currency: string;
-        updateUser: (user: Users) => void;
-      }
+        updateUserPrefs: (user: Partial<Users>) => Promise<void>;
+      })
     | undefined;
   loaded: boolean;
 };
@@ -57,10 +53,7 @@ function getCachedUser() {
   return cachedUser ? (JSON.parse(cachedUser) as Users) : undefined;
 }
 
-export const updateUser = async (
-  token: string,
-  args: { currency?: string; onboarding_step?: string }
-) => {
+const signIn = async (token: string, args: Partial<Users>) => {
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/sign-in", {
       method: "POST",
@@ -92,7 +85,7 @@ const login = async (token: string, firebaseUid: string) => {
   if (cachedUser && cachedUser.firebase_uid === firebaseUid) {
     return cachedUser;
   }
-  const user = await updateUser(token, {});
+  const user = await signIn(token, {});
   if (user) {
     logAnalyticsEvent("sign-in");
   }
@@ -115,9 +108,23 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
     clearAuthToken();
   };
 
-  const updateUser = (user: Users) => {
+  const updateUserState = (user: Users) => {
     setUser(user);
     localStorage.setItem("user", JSON.stringify(user));
+  };
+
+  const updateUserPrefs = async (user: Partial<Users>) => {
+    if (!idToken) {
+      return;
+    }
+    try {
+      const result = await signIn(idToken, user);
+      if (result) {
+        updateUserState(result);
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
   };
 
   useEffect(() => {
@@ -136,8 +143,7 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
         if (userResult) {
           setAuthToken(token);
           setIdToken(token);
-
-          updateUser(userResult);
+          updateUserState(userResult);
           Sentry.setUser({
             fullName: user.displayName,
             email: user.email ?? undefined,
@@ -162,11 +168,8 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
               }
               return Promise.resolve(idToken);
             },
-            id: user.id,
-            email: user.email,
-            currency: user.currency,
-            firebaseUid: user.firebase_uid,
-            updateUser,
+            updateUserPrefs,
+            ...user,
           },
           loaded,
         }
