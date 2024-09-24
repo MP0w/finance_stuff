@@ -27,7 +27,7 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
     }
     const token = await user.idToken();
 
-    const result = await updateUser(token, currency);
+    const result = await updateUser(token, { currency });
     if (result) {
       user.updateUser(result);
     }

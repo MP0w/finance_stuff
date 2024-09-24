@@ -57,7 +57,10 @@ function getCachedUser() {
   return cachedUser ? (JSON.parse(cachedUser) as Users) : undefined;
 }
 
-export const updateUser = async (token: string, currency?: string) => {
+export const updateUser = async (
+  token: string,
+  args: { currency?: string; onboarding_step?: string }
+) => {
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/sign-in", {
       method: "POST",
@@ -65,7 +68,7 @@ export const updateUser = async (token: string, currency?: string) => {
         "Content-Type": "application/json",
         Authorization: token,
       },
-      body: JSON.stringify(currency ? { currency } : {}),
+      body: JSON.stringify(args),
     });
 
     if (!response.ok) {
@@ -89,7 +92,7 @@ const login = async (token: string, firebaseUid: string) => {
   if (cachedUser && cachedUser.firebase_uid === firebaseUid) {
     return cachedUser;
   }
-  const user = await updateUser(token, undefined);
+  const user = await updateUser(token, {});
   if (user) {
     logAnalyticsEvent("sign-in");
   }

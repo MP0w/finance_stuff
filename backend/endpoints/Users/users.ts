@@ -32,6 +32,7 @@ import expressAsyncHandler from "express-async-handler";
      "/sign-in",
      expressAsyncHandler(async (req, res) => {
        const currency = req.body.currency;
+       const onboarding_step = req.body.onboarding_step;
 
        const payload = {
          id: getUuidByString(req.user.uid),
@@ -40,6 +41,7 @@ import expressAsyncHandler from "express-async-handler";
          photo: null,
          updated_at: new Date(),
          ...(currency ? { currency } : {}),
+         ...(onboarding_step ? { onboarding_step } : {}),
        };
 
        const users = await dbConnection<Users>(Table.Users)

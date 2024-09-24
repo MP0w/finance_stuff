@@ -49,11 +49,11 @@ export enum Table {
 }
 
 export type Tables = {
-  accounting_entries: AccountingEntries;
-  accounts: Accounts;
-  connections: Connections;
-  entries: Entries;
-  users: Users;
+  "accounting_entries": AccountingEntries,
+  "accounts": Accounts,
+  "connections": Connections,
+  "entries": Entries,
+  "users": Users,
 };
 
 export type AccountingEntries = {
@@ -108,5 +108,6 @@ export type Users = {
   used_ai_total_tokens: number;
   used_ai_prompt_tokens: number;
   available_ai_tokens: number;
+  onboarding_step: string | null;
 };
 
