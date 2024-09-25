@@ -192,7 +192,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
         <div>
           <p className="mb-4 font-semibold">
             If you already track your finances using a spreadsheet or any tool
-            that can export to CSV, you can import import it in finance_stuff
+            that can export to CSV, you can import it in finance_stuff
             <br />
             we will create the necessary accounts and entries together with all
             the values you have been tracking in past.
