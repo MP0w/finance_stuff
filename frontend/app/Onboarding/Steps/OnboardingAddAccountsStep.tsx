@@ -99,6 +99,3 @@ export function OnboardingAddAccountsStep({
   );
 }
 
-export function OnboardingAddAccountsStepUI({}) {
-  return <div>UI</div>;
-}

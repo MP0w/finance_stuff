@@ -136,25 +136,13 @@ export async function fillInMissingAccountingEntriesIfNeeded(userId: string) {
 }
 
 export async function getAccoutingEntries(userId: string) {
-  let accountingEntries = await dbConnection<AccountingEntries>(
+  const accountingEntries = await dbConnection<AccountingEntries>(
     Table.AccountingEntries
   )
     .select()
     .where({ user_id: userId })
     .orderBy("date", "asc")
     .limit(1000);
-
-  if (accountingEntries.length === 0) {
-    await createAccountingEntriesForUser(userId);
-
-    accountingEntries = await dbConnection<AccountingEntries>(
-      Table.AccountingEntries
-    )
-      .select()
-      .where({ user_id: userId })
-      .orderBy("date", "asc")
-      .limit(1000);
-  }
 
   const allEntries = await dbConnection<Entries>(Table.Entries)
     .select()
@@ -391,7 +379,7 @@ export function accountingEntriesRouter(app: Application) {
   );
 }
 
-function getFirstDaysOfMonth(date: Date, count: number): Date[] {
+export function getFirstDaysOfMonth(date: Date, count: number): Date[] {
   const result: Date[] = [];
   const currentDate = new Date(date);
 

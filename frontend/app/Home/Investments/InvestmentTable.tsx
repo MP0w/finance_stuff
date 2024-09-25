@@ -19,9 +19,9 @@ interface InvestmentTableProps {
     value: number,
     invested: boolean
   ) => Promise<void>;
-  onAddEntry: (date: string) => void;
-  onDeleteAccount: (accountId: string) => void;
-  onDeleteAccountingEntry: (entryId: string) => void;
+  onAddEntry?: (date: string) => void;
+  onDeleteAccount?: (accountId: string) => void;
+  onDeleteAccountingEntry?: (entryId: string) => void;
 }
 
 export function colorForValue(value: number | undefined): string | undefined {
@@ -109,9 +109,11 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
           accountingEntry.date,
           "yyyy-MM-dd"
         ).toJSDate(),
-        onDelete: () => {
-          onDeleteAccountingEntry(accountingEntry.id);
-        },
+        onDelete: onDeleteAccountingEntry
+          ? () => {
+              onDeleteAccountingEntry(accountingEntry.id);
+            }
+          : undefined,
       },
       {
         value: invested,
@@ -148,7 +150,7 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
         getCells(entry, account)
       )}
       onAddEntry={onAddEntry}
-      onDelete={() => onDeleteAccount(account.id)}
+      onDelete={onDeleteAccount ? () => onDeleteAccount(account.id) : undefined}
     />
   );
 };

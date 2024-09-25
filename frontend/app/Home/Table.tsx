@@ -128,11 +128,7 @@ const Table: React.FC<TableProps> = ({
                   <div className="ml-4 mt-2 mb-2">
                     {!showDatePicker && (
                       <AddButton
-                        title={
-                          rows.length === 0
-                            ? "Add your first entry. You can also add some for past months and later on new ones each month/week/etc..."
-                            : "Add entry"
-                        }
+                        title={"Add entry"}
                         onClick={() => setShowDatePicker(!showDatePicker)}
                       />
                     )}

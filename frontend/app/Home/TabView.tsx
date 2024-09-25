@@ -15,6 +15,7 @@ interface TabViewProps {
   email?: string;
   exportData: () => void;
   signOut: () => void;
+  hideSettings?: boolean;
 }
 
 const TabView: React.FC<TabViewProps> = ({
@@ -25,6 +26,7 @@ const TabView: React.FC<TabViewProps> = ({
   email,
   exportData,
   signOut,
+  hideSettings,
 }) => {
   function renderTab(tab: Tab) {
     return (
@@ -52,6 +54,7 @@ const TabView: React.FC<TabViewProps> = ({
             signOut={signOut}
             exportData={exportData}
             importData={() => setActiveTab("import")}
+            hideSettings={hideSettings ?? false}
           />
           <div className="flex">
             <div className="w-full">{tabs.map((tab) => renderTab(tab))}</div>
@@ -61,6 +64,7 @@ const TabView: React.FC<TabViewProps> = ({
               signOut={signOut}
               exportData={exportData}
               importData={() => setActiveTab("import")}
+              hideSettings={hideSettings ?? false}
             />
           </div>
         </div>

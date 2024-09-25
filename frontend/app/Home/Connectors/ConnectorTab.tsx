@@ -17,7 +17,8 @@ import Loading from "@/app/components/Loading";
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
   onAddConnection: () => void;
-}> = ({ accounts, onAddConnection }) => {
+  isOnboarding?: boolean;
+}> = ({ accounts, onAddConnection, isOnboarding = false }) => {
   const [selectedAccount, setSelectedAccount] = useState<
     Accounts | undefined
   >();
@@ -152,7 +153,7 @@ export const ConnectorsTab: React.FC<{
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2>Connections</h2>
+      {!isOnboarding && <h2>Connections</h2>}
 
       {(isLoading || connectionsLoading) && <Loading />}
       {connectionsError && (
@@ -170,7 +171,14 @@ export const ConnectorsTab: React.FC<{
       {!connectionsLoading && !connectionsError && (
         <>
           {connections.length === 0 ? (
-            <p>You don&apos;t have any connections yet.</p>
+            isOnboarding ? (
+              <p>
+                Connect your accounts to external services to fill your data
+                automatically and see live data.
+              </p>
+            ) : (
+              <p>You don&apos;t have any connections yet.</p>
+            )
           ) : (
             <ul className="mb-6 space-y-4">
               {connections.map((connection) => (

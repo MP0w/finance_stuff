@@ -9,6 +9,7 @@ interface BrandHeaderProps {
   className?: string;
   exportData: () => void;
   importData: () => void;
+  hideSettings: boolean;
 }
 
 export const BrandHeader: React.FC<BrandHeaderProps> = ({
@@ -17,6 +18,7 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
   className,
   exportData,
   importData,
+  hideSettings,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const { user } = useUserState();
@@ -27,10 +29,13 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
 
   return (
     <div className={`flex justify-between ${className}`}>
-      <h1 className="py-1">finance_stuff</h1>
+      <h1 className="py-1" hidden={hideSettings}>
+        finance_stuff
+      </h1>
       <div
         onMouseEnter={() => setShowSettings(true)}
         onClick={() => setShowSettings(!showSettings)}
+        hidden={hideSettings}
       >
         <button className="py-4 ml-4 transition duration-200">
           <SettingsIcon />

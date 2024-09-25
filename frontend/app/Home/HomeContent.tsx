@@ -17,6 +17,14 @@ import { useUserState } from "../UserState";
 import ImportTab from "./Import/ImportTab";
 import Loading from "../components/Loading";
 
+export const tabs = [
+  { id: "fiat", label: "Bank Accounts" },
+  { id: "investments", label: "Investments" },
+  { id: "summary", label: "Summary" },
+  { id: "connectors", label: "Connectors" },
+  { id: "chat", label: "✨AI🔮" },
+];
+
 interface HomeContentProps {
   uiState: {
     expandedAddAccount: boolean;
@@ -204,13 +212,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
           <TabView
             email={user?.email ?? undefined}
             signOut={signOut}
-            tabs={[
-              { id: "fiat", label: "Bank Accounts" },
-              { id: "investments", label: "Investments" },
-              { id: "summary", label: "Summary" },
-              { id: "connectors", label: "Connectors" },
-              { id: "chat", label: "✨AI🔮" },
-            ]}
+            tabs={tabs}
             activeTab={activeTab}
             setActiveTab={switchTab}
             exportData={exportData}

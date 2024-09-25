@@ -12,9 +12,9 @@ interface AccountsTableProps {
     value: number,
     invested: boolean
   ) => Promise<void>;
-  onAddEntry: (date: string) => void;
-  onDeleteAccount: (accountId: string) => void;
-  onDeleteAccountingEntry: (entryId: string) => void;
+  onAddEntry?: (date: string) => void;
+  onDeleteAccount?: (accountId: string) => void;
+  onDeleteAccountingEntry?: (entryId: string) => void;
 }
 
 const AccountsTable: React.FC<AccountsTableProps> = ({
@@ -30,9 +30,11 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
     ...accounts.map((account) => {
       return {
         title: account.name,
-        onDelete: () => {
-          onDeleteAccount(account.id);
-        },
+        onDelete: onDeleteAccount
+          ? () => {
+              onDeleteAccount(account.id);
+            }
+          : undefined,
       };
     }),
     {
@@ -66,9 +68,11 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
     return [
       {
         value: DateTime.fromFormat(entry.date, "yyyy-MM-dd").toJSDate(),
-        onDelete: () => {
-          onDeleteAccountingEntry(entry.id);
-        },
+        onDelete: onDeleteAccountingEntry
+          ? () => {
+              onDeleteAccountingEntry(entry.id);
+            }
+          : undefined,
       },
       ...entries,
       {
