@@ -190,8 +190,15 @@ export const ImportTab: React.FC<ImportTabProps> = ({
       {confirmLoading && <Loading message="Importing data..." />}
       {!csv && (
         <div>
+          <p className="mb-4 font-semibold">
+            If you already track your finances using a spreadsheet or any tool
+            that can export to CSV, you can import import it in finance_stuff
+            <br />
+            we will create the necessary accounts and entries together with all
+            the values you have been tracking in past.
+          </p>
           <p className="mb-8">
-            You can export your spreadsheet as CSV to upload it here.
+            Export your data as CSV and upload it here.
             <br />
             For example in Google sheets:
             <br />

@@ -65,7 +65,7 @@ async function getImportProposal(
         You will need to propose a list of new accounts, investments, accounting entries and entries that should be created.
 
         Definitions of the entities:
-        Accounts -> these are fiat acocunts, like bank accounts, cash, etc
+        Accounts -> these are fiat accounts, like bank accounts, cash, etc
         Investments -> these are investments accounts, like stocks brokers, cryptos, etc...
         AccountingEntries -> this is an object used to link entries together to then display in tables. Accounting entries main purpose is to cluster Entries into a date. IMPORTANT: there can't be two for the same date, so use existing accountingEntries ids.
         Entries -> these are the values for an account at a specific date (AccountingEntry). For an entry to exist it needs an accountingEntry to be associated with. Invested only makes sense for investment accounts and might not be inferred, priority is the value.

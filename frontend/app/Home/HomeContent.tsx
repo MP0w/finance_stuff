@@ -30,7 +30,7 @@ interface HomeContentProps {
     setIsDeleteEntryModalOpen: (open: boolean) => void;
   };
   actions: {
-    handleCreateAccount: (type: AccountType) => Promise<void>;
+    handleCreateAccount: (name: string, type: AccountType) => Promise<void>;
     handleCellChange: (
       accountingEntryId: string,
       accountId: string,
@@ -40,7 +40,7 @@ interface HomeContentProps {
     handleCreateAccountingEntry: (date: string) => Promise<void>;
     handleDeleteAccount: (accountId: string) => Promise<void>;
     handleDeleteAccountingEntry: (accountingEntryId: string) => Promise<void>;
-    confirmDeleteAccount: () => Promise<void>;
+    confirmDeleteAccount: (id: string) => Promise<void>;
     confirmDeleteAccountingEntry: () => Promise<void>;
   };
   data: {
@@ -95,8 +95,8 @@ const HomeContent: React.FC<HomeContentProps> = ({
     accounts?.filter((account) => account.type === "fiat") ?? [];
   const investmentAccounts =
     accounts?.filter((account) => account.type === "investment") ?? [];
-    const isLoading =
-      (accountsLoading && !accounts) || (entriesLoading && !accountingEntries);
+  const isLoading =
+    (accountsLoading && !accounts) || (entriesLoading && !accountingEntries);
   const [activeTab, setActiveTab] = useState("fiat");
   const { user } = useUserState();
 
@@ -254,7 +254,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
               Cancel
             </button>
             <button
-              onClick={confirmDeleteAccount}
+              onClick={() => confirmDeleteAccount(accountToDelete?.id ?? "")}
               className="bg-red-500 text-white px-4 py-2 pixel-corners-small hover:bg-red-600"
             >
               Delete

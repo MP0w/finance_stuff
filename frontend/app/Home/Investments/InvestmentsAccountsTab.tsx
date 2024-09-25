@@ -15,7 +15,7 @@ interface InvestmentsAccountsTabProps {
   setExpandedAddAccount: (expanded: boolean) => void;
   newAccountName: string;
   setNewAccountName: (name: string) => void;
-  handleCreateAccount: (type: AccountType) => Promise<void>;
+  handleCreateAccount: (name: string, type: AccountType) => Promise<void>;
   switchTab: (id: string) => void;
   isLoading: boolean;
   fiatAccounts: Accounts[];
@@ -70,7 +70,7 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
               className="border rounded px-2 py-1 mr-2"
             />
             <button
-              onClick={() => handleCreateAccount("investment")}
+              onClick={() => handleCreateAccount(newAccountName, "investment")}
               className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={newAccountName.length === 0}
             >

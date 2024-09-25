@@ -104,10 +104,10 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   }, [hasOutdated, outdatedTTL, fetchLiveAccountingEntry]);
 
   const handleCreateAccount = useCallback(
-    async (type: AccountType) => {
-      if (newAccountName.length > 0) {
+    async (name: string, type: AccountType) => {
+      if (name.length > 0) {
         try {
-          await createAccount(newAccountName, type, user?.currency ?? "USD");
+          await createAccount(name, type, user?.currency ?? "USD");
           fetchAccounts();
           setNewAccountName("");
           toast.success("Account created", { position: "bottom-right" });
@@ -120,7 +120,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         }
       }
     },
-    [newAccountName, createAccount, fetchAccounts, user]
+    [createAccount, fetchAccounts, user]
   );
 
   const handleCreateAccountingEntry = useCallback(
@@ -246,19 +246,18 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     [accountingEntries]
   );
 
-  const confirmDeleteAccount = async () => {
-    if (accountToDelete) {
-      try {
-        await deleteAccount(accountToDelete.id);
-        fetchAccounts();
-        toast.success("Account deleted successfully", {
-          position: "bottom-right",
-        });
-      } catch (error) {
-        toast.error("Failed to delete account. Please try again.", {
-          position: "bottom-right",
-        });
-      }
+  const confirmDeleteAccount = async (id: string) => {
+    try {
+      await deleteAccount(id);
+      fetchAccounts();
+
+      toast.success("Account deleted successfully", {
+        position: "bottom-right",
+      });
+    } catch (error) {
+      toast.error("Failed to delete account. Please try again.", {
+        position: "bottom-right",
+      });
     }
     setIsDeleteModalOpen(false);
     setAccountToDelete(null);
@@ -298,6 +297,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   //           handleCreateAccount,
   //           handleCellChange,
   //           handleCreateAccountingEntry,
+  //           confirmDeleteAccount,
   //         },
   //         data: { accounts, accountingEntries },
   //         apis: { reloadData: reloadData },

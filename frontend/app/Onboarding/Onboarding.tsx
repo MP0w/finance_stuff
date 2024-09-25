@@ -7,10 +7,15 @@ import {
 } from "../../../shared/types";
 import { OnboardingImportStep } from "./Steps/OnboardingImportStep";
 import { FaChevronLeft } from "react-icons/fa";
+import {
+  OnboardingAddAccountsStep,
+  OnboardingAddAccountsStepUI,
+} from "./Steps/OnboardingAddAccountsStep";
 
 const onboardingSteps = [
-  "add_accounts",
   "import_csv",
+  "add_bank_accounts",
+  "add_investment_accounts",
   "add_accounting_entries",
   "connect_accounts",
   "summary_graphs",
@@ -19,7 +24,7 @@ const onboardingSteps = [
 
 export interface OnboardingProps {
   actions: {
-    handleCreateAccount: (type: AccountType) => Promise<void>;
+    handleCreateAccount: (name: string, type: AccountType) => Promise<void>;
     handleCellChange: (
       accountingEntryId: string,
       accountId: string,
@@ -27,6 +32,7 @@ export interface OnboardingProps {
       invested: boolean
     ) => Promise<void>;
     handleCreateAccountingEntry: (date: string) => Promise<void>;
+    confirmDeleteAccount: (accountId: string) => Promise<void>;
   };
   data: {
     accounts: Accounts[];
@@ -35,19 +41,6 @@ export interface OnboardingProps {
   };
   apis: {
     reloadData: () => void;
-  };
-}
-
-export interface OnboardingStep {
-  onboardingStep(props: {
-    actions: OnboardingProps["actions"];
-    data: OnboardingProps["data"];
-    apis: OnboardingProps["apis"];
-    onStepComplete: () => void;
-  }): {
-    instructions: React.JSX.Element;
-    ui?: React.JSX.Element;
-    title: string;
   };
 }
 
@@ -99,22 +92,43 @@ const Onboarding = ({
     }
   };
 
-  const makeStep = () => {
+  const stepTitle = (() => {
     switch (currentStep) {
       case "import_csv":
-        return new OnboardingImportStep().onboardingStep({
-          ...props,
-          onStepComplete: nextStep,
-        });
-      default:
-        return new OnboardingImportStep().onboardingStep({
-          ...props,
-          onStepComplete: nextStep,
-        });
+        return "Import your data";
+      case "add_bank_accounts":
+        return "Add Bank Accounts";
+      case "add_investment_accounts":
+        return "Add Investment Accounts";
+      case "add_accounting_entries":
+        return "Add Accounting Entries";
+      case "connect_accounts":
+        return "Connect Accounts";
+      case "summary_graphs":
+        return "Summary Graphs";
     }
-  };
 
-  const step = makeStep();
+    return "";
+  })();
+
+  const nextButtonTitle = (() => {
+    switch (currentStep) {
+      case "add_bank_accounts":
+      case "add_investment_accounts":
+        return "Next";
+    }
+
+    return "Skip";
+  })();
+
+  const stepHasUI = (() => {
+    switch (currentStep) {
+      case "import_csv":
+        return false;
+    }
+
+    return true;
+  })();
 
   return (
     <div className="h-screen w-screen">
@@ -127,28 +141,61 @@ const Onboarding = ({
             }}
           ></div>
         </div>
-        <h2 className="my-2 text-center">{step.title}</h2>
-        {step.ui && (
-          <div className="flex-grow flex flex-col md:flex-row">
-            <div className="w-full md:w-1/2 p-8">{step.instructions}</div>
-            <div className="w-full md:w-1/2 p-8 hidden md:block">{step.ui}</div>
+        <h2 className="my-2 text-center">{stepTitle}</h2>
+        {
+          <div
+            className={
+              stepHasUI
+                ? "flex-grow flex flex-col md:flex-row items-center"
+                : "flex-grow p-8 flex items-center justify-center"
+            }
+          >
+            <div
+              className={
+                stepHasUI ? "w-full md:w-1/2 p-8 flex items-center text-md" : ""
+              }
+            >
+              {currentStep === "import_csv" && (
+                <OnboardingImportStep
+                  actions={props.actions}
+                  data={props.data}
+                  apis={props.apis}
+                  onStepComplete={nextStep}
+                />
+              )}
+              {currentStep === "add_bank_accounts" && (
+                <OnboardingAddAccountsStep props={props} type="fiat" />
+              )}
+              {currentStep === "add_investment_accounts" && (
+                <OnboardingAddAccountsStep props={props} type="investment" />
+              )}
+            </div>
+            {stepHasUI && (
+              <div className="w-full md:w-1/2 p-8 hidden md:flex md:items-center">
+                {currentStep === "add_bank_accounts" && (
+                  <OnboardingAddAccountsStepUI />
+                )}
+                {currentStep === "add_investment_accounts" && (
+                  <OnboardingAddAccountsStepUI />
+                )}
+              </div>
+            )}
           </div>
-        )}
-        {!step.ui && <div className="flex-grow p-8">{step.instructions}</div>}
+        }
         <div className="flex justify-between items-center mx-2 shadow-inner">
           <button
             onClick={prevStep}
             disabled={currentStepIndex === 0}
-            className="p-2 disabled:opacity-0 flex items-center"
+            className="m-2 px-4 py-2 bg-blue-500 text-white pixel-corners-small disabled:opacity-0 flex items-center"
           >
-            <FaChevronLeft className="mr-2" />
+            <FaChevronLeft />
           </button>
           <button
             onClick={nextStep}
             disabled={currentStepIndex === totalSteps - 1}
-            className="p-2 font-semibold disabled:opacity-50"
+            className="m-2 px-4 py-2 disabled:opacity-50 bg-blue-500 text-white pixel-corners-small"
           >
-            Skip
+            {nextButtonTitle}
           </button>
         </div>
       </div>

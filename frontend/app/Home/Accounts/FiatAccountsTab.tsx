@@ -14,7 +14,7 @@ interface FiatAccountsTabProps {
   setExpandedAddAccount: (expanded: boolean) => void;
   newAccountName: string;
   setNewAccountName: (name: string) => void;
-  handleCreateAccount: (type: AccountType) => Promise<void>;
+  handleCreateAccount: (name: string, type: AccountType) => Promise<void>;
   isLoading: boolean;
   fiatAccounts: Accounts[];
   investmentAccounts: Accounts[];
@@ -65,7 +65,7 @@ const FiatAccountsTab: React.FC<FiatAccountsTabProps> = ({
             className="border rounded px-2 py-1 mr-2"
           />
           <button
-            onClick={() => handleCreateAccount("fiat")}
+            onClick={() => handleCreateAccount(newAccountName, "fiat")}
             className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={newAccountName.length === 0}
           >
@@ -75,7 +75,7 @@ const FiatAccountsTab: React.FC<FiatAccountsTabProps> = ({
       )}
       {expandedAddAccount && (
         <p className="mb-8 max-w-prose">
-          Any account where, unlike investment acocunts,{" "}
+          Any account where, unlike investment accounts,{" "}
           <b>you don&apos;t expect the value to fluctuate</b> unless you
           add/spend/remove money from it.
           <br />
