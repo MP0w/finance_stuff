@@ -237,6 +237,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
             <Table
               title={table.title}
               onDelete={table.onDelete}
+              alwaysShowDelete={true}
               key={table.title}
               headers={table.headers}
               rows={table.rows}

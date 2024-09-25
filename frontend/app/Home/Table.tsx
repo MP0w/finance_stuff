@@ -62,6 +62,7 @@ interface TableProps {
   rows: TableRowCell[][];
   onAddEntry?: (date: string) => void;
   onDelete?: () => void;
+  alwaysShowDelete?: boolean;
 }
 
 const Table: React.FC<TableProps> = ({
@@ -70,6 +71,7 @@ const Table: React.FC<TableProps> = ({
   rows,
   onAddEntry,
   onDelete,
+  alwaysShowDelete,
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -91,7 +93,7 @@ const Table: React.FC<TableProps> = ({
           onMouseLeave={() => setIsHoveringHeader(false)}
         >
           <h3 className="mt-8 mb-0">{title}</h3>
-          {onDelete && isHoveringHeader && (
+          {onDelete && (isHoveringHeader || alwaysShowDelete) && (
             <DeleteIcon className="mt-7 ml-2" onClick={onDelete} />
           )}
         </div>
