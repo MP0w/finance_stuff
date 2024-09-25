@@ -128,6 +128,30 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
           />
         </div>
 
+        <section className="w-full md:w-1/2 mt-12">
+          <h3 className="text-center">Coming Soon™️</h3>
+          <div className="bg-white p-6 rounded-lg shadow-lg border">
+            <ul className="space-y-2">
+              {[
+                ["📱", "Mobile Apps"],
+                ["🔮", "Automagic expense tracking from bank statements"],
+                ["🎯", "Budgeting"],
+                [
+                  "🤖",
+                  "More connectors to popular banking and investments services",
+                ],
+                ["🏦", "Better mortgages & loans support"],
+                ["💯", "More..."],
+              ].map((feature, index) => (
+                <li key={index} className="flex items-center">
+                  <span className="">{feature[0]}</span>
+                  <span className="ml-2">{feature[1]}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
         <footer className="mt-12 text-center w-full">
           <p>
             stuff.finance <b>-</b> info@stuff.finance
