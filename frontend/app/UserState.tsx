@@ -79,18 +79,21 @@ const signIn = async (token: string, args: Partial<Users>) => {
   }
 };
 
-const login = async (token: string, firebaseUid: string) => {
+const loginHandler = (token: string, firebaseUid: string) => {
   const cachedUser = getCachedUser();
 
-  if (cachedUser && cachedUser.firebase_uid === firebaseUid) {
-    return cachedUser;
-  }
-  const user = await signIn(token, {});
-  if (user) {
-    logAnalyticsEvent("sign-in");
-  }
-
-  return user;
+  return {
+    cachedUser:
+      cachedUser && cachedUser.firebase_uid === firebaseUid
+        ? cachedUser
+        : undefined,
+    execute: signIn(token, {}).then((user) => {
+      if (user) {
+        logAnalyticsEvent("sign-in");
+      }
+      return user;
+    }),
+  };
 };
 
 export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
@@ -139,18 +142,23 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
         const token = await user.getIdToken();
         localStorage.setItem("idToken", token);
 
-        const userResult = await login(token, user.uid);
-        if (userResult) {
-          setAuthToken(token);
-          setIdToken(token);
-          updateUserState(userResult);
-          Sentry.setUser({
-            fullName: user.displayName,
-            email: user.email ?? undefined,
-          });
-        } else {
-          clearUser();
-        }
+        const handleLoginResult = (userResult: Users | undefined) => {
+          if (userResult) {
+            setAuthToken(token);
+            setIdToken(token);
+            updateUserState(userResult);
+            Sentry.setUser({
+              fullName: user.displayName,
+              email: user.email ?? undefined,
+            });
+          } else {
+            clearUser();
+          }
+        };
+
+        const handler = loginHandler(token, user.uid);
+        handleLoginResult(handler.cachedUser);
+        handler.execute.then(handleLoginResult);
       }
     });
 
