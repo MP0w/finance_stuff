@@ -1,7 +1,7 @@
 import React from "react";
 
 interface LoadingProps {
-  message: string;
+  message?: string;
 }
 
 const Loading: React.FC<LoadingProps> = ({ message }) => {
@@ -155,7 +155,7 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
           </g>
         </svg>
       </div>
-      <p className="mt-4 text-sm">{message}</p>
+      {message && <p className="mt-4 text-sm">{message}</p>}
     </div>
   );
 };

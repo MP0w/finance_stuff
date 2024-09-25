@@ -95,8 +95,8 @@ const HomeContent: React.FC<HomeContentProps> = ({
     accounts?.filter((account) => account.type === "fiat") ?? [];
   const investmentAccounts =
     accounts?.filter((account) => account.type === "investment") ?? [];
-  const isLoading = accountsLoading || (entriesLoading && !accountingEntries);
-
+    const isLoading =
+      (accountsLoading && !accounts) || (entriesLoading && !accountingEntries);
   const [activeTab, setActiveTab] = useState("fiat");
   const { user } = useUserState();
 
@@ -215,7 +215,8 @@ const HomeContent: React.FC<HomeContentProps> = ({
             setActiveTab={switchTab}
             exportData={exportData}
           >
-            {accountsError || entriesError ? (
+            {isLoading && <Loading />}
+            {(accountsError || entriesError) && (
               <div className="flex flex-col items-center">
                 <p className="mt-16">Error loading data</p>
                 <button
@@ -225,10 +226,10 @@ const HomeContent: React.FC<HomeContentProps> = ({
                   Retry
                 </button>
               </div>
-            ) : (
-              tabContent[activeTab as keyof typeof tabContent]
             )}
-            {isLoading && <Loading message="Loading data..." />}
+            {!isLoading &&
+              !(accountsError || entriesError) &&
+              tabContent[activeTab as keyof typeof tabContent]}
           </TabView>
         </ArcherContainer>
         <Modal

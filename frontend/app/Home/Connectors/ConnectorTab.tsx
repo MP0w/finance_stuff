@@ -154,7 +154,7 @@ export const ConnectorsTab: React.FC<{
     <div className="max-w-2xl mx-auto">
       <h2>Connections</h2>
 
-      {connectionsLoading && <p>Loading connections...</p>}
+      {(isLoading || connectionsLoading) && <Loading />}
       {connectionsError && (
         <div>
           <p>Error loading connections: {connectionsError.message}</p>
@@ -201,10 +201,9 @@ export const ConnectorsTab: React.FC<{
         </>
       )}
 
-      {
+      {!isLoading && (
         <div className="mt-8">
           <h3>Add New Connector</h3>
-          {isLoading && <Loading message="Loading connectors settings..." />}
           {error && <p>Error loading connectors settings: {error.message}</p>}
           {!isLoading && !error && (
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -367,7 +366,7 @@ export const ConnectorsTab: React.FC<{
             </form>
           )}
         </div>
-      }
+      )}
 
       <Modal
         isOpen={isDeleteModalOpen}
