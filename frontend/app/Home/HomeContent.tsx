@@ -17,14 +17,15 @@ import { useUserState } from "../UserState";
 import ImportTab from "./Import/ImportTab";
 import Loading from "../components/Loading";
 import LogScreenView from "../components/LogScreenView";
+import toast from "react-hot-toast";
 
 export const tabs = [
   { id: "fiat", label: "Bank Accounts" },
   { id: "investments", label: "Investments" },
+  { id: "expenses", label: "Expenses" },
   { id: "summary", label: "Summary" },
   { id: "connectors", label: "Connectors" },
   { id: "chat", label: "✨AI🔮" },
-  { id: "expenses", label: "Expenses" },
 ];
 
 interface HomeContentProps {
@@ -111,6 +112,25 @@ const HomeContent: React.FC<HomeContentProps> = ({
   const { user } = useUserState();
 
   const switchTab = (id: string) => {
+    if (id === "expenses") {
+      toast.custom(
+        (t) => (
+          <div className="flex justify-center items-center h-screen">
+            <div
+              className={`text-center bg-gray-200 p-8 rounded-lg shadow-lg border border-gray-300 shadow-gray-500 shadow-lg ${
+                t.visible ? "fade-in" : "fade-out"
+              }`}
+            >
+              <Loading />
+              <p>We are still working on Expenses.</p>
+              <p>Coming Soon™️</p>
+            </div>
+          </div>
+        ),
+        { position: "top-center" }
+      );
+      return;
+    }
     setActiveTab(id);
     setNewAccountName("");
     setExpandedAddAccount(false);
