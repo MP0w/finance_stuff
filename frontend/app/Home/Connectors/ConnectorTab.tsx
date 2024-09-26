@@ -13,6 +13,7 @@ import Modal from "react-modal";
 import DeleteIcon from "../../components/DeleteIcon";
 import Linkify from "react-linkify";
 import Loading from "@/app/components/Loading";
+import { logAnalyticsEvent } from "@/app/firebase";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
@@ -113,6 +114,7 @@ export const ConnectorsTab: React.FC<{
         setFormData({});
         onAddConnection();
         fetchConnections();
+        logAnalyticsEvent("create_connection_success");
         toast.success("Connection created successfully", {
           position: "bottom-right",
         });

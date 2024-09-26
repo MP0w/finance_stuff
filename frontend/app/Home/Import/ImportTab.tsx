@@ -14,6 +14,7 @@ import {
 import Table from "../Table";
 import { importTableData } from "./importData";
 import Loading from "@/app/components/Loading";
+import { logAnalyticsEvent } from "@/app/firebase";
 
 export type ImportTabProps = {
   fiatAccounts: Accounts[];
@@ -93,6 +94,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
     async function fetchData(csv: string) {
       try {
         const proposal = await createImport(csv);
+        logAnalyticsEvent("create_import_proposal");
         setDeletedTables(new Set());
         setLatestProposal(proposal);
       } catch (error) {
@@ -139,6 +141,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
     try {
       await confirmImport(latestProposal.id, Array.from(deletedTables));
       toast.success("Data imported!");
+      logAnalyticsEvent("import_success");
       setDeletedTables(new Set());
       setLatestProposal(undefined);
       setCsv(undefined);
@@ -170,6 +173,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
 
     try {
       const newProposal = await updateImport(latestProposal.id, inputMessage);
+      logAnalyticsEvent("update_import_proposal");
       setDeletedTables(new Set());
       setLatestProposal(newProposal);
       setInputMessage("");
