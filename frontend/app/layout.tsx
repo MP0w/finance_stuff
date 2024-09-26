@@ -38,7 +38,7 @@ export default function RootLayout({
     <html lang="en" className={tiny5.variable}>
       <body>
         {children}
-        <Toaster />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

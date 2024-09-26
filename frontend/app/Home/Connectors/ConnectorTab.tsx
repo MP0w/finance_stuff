@@ -115,14 +115,9 @@ export const ConnectorsTab: React.FC<{
         onAddConnection();
         fetchConnections();
         logAnalyticsEvent("create_connection_success");
-        toast.success("Connection created successfully", {
-          position: "bottom-right",
-        });
+        toast.success("Connection created successfully");
       } catch (error) {
-        toast.error("Error creating connection: " + (error as Error).message, {
-          id: "create-connection-error",
-          position: "bottom-right",
-        });
+        toast.error("Error creating connection: " + (error as Error).message);
       }
     }
   };
@@ -137,16 +132,9 @@ export const ConnectorsTab: React.FC<{
       try {
         await deleteConnection(connectionToDelete.id);
         fetchConnections();
-        toast.success("Connection deleted successfully", {
-          position: "bottom-right",
-        });
+        toast.success("Connection deleted successfully");
       } catch (error) {
-        toast.error(
-          "Failed to delete connection: " + (error as Error).message,
-          {
-            position: "bottom-right",
-          }
-        );
+        toast.error("Failed to delete connection: " + (error as Error).message);
       }
     }
     setIsDeleteModalOpen(false);

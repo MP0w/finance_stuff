@@ -125,7 +125,7 @@ const CommonPasswordAuth: React.FC<PasswordAuthProps> = ({
 
   return (
     <div>
-      <Toaster />
+      <Toaster position="bottom-right" />
       <form onSubmit={handleSubmit} className="space-y-4 mb-4">
         <div>
           <input

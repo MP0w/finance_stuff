@@ -110,13 +110,11 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           await createAccount(name, type, user?.currency ?? "USD");
           fetchAccounts();
           setNewAccountName("");
-          toast.success("Account created", { position: "bottom-right" });
+          toast.success("Account created");
           setExpandedAddAccount(false);
           logAnalyticsEvent("create_account_success");
         } catch (error) {
-          toast.error("Failed to create account. Please try again.", {
-            position: "bottom-right",
-          });
+          toast.error("Failed to create account. Please try again.");
         }
       }
     },
@@ -128,7 +126,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       try {
         const response = await createAccountingEntry(date);
         fetchAccountingEntries();
-        toast.success("new entry created", { position: "bottom-right" });
+        toast.success("new entry created");
         const failedConnections = response?.failedConnections ?? [];
         if (failedConnections.length > 0) {
           toast.error(
@@ -136,7 +134,6 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
               .map((c) => c.connectorId)
               .join(", ")}.`,
             {
-              position: "bottom-right",
               duration: 20000,
             }
           );
@@ -145,10 +142,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         logAnalyticsEvent("create_accounting_entry_success");
       } catch (error) {
         toast.error(
-          "Failed to create accounting entry. " + (error as Error).message,
-          {
-            position: "bottom-right",
-          }
+          "Failed to create accounting entry. " + (error as Error).message
         );
       }
     },
@@ -199,9 +193,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           );
         }
       } catch {
-        toast.error("Failed to update entry. Please try again.", {
-          position: "bottom-right",
-        });
+        toast.error("Failed to update entry. Please try again.");
       }
 
       try {
@@ -215,9 +207,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     async (accountId: string) => {
       const account = accounts?.find((a) => a.id === accountId);
       if (!account) {
-        toast.error("Account not found. Retry", {
-          position: "bottom-right",
-        });
+        toast.error("Account not found. Retry");
         return;
       }
 
@@ -234,9 +224,7 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       );
 
       if (!accountingEntry) {
-        toast.error("Entry not found. Retry", {
-          position: "bottom-right",
-        });
+        toast.error("Entry not found. Retry");
         return;
       }
 
@@ -251,13 +239,9 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       await deleteAccount(id);
       fetchAccounts();
 
-      toast.success("Account deleted successfully", {
-        position: "bottom-right",
-      });
+      toast.success("Account deleted successfully");
     } catch (error) {
-      toast.error("Failed to delete account. Please try again.", {
-        position: "bottom-right",
-      });
+      toast.error("Failed to delete account. Please try again.");
     }
     setIsDeleteModalOpen(false);
     setAccountToDelete(null);
@@ -268,13 +252,9 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       try {
         await deleteAccountingEntry(accountingEntryToDelete);
         fetchAccountingEntries();
-        toast.success("Entry deleted successfully", {
-          position: "bottom-right",
-        });
+        toast.success("Entry deleted successfully");
       } catch (error) {
-        toast.error("Failed to delete entry. Please try again.", {
-          position: "bottom-right",
-        });
+        toast.error("Failed to delete entry. Please try again.");
       }
     }
     setIsDeleteEntryModalOpen(false);

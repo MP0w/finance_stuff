@@ -321,9 +321,7 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
             return newValues;
           });
           // Show error toast
-          toast.error("Failed to update value. Please try again.", {
-            position: "bottom-right",
-          });
+          toast.error("Failed to update value. Please try again.");
         }
       }
     },

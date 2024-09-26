@@ -113,9 +113,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
     // Handle the uploaded files here
     const file = acceptedFiles.at(0);
     if (!file) {
-      toast.error("Invalid file, select a CSV file", {
-        position: "bottom-right",
-      });
+      toast.error("Invalid file, select a CSV file");
       return;
     }
     const reader = new FileReader();
@@ -158,16 +156,12 @@ export const ImportTab: React.FC<ImportTabProps> = ({
 
   const handleRequestNewProposal = async () => {
     if (!latestProposal || inputMessage.length < 20) {
-      toast.error("Please provide more context to request a new proposal", {
-        position: "bottom-right",
-      });
+      toast.error("Please provide more context to request a new proposal");
       return;
     }
 
     if (inputMessage.length > 400) {
-      toast.error("Message too long", {
-        position: "bottom-right",
-      });
+      toast.error("Message too long");
       return;
     }
 

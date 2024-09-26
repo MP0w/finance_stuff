@@ -24,6 +24,7 @@ export const tabs = [
   { id: "summary", label: "Summary" },
   { id: "connectors", label: "Connectors" },
   { id: "chat", label: "✨AI🔮" },
+  { id: "expenses", label: "Expenses" },
 ];
 
 interface HomeContentProps {
