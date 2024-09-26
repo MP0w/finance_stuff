@@ -32,7 +32,7 @@ const TabView: React.FC<TabViewProps> = ({
     return (
       <button
         key={tab.id}
-        className={`py-4 px-4 text-sm md:text-md focus:outline-none hover:text-black ${
+        className={`p-3 md:p-4 text-sm md:text-md focus:outline-none hover:text-black ${
           activeTab === tab.id ? " font-bold" : "font-medium"
         }`}
         onClick={() => setActiveTab(tab.id)}
