@@ -12,6 +12,7 @@ Sentry.init({
       levels: ["error", "warn"],
     }),
   ],
+  environment: process.env.NODE_ENV,
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0,
 });
