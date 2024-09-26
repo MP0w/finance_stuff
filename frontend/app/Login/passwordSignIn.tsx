@@ -3,7 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { auth } from "../firebase";
 
 interface PasswordAuthProps {
@@ -125,7 +125,6 @@ const CommonPasswordAuth: React.FC<PasswordAuthProps> = ({
 
   return (
     <div>
-      <Toaster position="bottom-right" />
       <form onSubmit={handleSubmit} className="space-y-4 mb-4">
         <div>
           <input
