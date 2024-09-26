@@ -18,6 +18,7 @@ export type UserStateContextType = {
       })
     | undefined;
   loaded: boolean;
+  signingIn: boolean;
 };
 
 export function getUserCurrencySymbol() {
@@ -102,6 +103,7 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
   const [idToken, setIdToken] = useState<string | undefined>(undefined);
   const [user, setUser] = useState<Users | undefined>(undefined);
   const [loaded, setLoaded] = useState<boolean>(false);
+  const [signingIn, setSigningIn] = useState<boolean>(false);
 
   const clearUser = () => {
     localStorage.removeItem("idToken");
@@ -156,9 +158,12 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
           }
         };
 
+        setSigningIn(true);
         const handler = loginHandler(token, user.uid);
         handleLoginResult(handler.cachedUser);
-        handler.execute.then(handleLoginResult);
+        handler.execute
+          .then(handleLoginResult)
+          .finally(() => setSigningIn(false));
       }
     });
 
@@ -180,8 +185,9 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
             ...user,
           },
           loaded,
+          signingIn,
         }
-      : { user: undefined, loaded };
+      : { user: undefined, loaded, signingIn };
 
   return (
     <UserStateContext.Provider value={value}>
