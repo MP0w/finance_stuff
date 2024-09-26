@@ -29,7 +29,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   };
 
   return (
-    <div className="p-4 pt-8 min-h-screen flex flex-col items-center">
+    <div className="p-4 pt-8 min-h-screen flex flex-col items-center bg-gray-100">
       <LogScreenView screenName="landing_page" />
       <div className="w-full max-w-4xl flex flex-col items-center">
         <header className="text-center mb-8 w-full">

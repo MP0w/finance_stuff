@@ -74,7 +74,7 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <LogScreenView screenName="login_page" />
       <div className="w-full max-w-md bg-white m-4 p-4 rounded-lg shadow-lg">
         <div className="relative mb-6">
