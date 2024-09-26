@@ -14,7 +14,7 @@ import {
 } from "./apis/accountingEntriesAPIs";
 import { useCreateEntry, useUpdateEntry } from "./apis/entriesAPIs";
 import { AccountType } from "../../../shared/types";
-import { logAnalyticsEvent, logPageView } from "../firebase";
+import { logAnalyticsEvent } from "../firebase";
 import HomeContent from "./HomeContent";
 import Onboarding, { didCompleteOnboarding } from "../Onboarding/Onboarding";
 
