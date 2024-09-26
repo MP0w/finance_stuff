@@ -115,19 +115,18 @@ const HomeContent: React.FC<HomeContentProps> = ({
     if (id === "expenses") {
       toast.custom(
         (t) => (
-          <div className="flex justify-center items-center h-screen">
-            <div
-              className={`text-center bg-gray-200 p-8 rounded-lg shadow-lg border border-gray-300 shadow-gray-500 shadow-lg ${
-                t.visible ? "fade-in" : "fade-out"
-              }`}
-            >
-              <Loading />
-              <p>We are still working on Expenses.</p>
-              <p>Coming Soon™️</p>
-            </div>
+          <div
+            onClick={() => toast.dismiss(t.id)}
+            className={`mt-16 text-center bg-gray-200 p-8 rounded-lg shadow-lg border border-gray-300 shadow-gray-500 shadow-lg ${
+              t.visible ? "" : "hidden animate-fade-out"
+            }`}
+          >
+            <Loading />
+            <p>We are still working on Expenses.</p>
+            <p>Coming Soon™️</p>
           </div>
         ),
-        { position: "top-center" }
+        { id: "expenses-tab", position: "top-center" }
       );
       return;
     }
