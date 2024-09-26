@@ -78,29 +78,16 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
             <div className="bg-white p-6 rounded-lg shadow-lg border">
               <ul className="space-y-2">
                 {[
-                  "Track All Accounts and Investments",
-                  "AI Powered Insights for Smarter Decisions",
-                  "Visualize Your Growth",
-                  "Easy Future Planning & Projections",
-                  "Connect your accounts to automate your tracking",
-                  "Graphs and Charts",
+                  ["💼", "Track All Accounts and Investments"],
+                  ["🔮", "AI Powered Insights for Smarter Decisions"],
+                  ["🪄", "Automagically Import Spreadsheets"],
+                  ["📈", "Visualize Your Growth"],
+                  ["🎯", "Easy Future Planning & Projections"],
+                  ["🔗", "Connect your accounts to automate your tracking"],
                 ].map((feature, index) => (
                   <li key={index} className="flex items-center">
-                    <svg
-                      className="w-5 h-5 mr-2 text-green-500 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span>{feature}</span>
+                    <span className="mr-2">{feature[0]}</span>
+                    <span>{feature[1]}</span>
                   </li>
                 ))}
               </ul>
@@ -134,7 +121,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
             <ul className="space-y-2">
               {[
                 ["📱", "Mobile Apps"],
-                ["🔮", "Automagic expense tracking from bank statements"],
+                ["🔮", "Automatic expense tracking from bank statements"],
                 ["🎯", "Budgeting"],
                 [
                   "🤖",
@@ -144,8 +131,8 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
                 ["💯", "More..."],
               ].map((feature, index) => (
                 <li key={index} className="flex items-center">
-                  <span className="">{feature[0]}</span>
-                  <span className="ml-2">{feature[1]}</span>
+                  <span className="mr-2">{feature[0]}</span>
+                  <span>{feature[1]}</span>
                 </li>
               ))}
             </ul>
