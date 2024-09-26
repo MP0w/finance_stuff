@@ -3,29 +3,23 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: "finance_stuff",
+  title: "finance_stuff // Personal Finance Tracker",
   description:
-    "Effortlessly Track & Grow your Finances in just 10 minutes a month. AI Insights, Statistics, Graphs, and more.",
+    "Effortlessly track and grow your finances in just 10 minutes a month. Get AI insights, statistics, and visualizations for smarter financial management.",
   keywords: [
-    "finance_stuff",
-    "finance stuff",
-    "ai personal finance",
-    "personal finance",
-    "budgeting",
-    "financial management",
+    "personal finance tracker",
+    "AI financial insights",
     "expense tracking",
-    "money management",
-    "financial planning",
-    "savings goals",
-    "debt management",
-    "investment tracking",
-    "financial education",
-    "income management",
+    "investment management",
+    "budget planner",
+    "budgeting",
+    "financial goal setting",
+    "wealth visualization",
+    "automated finance tracking",
+    "financial projections",
+    "smart money management",
     "financial independence",
-    "retirement planning",
-    "financial analysis",
-    "cash flow management",
-    "financial decision-making",
+    "savings goals",
   ],
 };
 
