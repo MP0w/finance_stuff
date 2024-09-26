@@ -50,7 +50,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
           </button>
           <button
             onClick={showLogin}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 px-6 rounded transition duration-300 pixel-corners-small"
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-6 rounded transition duration-300 pixel-corners-small"
           >
             Login
           </button>

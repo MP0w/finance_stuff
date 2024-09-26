@@ -139,7 +139,7 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
               {state === undefined && (
                 <button
                   onClick={() => setState("pass")}
-                  className="w-full py-2 px-4 bg-purple-500 hover:bg-purple-700 text-white pixel-corners-small transition duration-200 flex items-center justify-center"
+                  className="w-full py-2 px-4 bg-violet-500 hover:bg-violet-700 text-white pixel-corners-small transition duration-200 flex items-center justify-center"
                 >
                   <FaKey className="mr-2" /> Sign In with Password
                 </button>
@@ -147,7 +147,7 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
               {state === undefined && (
                 <button
                   onClick={() => setState("anon")}
-                  className="w-full py-2 px-4 bg-black hover:bg-gray-900 text-white pixel-corners-small transition duration-200 flex items-center justify-center"
+                  className="w-full py-2 px-4 bg-black hover:bg-gray-800 text-white pixel-corners-small transition duration-200 flex items-center justify-center"
                 >
                   <FaUserNinja className="mr-2" /> Sign In Anonymously
                 </button>
