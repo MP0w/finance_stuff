@@ -337,7 +337,7 @@ export const ConnectorsTab: React.FC<{
                         disabled={!isFormValid || isCreating}
                         className="w-full mt-8 flex justify-center py-2 px-4 border border-transparent shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 pixel-corners-small disabled:opacity-50"
                       >
-                        {isCreating ? "Connecting..." : "Connect"}
+                        {isCreating ? <Loading /> : "Connect"}
                       </button>
                     </div>
                   )}

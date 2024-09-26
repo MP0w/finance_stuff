@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useAIChat } from "../../websocketClient";
 import TextareaAutosize from "react-textarea-autosize";
 import DeleteIcon from "../../components/DeleteIcon";
+import Loading from "@/app/components/Loading";
 
 interface ChatMessageProps {
   message: {
@@ -89,9 +90,9 @@ const ChatTab: React.FC = () => {
               </button>
             </div>
             <div className="pb-8" ref={messagesEndRef} />
+            {isConnecting && <Loading />}
           </div>
         </div>
-        {isConnecting && <div className="p-2 text-center">Connecting...</div>}
         <div className="p-4 bg-gray-100 rounded-t-lg border border-gray-200 shadow-lg fixed bottom-0 left-0 right-0 max-w-3xl mx-auto">
           <div className="flex space-x-2">
             <TextareaAutosize
@@ -110,7 +111,8 @@ const ChatTab: React.FC = () => {
             />
             <button
               onClick={handleSendMessage}
-              className="px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              disabled={isConnecting}
+              className="px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             >
               Send
             </button>
