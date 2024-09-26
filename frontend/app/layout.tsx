@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import localFont from "next/font/local";
+
+const tiny5 = localFont({
+  src: "../public/fonts/Tiny5-Regular.ttf",
+  variable: "--font-tiny5",
+});
 
 export const metadata: Metadata = {
   title: "finance_stuff // Personal Finance Tracker",
@@ -29,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={tiny5.variable}>
       <body>
         {children}
         <Toaster />

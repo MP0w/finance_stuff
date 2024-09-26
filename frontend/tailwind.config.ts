@@ -11,10 +11,6 @@ const config: Config = {
       screens: {
         tallscreen: { raw: "(min-height: 700px)" },
       },
-      fontFamily: {
-        tiny5: ["Tiny5", "sans-serif"],
-        sans: ["Courier New", "monospace"], // Add this line
-      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
