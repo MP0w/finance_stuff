@@ -12,6 +12,7 @@ import { OnboardingConnectAccountsStep } from "./Steps/OnboardingConnectAccounts
 import OnboardingAppPreview from "./OnboardingAppPreview";
 import { OnboardingAddAccountingEntriesStep } from "./Steps/OnboardingAddAccountingEntriesStep";
 import { OnboardingFillAccountingEntriesStep } from "./Steps/OnboardingFillAccountingEntriesStep";
+import LogScreenView from "../components/LogScreenView";
 
 const onboardingSteps = [
   "import_csv",
@@ -148,6 +149,7 @@ const Onboarding = ({
 
   return (
     <div className="h-screen w-screen">
+      <LogScreenView screenName={currentStep} />
       <div className="h-full flex flex-col">
         <div className="m-4 h-2 bg-gray-300 rounded min-h-[8px]">
           <div
