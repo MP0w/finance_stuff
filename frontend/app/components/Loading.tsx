@@ -155,7 +155,7 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
           </g>
         </svg>
       </div>
-      {message && <p className="mt-4 text-sm">{message}</p>}
+      {message && <p className="mt-4">{message}</p>}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import {
 } from "./mockData";
 import Link from "next/link";
 import { ChatMessage } from "../Home/Chat/ChatTab";
+import Loading from "../components/Loading";
 
 const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   const { user, loaded } = useUserState();
@@ -115,8 +116,11 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
           />
         </div>
 
-        <section className="w-full md:w-1/2 mt-12">
-          <h3 className="text-center">Coming Soon™️</h3>
+        <section className="flex flex-col items-center w-full md:w-1/2 mt-12 gap-4">
+          <div className="flex items-center gap-4">
+            <Loading />
+            <h3 className="m-0">Coming Soon™️</h3>
+          </div>
           <div className="bg-white p-6 rounded-lg shadow-lg border">
             <ul className="space-y-2">
               {[
