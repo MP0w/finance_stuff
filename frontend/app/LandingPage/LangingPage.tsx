@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import { ChatMessage } from "../Home/Chat/ChatTab";
 import Loading from "../components/Loading";
+import LogScreenView from "../components/LogScreenView";
 
 const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   const { user, loaded } = useUserState();
@@ -29,6 +30,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
 
   return (
     <div className="p-4 pt-8 min-h-screen flex flex-col items-center">
+      <LogScreenView screenName="landing_page" />
       <div className="w-full max-w-4xl flex flex-col items-center">
         <header className="text-center mb-8 w-full">
           <h1 className="text-4xl md:text-6xl mb-2">finance_stuff</h1>

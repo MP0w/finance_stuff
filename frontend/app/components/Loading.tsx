@@ -16,7 +16,7 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
         >
           <filter
             id="a"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
             height="1.336"
             width="1.336"
             x="-.168"
@@ -33,8 +33,8 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
             y1="7.668531"
             y2="17.89324"
           >
-            <stop offset="0" stop-color="#fbb114" />
-            <stop offset="1" stop-color="#ff9508" />
+            <stop offset="0" stopColor="#fbb114" />
+            <stop offset="1" stopColor="#ff9508" />
           </linearGradient>
           <linearGradient
             id="c"
@@ -45,8 +45,8 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
             y1="8.60988"
             y2="19.256279"
           >
-            <stop offset="0" stop-color="#ff645d" />
-            <stop offset="1" stop-color="#ff4332" />
+            <stop offset="0" stopColor="#ff645d" />
+            <stop offset="1" stopColor="#ff4332" />
           </linearGradient>
           <linearGradient
             id="d"
@@ -57,8 +57,8 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
             y1="19.205147"
             y2="29.033293"
           >
-            <stop offset="0" stop-color="#ca70e1" />
-            <stop offset="1" stop-color="#b452cb" />
+            <stop offset="0" stopColor="#ca70e1" />
+            <stop offset="1" stopColor="#b452cb" />
           </linearGradient>
           <linearGradient
             id="e"
@@ -69,8 +69,8 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
             y1="17.89324"
             y2="28.117949"
           >
-            <stop offset="0" stop-color="#14adf6" />
-            <stop offset="1" stop-color="#1191f4" />
+            <stop offset="0" stopColor="#14adf6" />
+            <stop offset="1" stopColor="#1191f4" />
           </linearGradient>
           <linearGradient
             id="f"
@@ -81,8 +81,8 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
             y1="13.618688"
             y2="24.265087"
           >
-            <stop offset="0" stop-color="#52cf30" />
-            <stop offset="1" stop-color="#3bbd1c" />
+            <stop offset="0" stopColor="#52cf30" />
+            <stop offset="1" stopColor="#3bbd1c" />
           </linearGradient>
           <linearGradient
             id="g"
@@ -93,10 +93,10 @@ const Loading: React.FC<LoadingProps> = ({ message }) => {
             y1="9.376999"
             y2="19.205147"
           >
-            <stop offset="0" stop-color="#ffd305" />
-            <stop offset="1" stop-color="#fdcf01" />
+            <stop offset="0" stopColor="#ffd305" />
+            <stop offset="1" stopColor="#fdcf01" />
           </linearGradient>
-          <g fill-rule="evenodd">
+          <g fillRule="evenodd">
             <g
               filter="url(#a)"
               opacity=".2"

@@ -16,6 +16,7 @@ import {
 import { useUserState } from "../UserState";
 import ImportTab from "./Import/ImportTab";
 import Loading from "../components/Loading";
+import LogScreenView from "../components/LogScreenView";
 
 export const tabs = [
   { id: "fiat", label: "Bank Accounts" },
@@ -232,6 +233,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
             {!isLoading &&
               !(accountsError || entriesError) &&
               tabContent[activeTab as keyof typeof tabContent]}
+            <LogScreenView screenName={activeTab} />
           </TabView>
         </ArcherContainer>
         <Modal

@@ -11,6 +11,7 @@ import {
   sendSignInLinkToEmail,
   signInWithPopup,
 } from "firebase/auth";
+import LogScreenView from "../components/LogScreenView";
 
 interface LoginPageProps {}
 
@@ -74,6 +75,7 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
+      <LogScreenView screenName="login_page" />
       <div className="w-full max-w-md bg-white m-4 p-4 rounded-lg shadow-lg">
         <div className="relative mb-6">
           {state !== undefined && (
