@@ -5,11 +5,14 @@ import { createWriteStream } from "fs";
 
 let isFirst = true;
 let isAccountType = false;
+let isExpenseType = false;
 
 const customTypes = `
 export type AccountingEntriesDTO = AccountingEntries & { entries: Entries[] };
 
 export type AccountType = "fiat" | "investment";
+
+export type ExpenseType = "expense" | "income";
 
 export type ConnectionsDTO = Omit<
   Connections,
@@ -88,10 +91,18 @@ const transformer = new Transform({
       isAccountType = false;
     }
 
+    if (data.startsWith("export type Expenses = {")) {
+      isExpenseType = true;
+    } else if (isExpenseType && data.startsWith("};")) {
+      isExpenseType = false;
+    }
+
     if (data.includes("//")) {
       this.push("\n");
     } else if (isAccountType && data === "  type: string;\n") {
       this.push("  type: AccountType;\n");
+    } else if (isExpenseType && data === "  type: string;\n") {
+      this.push("  type: ExpenseType;\n");
     } else {
       this.push(data);
     }

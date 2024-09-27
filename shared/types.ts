@@ -5,6 +5,8 @@ export type AccountingEntriesDTO = AccountingEntries & { entries: Entries[] };
 
 export type AccountType = "fiat" | "investment";
 
+export type ExpenseType = "expense" | "income";
+
 export type ConnectionsDTO = Omit<
   Connections,
   "settings" | "created_at" | "updated_at" | "user_id"
@@ -71,6 +73,7 @@ export enum Table {
   Accounts = "accounts",
   Connections = "connections",
   Entries = "entries",
+  Expenses = "expenses",
   Users = "users",
 }
 
@@ -79,6 +82,7 @@ export type Tables = {
   "accounts": Accounts,
   "connections": Connections,
   "entries": Entries,
+  "expenses": Expenses,
   "users": Users,
 };
 
@@ -117,6 +121,19 @@ export type Entries = {
   accounting_entry_id: string;
   value: number;
   invested: number | null;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type Expenses = {
+  id: string;
+  user_id: string;
+  description: string;
+  date: string;
+  amount: number;
+  currency: string;
+  category: string | null;
+  type: ExpenseType;
   created_at: Date;
   updated_at: Date;
 };
