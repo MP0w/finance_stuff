@@ -10,6 +10,7 @@ import cors from "cors";
 import expressAsyncHandler from "express-async-handler";
 import { connectorsRouter } from "./Connectors/connectors";
 import { importRouter } from "./Import/import";
+import { expensesRouter } from "./Expenses/expenses";
 
 declare global {
   namespace Express {
@@ -59,4 +60,5 @@ export function router(app: Application) {
   entriesRouter(app);
   connectorsRouter(app);
   importRouter(app);
+  expensesRouter(app);
 }

@@ -22,6 +22,7 @@ import { router } from "./endpoints/router";
 import { initializeApp } from "firebase-admin/app";
 import admin from "firebase-admin";
 import { startWebsocketServer } from "./ai-chat/websocket";
+import multer from "multer";
 
 const cert: admin.ServiceAccount = JSON.parse(process.env.FIREBASE_CERT!);
 
@@ -40,6 +41,13 @@ router(app);
 
 // Add error handling middleware
 app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      res.status(400).json({ error: "File size exceeds the 2MB limit" });
+      return;
+    }
+  }
+
   console.error(
     `error handled in ${req.method} ${req.path}\n\n ${err.stack}\n-----`
   );

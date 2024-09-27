@@ -44,7 +44,33 @@ export type ImportProposal = {
     value: number;
     invested?: number;
   }[];
-};`;
+};
+
+export const CategoryMap = {
+  atm: "ATM",
+  inc: "Income",
+  inv: "Investments",
+  rnt: "Rent",
+  utl: "Utilities",
+  bar: "Bars & Restaurants",
+  fod: "Food & Groceries",
+  trn: "Transportation",
+  ins: "Insurance",
+  ent: "Entertainment",
+  trv: "Travel",
+  hlt: "Health",
+  edu: "Education",
+  sub: "Subscriptions",
+  shp: "Shopping",
+  dbt: "Debt Repayment",
+  tax: "Taxes",
+  sav: "Savings",
+  fam: "Friends & Family",
+  oth: "Other",
+} as const;
+
+export type Category = (typeof CategoryMap)[keyof typeof CategoryMap];
+`;
 
 const transformer = new Transform({
   transform(chunk, _, callback) {
