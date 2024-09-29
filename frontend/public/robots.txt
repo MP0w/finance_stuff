@@ -1,3 +1,18 @@
 # Allow all crawlers
 User-agent: *
 Allow: /
+Allow: /feature/savings
+Allow: /feature/savings-app
+Allow: /feature/savings-tracker
+Allow: /feature/savings-goals
+Allow: /feature/budgeting
+Allow: /feature/budgeting-app
+Allow: /feature/budget-planner
+Allow: /feature/spreadsheet
+Allow: /feature/personal-finance-spreadsheet
+Allow: /feature/budgeting-spreadsheet
+Allow: /feature/expenses-spreadsheet
+Allow: /feature/savings-spreadsheet
+Allow: /feature/expenses
+Allow: /feature/expenses-app
+Allow: /feature/expenses-tracker
