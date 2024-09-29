@@ -33,7 +33,9 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    window.history.pushState(null, "", showLogin ? "/login" : "/");
+    if (showLogin) {
+      window.history.pushState(null, "", "/login");
+    }
   }, [showLogin]);
 
   const signOut = async () => {
