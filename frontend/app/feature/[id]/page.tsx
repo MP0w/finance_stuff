@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 import { Metadata } from "next";
 import Main from "../../main";
 import { getMetadata } from "@/app/metadata";
