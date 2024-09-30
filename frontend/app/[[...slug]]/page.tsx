@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "finance_stuff",
       images: [
         {
-          url: "/images/og.png",
+          url: "https://stuff.finance/_next/image?url=%2Fimages%2Fog.png&w=1200",
         },
       ],
     },
