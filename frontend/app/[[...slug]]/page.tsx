@@ -27,7 +27,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return getMetadata("spreadsheet");
   }
 
-  return getMetadata("default");
+  const metadata = getMetadata("default");
+
+  return {
+    ...metadata,
+    openGraph: {
+      type: "website",
+      url: "https://stuff.finance",
+      title: metadata.title,
+      description: metadata.description,
+      siteName: "finance_stuff",
+      images: [
+        {
+          url: "/images/og.png",
+        },
+      ],
+    },
+  };
 }
 
 export default function Home() {
