@@ -8,6 +8,11 @@ const PrivacyPolicy: React.FC = () => {
       <Head>
         <title>Privacy Policy</title>
         <meta name="description" content="Privacy Policy for finance_stuff" />
+        <link
+          rel="canonical"
+          href="https://stuff.finance/privacy"
+          key="canonical"
+        />
       </Head>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>

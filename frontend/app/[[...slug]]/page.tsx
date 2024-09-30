@@ -38,6 +38,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     ...metadata,
+    alternates: {
+      canonical: `https://stuff.finance${type === "default" ? "" : `/${type}`}`,
+    },
     openGraph: {
       type: "website",
       url: "https://stuff.finance",

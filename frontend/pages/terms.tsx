@@ -11,6 +11,11 @@ const TermsAndConditions: React.FC = () => {
           name="description"
           content="Terms and Conditions for our service"
         />
+        <link
+          rel="canonical"
+          href="https://stuff.finance/terms"
+          key="canonical"
+        />
       </Head>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Terms and Conditions</h1>
