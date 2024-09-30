@@ -10,7 +10,11 @@ import HomePage from "./Home/HomePage";
 import LandingPage from "./LandingPage/LangingPage";
 import { usePathname } from "next/navigation";
 
-export default function Main() {
+export default function Main({
+  type,
+}: {
+  type: "expenses" | "budgeting" | "savings" | "spreadsheet" | "default";
+}) {
   const path = usePathname();
   const [showLogin, setShowLogin] = useState(path === "/login");
 
@@ -48,6 +52,7 @@ export default function Main() {
       {!showLogin ? (
         <div className="transition-all duration-1000 ease-out opacity-100">
           <LandingPage
+            type={type}
             showLogin={() => {
               setShowLogin(true);
             }}

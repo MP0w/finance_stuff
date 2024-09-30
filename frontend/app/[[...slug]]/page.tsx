@@ -8,26 +8,33 @@ type Props = {
   params: { slug?: string[] };
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = params.slug?.join("/") ?? "";
+const getType = (
+  slug?: string[]
+): "expenses" | "budgeting" | "savings" | "spreadsheet" | "default" => {
+  const id = slug?.join("/") ?? "";
 
   if (id.includes("expense")) {
-    return getMetadata("expenses");
+    return "expenses";
   }
 
   if (id.includes("budget")) {
-    return getMetadata("budgeting");
+    return "budgeting";
   }
 
   if (id.includes("saving")) {
-    return getMetadata("savings");
+    return "savings";
   }
 
   if (id.includes("sheet")) {
-    return getMetadata("spreadsheet");
+    return "spreadsheet";
   }
 
-  const metadata = getMetadata("default");
+  return "default";
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const type = getType(params.slug);
+  const metadata = getMetadata(type);
 
   return {
     ...metadata,
@@ -46,6 +53,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function Home() {
-  return <Main />;
+export default function Home(props: Props) {
+  return <Main type={getType(props.params.slug)} />;
 }

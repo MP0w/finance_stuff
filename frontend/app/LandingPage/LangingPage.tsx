@@ -11,7 +11,10 @@ import { ChatMessage } from "../Home/Chat/ChatTab";
 import Loading from "../components/Loading";
 import LogScreenView from "../components/LogScreenView";
 
-const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
+const LandingPage: React.FC<{
+  showLogin: () => void;
+  type: "expenses" | "budgeting" | "savings" | "spreadsheet" | "default";
+}> = ({ showLogin, type }) => {
   const { user, loaded } = useUserState();
   const [expandedFAQ, setExpandedFAQ] = useState<string>("security");
 
@@ -19,6 +22,54 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
     return <></>;
   }
 
+  const getKeyFeatures = () => {
+    if (type === "expenses") {
+      return [
+        ["💼", "Track expenses, accounts and investments"],
+        ["🔮", "AI Powered Insights for Smarter Decisions"],
+        ["🪄", "Automagically Import Expenses"],
+        ["📈", "Visualize Your Growth"],
+        ["🎯", "Easy Future Planning & Projections"],
+        ["🔗", "Connect your accounts to automate your tracking"],
+      ];
+    } else if (type === "budgeting") {
+      return [
+        ["💼", "Track expenses, accounts and investments"],
+        ["🔮", "AI Powered Insights to help you budget"],
+        ["🪄", "Automagically Import Expenses"],
+        ["📈", "Visualize Your Growth"],
+        ["🎯", "Easy Budgeting & Projections"],
+        ["🔗", "Connect your accounts to automate your tracking"],
+      ];
+    } else if (type === "savings") {
+      return [
+        ["💼", "Track All Accounts and Investments"],
+        ["🔮", "AI Powered Insights to help you save"],
+        ["🪄", "Automagically Import Spreadsheets"],
+        ["📈", "Visualize Your Savings"],
+        ["🎯", "Easy Saving Goals & Projections"],
+        ["🔗", "Connect your accounts to automate your tracking"],
+      ];
+    } else if (type === "spreadsheet") {
+      return [
+        ["🪄", "Automagically Import Spreadsheets"],
+        ["💼", "Track All Accounts and Investments"],
+        ["🔮", "AI Powered, more powerful than a spreadsheet"],
+        ["📈", "Visualize Your Growth"],
+        ["🎯", "Easy Future Planning & Projections"],
+        ["🔗", "Connect your accounts to automate your tracking"],
+      ];
+    }
+
+    return [
+      ["💼", "Track All Accounts and Investments"],
+      ["🔮", "AI Powered Insights for Smarter Decisions"],
+      ["🪄", "Automagically Import Spreadsheets"],
+      ["📈", "Visualize Your Growth"],
+      ["🎯", "Easy Future Planning & Projections"],
+      ["🔗", "Connect your accounts to automate your tracking"],
+    ];
+  };
   const mock: TotalTableProps = {
     title: undefined,
     fiatAccounts: mockFiatAccounts,
@@ -67,14 +118,7 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
             <h2 className="text-center">Key Features</h2>
             <div className="bg-white p-6 rounded-lg shadow-lg border">
               <ul className="space-y-2">
-                {[
-                  ["💼", "Track All Accounts and Investments"],
-                  ["🔮", "AI Powered Insights for Smarter Decisions"],
-                  ["🪄", "Automagically Import Spreadsheets"],
-                  ["📈", "Visualize Your Growth"],
-                  ["🎯", "Easy Future Planning & Projections"],
-                  ["🔗", "Connect your accounts to automate your tracking"],
-                ].map((feature, index) => (
+                {getKeyFeatures().map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <span className="mr-2">{feature[0]}</span>
                     <span>{feature[1]}</span>
@@ -104,13 +148,54 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
           </section>
         </main>
 
-        <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
-          Master your money with simple tracking.
-          <br />
-          Manage spending, savings, and investments effortlessly!
-          <br />
-          Start building better financial habits today.
-        </blockquote>
+        {type === "default" && (
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+            Master your money with simple tracking.
+            <br />
+            Manage spending, savings, and investments effortlessly!
+            <br />
+            Start building better financial habits today.
+          </blockquote>
+        )}
+
+        {type === "expenses" && (
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+            Track your expenses automatically using bank statements.
+            <br />
+            Tracking expense is time consuming, let us do it for you.
+          </blockquote>
+        )}
+
+        {type === "savings" && (
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+            Track your savings and achieve your goals.
+            <br />
+            Manage your spending, savings, and investments effortlessly!
+            <br />
+            Start improving your savings today.
+          </blockquote>
+        )}
+
+        {type === "budgeting" && (
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+            We help you budget and track your savings.
+            <br />
+            Manage your budgets, spending, and investments effortlessly!
+          </blockquote>
+        )}
+
+        {type === "spreadsheet" && (
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+            Spreadsheets are great and very powerful. But they can get very
+            complex.
+            <br />
+            After years of over-engineering a personal finance spreadsheet we
+            decided to turn it into an app, to make it simpler and more
+            powerful.
+            <br />
+            It&apos;s tailored to tracking personal finances and easier to use.
+          </blockquote>
+        )}
 
         <div className="mt-4 w-full">
           <TotalTable
@@ -124,7 +209,6 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
           />
         </div>
 
-        {/* New FAQ Section */}
         <section className="w-full max-w-3xl mt-12">
           <h2 className="text-center">Frequently Asked Questions</h2>
           <div className="space-y-2">
