@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useUserState } from "../UserState";
 import TotalTable, { TotalTableProps } from "../Home/Summary/TotalTable";
 import {
@@ -13,6 +13,7 @@ import LogScreenView from "../components/LogScreenView";
 
 const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   const { user, loaded } = useUserState();
+  const [expandedFAQ, setExpandedFAQ] = useState<string>("security");
 
   if (user || !loaded) {
     return <></>;
@@ -62,27 +63,8 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
         </div>
 
         <main className="flex flex-col md:flex-row justify-center gap-8 max-w-4xl w-full my-8">
-          <section className="w-full md:w-1/2">
-            <h3 className="text-center">AI Assistant</h3>
-            <div className="space-y-4 bg-white p-6 rounded-lg shadow-lg border text-sm">
-              {[
-                {
-                  content:
-                    "I'm thinking of buying a flat, do you think I can pay off the mortgage safely?",
-                  role: "user",
-                },
-                {
-                  content:
-                    "Based on your income, a mortgage payment of up to 1200€/month should be manageable. Consider properties below 300,000€. Your savings could cover a 10-15% down payment. It's feasible!",
-                  role: "assistant",
-                },
-              ].map((msg, index) => (
-                <ChatMessage key={index} message={msg} small={true} />
-              ))}
-            </div>
-          </section>
           <section className="w-full md:w-1/2 ">
-            <h3 className="text-center">Key Features</h3>
+            <h2 className="text-center">Key Features</h2>
             <div className="bg-white p-6 rounded-lg shadow-lg border">
               <ul className="space-y-2">
                 {[
@@ -99,6 +81,25 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
                   </li>
                 ))}
               </ul>
+            </div>
+          </section>
+          <section className="w-full md:w-1/2">
+            <h2 className="text-center">AI Assistant</h2>
+            <div className="space-y-4 bg-white p-6 rounded-lg shadow-lg border text-sm">
+              {[
+                {
+                  content:
+                    "I'm thinking of buying a flat, do you think I can pay off the mortgage safely?",
+                  role: "user",
+                },
+                {
+                  content:
+                    "Based on your income, a mortgage payment of up to 1200€/month should be manageable. Consider properties below 300,000€. Your savings could cover a 10-15% down payment. It's feasible!",
+                  role: "assistant",
+                },
+              ].map((msg, index) => (
+                <ChatMessage key={index} message={msg} small={true} />
+              ))}
             </div>
           </section>
         </main>
@@ -123,10 +124,84 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
           />
         </div>
 
+        {/* New FAQ Section */}
+        <section className="w-full max-w-3xl mt-12">
+          <h2 className="text-center">Frequently Asked Questions</h2>
+          <div className="space-y-2">
+            {[
+              {
+                key: "security",
+                q: "Is my data secure?",
+                a: "Your financial data is very sensitive, first of all we offer an anonymous sign up option if you prefer to use it. Other than that the most sensitive data is encrypted in the database.",
+              },
+              {
+                key: "why",
+                q: "Why should I track my personal finances?",
+                a: "Tracking your personal finances is crucial for achieving financial stability and growth. It helps you understand your spending habits, identify areas for improvement, set realistic financial goals, and make informed decisions about your money. By consistently monitoring your finances, you can build better saving habits, reduce debt, plan for the future, and ultimately gain peace of mind about your financial situation.",
+              },
+              {
+                key: "spreadsheet",
+                q: "I already use a spreadsheet, why should I switch over?",
+                a: "While spreadsheets are versatile but can get very complex and not user friendly when you want to get more data and insights out of them. finance_stuff offers several advantages:\n1) Automated data import and updates save time and reduce errors. Even simply adding a new bank account or investement in a spreadsheet is time consuming.\n2) Our AI-powered assistant gives you contextual information and can help you make decisions.\n3) User-friendly interface makes tracking and visualizing your finances easier.\n4) Advanced features like statistics and future projections are built-in.\n5) Secure cloud storage ensures your data is safe and accessible across devices.\n6) Regular updates add new features without you having to redesign your spreadsheet.",
+              },
+              {
+                key: "import",
+                q: "Can I import data from other apps?",
+                a: "Absolutely! We offer an importer from CSV files, most apps should allow you to export your data in CSV, for example google sheets or notion databases.",
+              },
+              {
+                key: "automation",
+                q: "Can I automate my personal finance tracking?",
+                a: "We offer connections to some popular services to automatically get your balances, for example binance or blockchains connectors are already available. Many more to come! Feel free to hit us up to request a connector.",
+              },
+            ].map((faq, index) => (
+              <div
+                key={index}
+                className="bg-white p-4 rounded-lg shadow"
+                onClick={() => setExpandedFAQ(faq.key)}
+              >
+                <p className="text-lg font-semibold">{faq.q}</p>
+                {expandedFAQ === faq.key && (
+                  <div className="mt-2">
+                    {faq.a.split("\n").map((line, index) => (
+                      <p key={index}>{line}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="w-full max-w-3xl mt-12">
+          <h2 className="text-center">About Me</h2>
+          <div className="bg-white p-6 rounded-lg shadow">
+            I&apos;m Alex Manzella, the creator of <b>finance_stuff</b>.
+            I&apos;m a Software Engineer with 13 years of experience, in the
+            recent years I have been a Principal Engineer at{" "}
+            <Link className="underline" href="https://n26.com">
+              N26
+            </Link>{" "}
+            a popular mobile bank in Europe and a Tech Lead at{" "}
+            <Link className="underline" href="https://amie.so">
+              Amie
+            </Link>{" "}
+            an amazing productivity app.
+            <br />
+            <br />
+            I&apos;m very interested in finance and worked for many years in
+            fintech. I am interested in blockchains and DeFi.
+            <br />
+            After years of over-engineering my personal finance spreadsheet I
+            decided to turn it into an app, to make it simpler and more
+            powerful.
+          </div>
+        </section>
+
         <section className="flex flex-col items-center w-full md:w-1/2 mt-12 gap-4">
           <div className="flex items-center gap-4">
             <Loading />
-            <h3 className="m-0">Coming Soon™️</h3>
+            <h2 className="m-0">Coming Soon™️</h2>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-lg border">
             <ul className="space-y-2">
