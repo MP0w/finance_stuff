@@ -29,11 +29,11 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
   };
 
   return (
-    <div className="p-4 pt-8 min-h-screen flex flex-col items-center bg-gray-100">
+    <div className="p-4 pt-8 min-h-screen flex flex-col items-center from-gray-100 to-purple-100 via-blue-100 bg-gradient-to-b">
       <LogScreenView screenName="landing_page" />
       <div className="w-full max-w-4xl flex flex-col items-center">
-        <header className="text-center mb-8 w-full">
-          <h1 className="text-4xl md:text-6xl mb-2">finance_stuff</h1>
+        <header className="text-center mb-6 w-full">
+          <h1 className="text-5xl md:text-6xl mb-2">finance_stuff</h1>
           <p className="text-xl md:text-2xl mt-8">
             Effortlessly Track & Grow your Finances
             <br />
@@ -41,12 +41,17 @@ const LandingPage: React.FC<{ showLogin: () => void }> = ({ showLogin }) => {
           </p>
         </header>
 
-        <div className="flex flex-col justify-center gap-4 text-center font-bold w-full max-w-sm">
+        <div className="flex flex-col justify-center gap-4 text-center font-semibold w-full max-w-sm text-lg tracking-wide relative">
+          <span className="text-center bg-red-600 text-sm font-semibold text-white px-2 py-1 rounded-lg border border-white transform rotate-12 shadow-md z-10 absolute -right-4 top-0">
+            Free for
+            <br />
+            limited time!
+          </span>
           <button
             onClick={showLogin}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 g rounded transition duration-300 pixel-corners-small"
+            className="mt-8 from-blue-500 to-purple-500 via-blue-600 bg-gradient-to-r hover:from-blue-800 hover:to-blue-700 text-white py-3 px-6 rounded transition duration-300 pixel-corners-small relative"
           >
-            Get Started for Free
+            Get Started
           </button>
           <button
             onClick={showLogin}
