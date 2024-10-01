@@ -88,13 +88,13 @@ const LandingPage: React.FC<{
       <div className="w-full max-w-4xl flex flex-col items-center">
         <header className="text-center mb-6 w-full">
           <h1 className="text-5xl md:text-6xl mb-2">finance_stuff</h1>
-          <p className="text-xl md:text-2xl mt-8">
+          <p className="text-xl md:text-2xl mt-8 whitespace-pre-line">
             {t("landingPage.subtitle")}
           </p>
         </header>
 
         <div className="flex flex-col justify-center gap-4 text-center font-semibold w-full max-w-sm text-lg tracking-wide relative">
-          <span className="text-center bg-red-600 text-sm font-semibold text-white px-2 py-1 rounded-lg border border-white transform rotate-12 shadow-md z-10 absolute -right-4 top-0">
+          <span className="text-center bg-red-600 text-sm font-semibold text-white px-2 py-1 rounded-lg border border-white transform rotate-12 shadow-md z-10 absolute -right-4 top-0 whitespace-pre-line">
             {t("landingPage.freeOffer")}
           </span>
           <button
@@ -145,31 +145,31 @@ const LandingPage: React.FC<{
         </main>
 
         {type === "default" && (
-          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold whitespace-pre-line">
             {t("landingPage.quotes.default")}
           </blockquote>
         )}
 
         {type === "expenses" && (
-          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold whitespace-pre-line">
             {t("landingPage.quotes.expenses")}
           </blockquote>
         )}
 
         {type === "savings" && (
-          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold whitespace-pre-line">
             {t("landingPage.quotes.savings")}
           </blockquote>
         )}
 
         {type === "budgeting" && (
-          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold whitespace-pre-line">
             {t("landingPage.quotes.budgeting")}
           </blockquote>
         )}
 
         {type === "spreadsheet" && (
-          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold">
+          <blockquote className="border-l-4 border-gray-600 pl-4 m-4 font-semibold whitespace-pre-line">
             {t("landingPage.quotes.spreadsheet")}
           </blockquote>
         )}
@@ -223,11 +223,7 @@ const LandingPage: React.FC<{
               >
                 <p className="text-lg font-semibold">{faq.q}</p>
                 {expandedFAQ === faq.key && (
-                  <div className="mt-2">
-                    {faq.a.split("\n").map((line, index) => (
-                      <p key={index}>{line}</p>
-                    ))}
-                  </div>
+                  <div className="mt-2 whitespace-pre-line">{faq.a}</div>
                 )}
               </div>
             ))}
@@ -237,7 +233,7 @@ const LandingPage: React.FC<{
         <section className="w-full max-w-3xl mt-12">
           <h2 className="text-center">{t("landingPage.aboutMe.title")}</h2>
           <div className="bg-white p-6 rounded-lg shadow">
-            <div>
+            <div className="whitespace-pre-line">
               {t("landingPage.aboutMe.content", {
                 n26Link: '<span class="n26-link"></span>',
                 amieLink: '<span class="amie-link"></span>',

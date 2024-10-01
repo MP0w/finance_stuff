@@ -63,7 +63,9 @@ const CommonPasswordAuth: React.FC<PasswordAuthProps> = ({
     if (e.message.includes("auth/weak-password")) {
       return t("passwordSignIn.weakPassword");
     }
-    return t("passwordSignIn.genericError", { isSignUp });
+    return isSignUp
+      ? t("passwordSignIn.genericErrorSignup")
+      : t("passwordSignIn.genericErrorSignin");
   };
 
   const createUser = async () => {
