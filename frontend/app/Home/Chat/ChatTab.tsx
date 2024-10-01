@@ -10,7 +10,7 @@ interface ChatMessageProps {
     role: string;
     content: string;
   };
-  small?: boolean;
+  small: boolean;
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({ message, small }) => {
@@ -83,7 +83,11 @@ const ChatTab: React.FC = () => {
         <div className="overflow-y-auto pb-16">
           <div className="space-y-4">
             {allMessages.map((msg, index) => (
-              <ChatMessage key={index} message={msg} />
+              <ChatMessage
+                key={index}
+                message={msg}
+                small={window.innerWidth < 640}
+              />
             ))}
             <div className="flex justify-end">
               <button className="flex items-center space-x-2" onClick={clear}>
