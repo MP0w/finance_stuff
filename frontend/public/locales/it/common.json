@@ -1,0 +1,386 @@
+{
+  "brandHeader": {
+    "currency": "Valuta",
+    "exportData": "Esporta dati (CSV)",
+    "importFromSheet": "Importa da foglio",
+    "privacyPolicy": "Informativa Privacy",
+    "logout": "Esci"
+  },
+  "feedbackButton": {
+    "sendFeedback": "Invia feedback"
+  },
+  "accountsTable": {
+    "total": "Totale",
+    "totalTip": "La somma di tutti i valori dei conti"
+  },
+  "fiatAccountsTab": {
+    "addBankAccount": "Aggiungi Conto Bancario",
+    "accountPlaceholder": "Contanti, Banca, ecc.",
+    "create": "Crea",
+    "description": {
+      "part1": "Qualsiasi conto in cui, a differenza dei conti d'investimento,",
+      "part2": "non ti aspetti che il valore fluttui",
+      "part3": " a meno che non aggiungi/spendi/rimuovi denaro.",
+      "part4": "Ad esempio: conti bancari, contanti, persino prestiti o debiti che hai con qualcuno (usando valori negativi)"
+    }
+  },
+  "chatTab": {
+    "clearChat": "Pulisci chat",
+    "reply": "Rispondi",
+    "send": "Invia",
+    "defaultMessages": {
+      "1": "Posso aiutarti con le tue finanze personali, budget o argomenti di contabilità.",
+      "2": "Cosa stai cercando?"
+    }
+  },
+  "connectorsTab": {
+    "connections": "Connessioni",
+    "errorLoadingConnections": "Errore nel caricamento delle connessioni: {{error}}",
+    "onboardingMessage": "Connetti i tuoi conti a servizi esterni per compilare automaticamente i tuoi dati e vedere dati in tempo reale.",
+    "noConnections": "Non hai ancora connessioni.",
+    "addNewConnector": "Aggiungi Nuovo Connettore",
+    "errorLoadingConnectorsSettings": "Errore nel caricamento delle impostazioni dei connettori: {{error}}",
+    "selectAccount": "Seleziona un conto:",
+    "chooseAccount": "Scegli un conto",
+    "accountInstructions": "L'ultima voce per il conto selezionato sarà compilata automaticamente se vuota e recente. Altrimenti, quando crei una nuova voce con una data recente, sarà compilata automaticamente. Inizierai anche a vedere dati in tempo reale nel Riepilogo. Suggerimento: puoi aggiungere più connessioni a un singolo conto, verranno sommate",
+    "selectConnector": "Seleziona un connettore:",
+    "connectorSettings": "Impostazioni Connettore",
+    "securityNote": "Tutte le impostazioni dei connettori sono criptate e archiviate in modo sicuro.",
+    "connect": "Connetti",
+    "missingProviderMessage": "Se non vedi il tuo fornitore preferito nella lista, puoi inviarci un feedback o un'email e considereremo di aggiungerlo!",
+    "contributeMessage": "Puoi anche contribuire, è facile!",
+    "confirmDeletion": "Conferma Eliminazione",
+    "deleteConfirmationMessage": "Sei sicuro di voler eliminare la connessione a {{connectorId}} per il conto {{accountName}}? Questa azione non può essere annullata.",
+    "deleting": "Eliminazione in corso..."
+  },
+  "common": {
+    "retry": "Riprova",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "summary": "Riepilogo",
+    "together": "insieme a",
+    "graphs": "grafici",
+    "statistics": "statistiche",
+    "and": "e",
+    "projections": "proiezioni",
+    "next": "Avanti",
+    "skip": "Salta"
+  },
+  "importData": {
+    "newLabel": " (nuovo)",
+    "date": "Data",
+    "invested": "Investito",
+    "investmentValue": "Valore Investimento",
+    "value": "Valore"
+  },
+  "importTab": {
+    "creatingProposal": "Creazione di una proposta di importazione...",
+    "importingData": "Importazione dati...",
+    "introText": "Se già tieni traccia delle tue finanze usando un foglio di calcolo o qualsiasi strumento che può esportare in CSV, puoi importarlo in finance_stuff. Creeremo i conti e le voci necessarie insieme a tutti i valori che hai tracciato in passato.",
+    "exportInstructions": "Esporta i tuoi dati come CSV e caricali qui. Per esempio in Google Sheets: > File > Scarica > Valori separati da virgola (CSV)",
+    "dragDropInstruction": "Trascina e rilascia un file CSV qui, o clicca per selezionarne uno",
+    "emptyProposalMessage": "Nessuna proposta è stata generata, potrebbe significare che non c'è nulla da importare dal tuo foglio di calcolo perché hai già tutti i dati. Altrimenti prova con un altro CSV.",
+    "reviewInstructions": "Rivedi la proposta e clicca su Importa se tutto sembra corretto, altrimenti indica quali modifiche vorresti apportare per riprovare",
+    "confirmImport": "Conferma Importazione",
+    "changeProposalInstructions": "Se hai bisogno di apportare modifiche alla proposta, spiega cosa non va e quali cambiamenti vorresti in modo che la nostra IA possa tentare una nuova proposta.",
+    "newProposalPlaceholder": "Inserisci messaggio per nuova proposta",
+    "requestNewProposal": "Richiedi Nuova Proposta"
+  },
+  "investmentsAccountsTab": {
+    "addInvestmentAccount": "Aggiungi Conto Investimento",
+    "accountPlaceholder": "Crypto, Azioni, Obbligazioni, ecc.",
+    "add": "Aggiungi",
+    "description": {
+      "part1": "A differenza dei conti bancari, i conti di investimento sono conti",
+      "part2": "in cui ti aspetti che il valore fluttui",
+      "part3": " anche se non aggiungi o rimuovi denaro.",
+      "part4": "Ad esempio: azioni, crypto, obbligazioni. Inizialmente investi una somma, potresti aggiungere/rimuovere ogni mese ma il loro valore fluttua anche."
+    },
+    "connectInstructions": "Dopo aver creato un conto puoi connetterlo a conti esterni (es. banche, exchange di crypto, broker azionari, ecc...) per compilare automaticamente gli importi ogni volta che crei una voce e vedere dati in tempo reale.",
+    "connectExternalAccounts": "Connetti conti esterni",
+    "investmentsTotal": "Totale Investimenti"
+  },
+  "investmentTable": {
+    "initialInvestment": "Investimento Iniziale",
+    "initialInvestmentTip": "L'importo complessivo che hai investito in questo asset fino ad oggi, esclusi profitti o perdite",
+    "investmentValue": "Valore Investimento",
+    "investmentValueTip": "Il valore del tuo investimento ad oggi inclusi profitti o perdite"
+  },
+  "graphsTab": {
+    "liquid": "Liquidità",
+    "totalNetWorth": "Patrimonio netto totale",
+    "liquidAssets": "Attività liquide",
+    "investments": "Investimenti"
+  },
+  "projectionsTab": {
+    "dataWarning": "I tuoi dati coprono {{months}} mesi, le statistiche e le proiezioni saranno più accurate più dati avrai. Puoi anche inserire dati dei mesi precedenti.",
+    "averageSavings": "Risparmi Medi",
+    "averageTotal": "Totale Medio",
+    "averageMonthlyProfits": "Profitti Mensili Medi",
+    "projection": "Proiezione",
+    "insufficientData": "Possiamo fare proiezioni solo se hai almeno 6 mesi di dati. Attualmente hai {{months}} mesi di dati.",
+    "totalNetWorth": "Patrimonio netto totale"
+  },
+  "summaryTab": {
+    "addAccountsMessage": "Aggiungi i tuoi conti e voci per vedere il riepilogo"
+  },
+  "totalTable": {
+    "liquid": "Liquidità",
+    "liquidTip": "Totale di tutti i conti bancari",
+    "invested": "Investito",
+    "investedTip": "Totale di tutti i tuoi investimenti esclusi profitti o perdite",
+    "investmentsValue": "Valore Investimenti",
+    "investmentsValueTip": "Valore totale dei tuoi investimenti inclusi profitti o perdite",
+    "savings": "Risparmi",
+    "savingsTip": "Risparmi esclusi profitti o perdite degli investimenti dalla voce precedente. In pratica il cambiamento del tuo patrimonio netto se gli investimenti fossero rimasti stabili.",
+    "total": "Totale",
+    "totalTip": "Il tuo patrimonio netto totale, la somma della tua liquidità e dei valori degli investimenti",
+    "liveData": "Dati in Tempo Reale",
+    "missingValuesWarning": "🚨 Mancano alcuni valori nei tuoi conti per questa voce, controlla le celle rosse lampeggianti nei Conti Bancari e Investimenti per questa data"
+  },
+  "tabs": {
+    "bankAccounts": "Conti Bancari",
+    "investments": "Investimenti",
+    "expenses": "Spese",
+    "summary": "Riepilogo",
+    "connectors": "Connettori",
+    "ai": "✨IA🔮"
+  },
+  "homeContent": {
+    "expensesWorkInProgress": "Stiamo ancora lavorando sulle Spese.",
+    "comingSoon": "Prossimamente™️",
+    "confirmDeletion": "Conferma Eliminazione",
+    "deleteAccountConfirmation": "Sei sicuro di voler eliminare il conto <b>{{accountName}}</b>? Questa azione non può essere annullata e tutte le voci per quel conto saranno anche eliminate.",
+    "deleteEntryFromAllAccounts": "Elimina data da tutti i conti",
+    "deleteEntryWarning": "Tutti i valori per quella data su ogni conto saranno rimossi. Questa azione non può essere annullata e",
+    "errorLoadingData": "Errore nel caricamento dei dati",
+    "retry": "Riprova"
+  },
+  "homePage": {
+    "accountCreated": "Conto creato",
+    "accountCreationFailed": "Creazione del conto fallita. Riprova.",
+    "newEntryCreated": "Nuova voce creata",
+    "failedConnections": "Impossibile ottenere un valore da: {{connectors}}.",
+    "accountingEntryCreationFailed": "Creazione della voce contabile fallita. {{error}}",
+    "accountNotFound": "Conto non trovato. Riprova",
+    "entryNotFound": "Voce non trovata. Riprova",
+    "accountDeletedSuccess": "Conto eliminato con successo",
+    "accountDeletionFailed": "Eliminazione del conto fallita. Riprova.",
+    "entryDeletedSuccess": "Voce eliminata con successo",
+    "entryDeletionFailed": "Eliminazione della voce fallita. Riprova."
+  },
+  "onboardingTips": {
+    "addInvestmentAccounts": "Aggiungi i tuoi conti di investimento!",
+    "investmentExamples": "Ad esempio le tue azioni, obbligazioni, crypto, immobili, ecc.",
+    "addBankAccounts": "Aggiungi i tuoi conti bancari!",
+    "bankAccountExplanation": "Qui puoi aggiungere tutti i tuoi conti bancari o anche contanti, qualsiasi cosa che non sia un investimento."
+  },
+  "table": {
+    "addEntry": "Aggiungi Voce",
+    "dateHeader": {
+      "title": "Data",
+      "tip": "La data della voce contabile, suggeriamo di farlo mensilmente, ad esempio alla fine di ogni mese, ma puoi farlo settimanalmente o come preferisci. Quando sei pronto ad aggiungere una nuova voce, clicca sul pulsante Aggiungi voce e scegli la data."
+    },
+    "profitsHeader": {
+      "title": "Profitti",
+      "tip": "Profitti o perdite degli investimenti basati sull'importo investito"
+    },
+    "percentageHeader": {
+      "title": "%",
+      "tip": "La percentuale dei profitti dei tuoi investimenti rispetto all'importo investito"
+    },
+    "differenceHeader": {
+      "title": "Differenza",
+      "tip": "La differenza rispetto alla voce precedente"
+    },
+    "failedToUpdateValue": "Aggiornamento del valore fallito. Riprova."
+  },
+  "landingPage": {
+    "subtitle": "Traccia e Fai Crescere le tue Finanze Senza Sforzo\nin soli 10 minuti al mese",
+    "freeOffer": "Gratis per\ntempo limitato!",
+    "getStarted": "Inizia",
+    "login": "Accedi",
+    "keyFeatures": {
+      "expenses": {
+        "1": "Traccia spese, conti e investimenti",
+        "2": "Approfondimenti Potenziati dall'IA per Decisioni più Intelligenti",
+        "3": "Importa Automagicamente le Spese",
+        "4": "Visualizza la Tua Crescita",
+        "5": "Pianificazione Futura Facile e Proiezioni",
+        "6": "Connetti i tuoi conti per automatizzare il tracciamento"
+      },
+      "budgeting": {
+        "1": "Traccia spese, conti e investimenti",
+        "2": "Approfondimenti Potenziati dall'IA per aiutarti a fare budget",
+        "3": "Importa Automagicamente le Spese",
+        "4": "Visualizza la Tua Crescita",
+        "5": "Facile Budgeting e Proiezioni",
+        "6": "Connetti i tuoi conti per automatizzare il tracciamento"
+      },
+      "savings": {
+        "1": "Traccia Tutti i Conti e gli Investimenti",
+        "2": "Approfondimenti Potenziati dall'IA per aiutarti a risparmiare",
+        "3": "Importa Automaticamente i Fogli di Calcolo",
+        "4": "Visualizza i Tuoi Risparmi",
+        "5": "Facili Obiettivi di Risparmio e Proiezioni",
+        "6": "Connetti i tuoi conti per automatizzare il tracciamento"
+      },
+      "spreadsheet": {
+        "1": "Importa Automaticamente i Fogli di Calcolo",
+        "2": "Traccia Tutti i Conti e gli Investimenti",
+        "3": "Potenziato dall'IA, più potente di un foglio di calcolo",
+        "4": "Visualizza la Tua Crescita",
+        "5": "Pianificazione Futura Facile e Proiezioni",
+        "6": "Connetti i tuoi conti per automatizzare il tracciamento"
+      },
+      "default": {
+        "1": "Traccia Tutti i Conti e gli Investimenti",
+        "2": "Approfondimenti Potenziati dall'IA per Decisioni più Intelligenti",
+        "3": "Importa Automaticamente i Fogli di Calcolo",
+        "4": "Visualizza la Tua Crescita",
+        "5": "Pianificazione Futura Facile e Proiezioni",
+        "6": "Connetti i tuoi conti per automatizzare il tracciamento"
+      }
+    },
+    "footer": {
+      "companyName": "stuff.finance",
+      "email": "info@stuff.finance",
+      "privacyPolicy": "Informativa sulla Privacy",
+      "termsOfService": "Termini di Servizio"
+    },
+    "keyFeaturesTitle": "Caratteristiche Principali",
+    "aiAssistant": "Assistente IA",
+    "quotes": {
+      "default": "Padroneggia il tuo denaro con un tracciamento semplice.\nGestisci spese, risparmi e investimenti senza sforzo!\nInizia a costruire migliori abitudini finanziarie oggi.",
+      "expenses": "Traccia le tue spese automaticamente usando gli estratti conto.\nTracciare le spese richiede tempo, lascia che lo facciamo noi per te.",
+      "savings": "Traccia i tuoi risparmi e raggiungi i tuoi obiettivi.\nGestisci le tue spese, risparmi e investimenti senza sforzo!\nInizia a migliorare i tuoi risparmi oggi.",
+      "budgeting": "Ti aiutiamo a fare budget e tracciare i tuoi risparmi.\nGestisci i tuoi budget, spese e investimenti senza sforzo!",
+      "spreadsheet": "I fogli di calcolo sono ottimi e molto potenti. Ma possono diventare molto complessi.\nDopo anni di sovra-ingegnerizzazione di un foglio di calcolo per le finanze personali, abbiamo deciso di trasformarlo in un'app, per renderlo più semplice e potente.\nÈ su misura per tracciare le finanze personali e più facile da usare."
+    },
+    "faq": {
+      "title": "Domande Frequenti",
+      "security": {
+        "question": "I miei dati sono sicuri?",
+        "answer": "I tuoi dati finanziari sono molto sensibili, innanzitutto offriamo un'opzione di registrazione anonima se preferisci usarla. Oltre a ciò, i dati più sensibili sono criptati nel database."
+      },
+      "why": {
+        "question": "Perché dovrei tracciare le mie finanze personali?",
+        "answer": "Tracciare le tue finanze personali è cruciale per raggiungere stabilità e crescita finanziaria. Ti aiuta a capire le tue abitudini di spesa, identificare aree di miglioramento, stabilire obiettivi finanziari realistici e prendere decisioni informate sul tuo denaro. Monitorando costantemente le tue finanze, puoi costruire migliori abitudini di risparmio, ridurre i debiti, pianificare per il futuro e, in definitiva, ottenere tranquillità sulla tua situazione finanziaria."
+      },
+      "spreadsheet": {
+        "question": "Uso già un foglio di calcolo, perché dovrei passare a questo?",
+        "answer": "Mentre i fogli di calcolo sono versatili, possono diventare molto complessi e poco user-friendly quando vuoi ottenere più dati e approfondimenti. finance_stuff offre diversi vantaggi:\n1) L'importazione e l'aggiornamento automatico dei dati fanno risparmiare tempo e riducono gli errori. Anche semplicemente aggiungere un nuovo conto bancario o investimento in un foglio di calcolo richiede tempo.\n2) Il nostro assistente potenziato dall'IA ti fornisce informazioni contestuali e può aiutarti a prendere decisioni.\n3) L'interfaccia user-friendly rende più facile tracciare e visualizzare le tue finanze.\n4) Funzionalità avanzate come statistiche e proiezioni future sono integrate.\n5) L'archiviazione sicura nel cloud assicura che i tuoi dati siano al sicuro e accessibili su tutti i dispositivi.\n6) Aggiornamenti regolari aggiungono nuove funzionalità senza che tu debba riprogettare il tuo foglio di calcolo."
+      },
+      "import": {
+        "question": "Posso importare dati da altre app?",
+        "answer": "Assolutamente! Offriamo un importatore da file CSV, la maggior parte delle app dovrebbe permetterti di esportare i tuoi dati in CSV, ad esempio fogli Google o database Notion."
+      },
+      "automation": {
+        "question": "Posso automatizzare il tracciamento delle mie finanze personali?",
+        "answer": "Offriamo connessioni ad alcuni servizi popolari per ottenere automaticamente i tuoi saldi, ad esempio i connettori Binance o blockchain sono già disponibili. Molti altri in arrivo! Sentiti libero di contattarci per richiedere un connettore."
+      }
+    },
+    "aboutMe": {
+      "title": "Chi Sono",
+      "content": "Sono Alex Manzella, il creatore di <b>finance_stuff</b>. Sono un Ingegnere del Software con 13 anni di esperienza, negli ultimi anni sono stato un Principal Engineer presso {{n26Link}} una popolare banca mobile in Europa e un Tech Lead presso {{amieLink}} un'incredibile app di produttività.\n\nSono molto interessato alla finanza e ho lavorato per molti anni nel fintech. Sono interessato alle blockchain e alla DeFi.\nDopo anni di sovra-ingegnerizzazione del mio foglio di calcolo per le finanze personali, ho deciso di trasformarlo in un'app, per renderlo più semplice e potente."
+    },
+    "comingSoon": "Prossimamente™️",
+    "comingSoonFeatures": {
+      "mobileApps": "App Mobile",
+      "autoExpenseTracking": "Tracciamento automatico delle spese dagli estratti conto",
+      "budgeting": "Budgeting",
+      "moreConnectors": "Più connettori per servizi bancari e di investimento popolari",
+      "mortgageSupport": "Migliore supporto per mutui e prestiti",
+      "more": "Altro..."
+    },
+    "aiChat": {
+      "userMessage": "Sto pensando di comprare un appartamento, pensi che possa pagare il mutuo in sicurezza?",
+      "assistantMessage": "In base al tuo reddito, una rata del mutuo fino a 1200€/mese dovrebbe essere gestibile. Considera proprietà sotto i 300.000€. I tuoi risparmi potrebbero coprire un acconto del 10-15%. È fattibile!"
+    }
+  },
+  "onboardingAddAccountingEntriesStep": {
+    "regularEntry": "Regolarmente, ad esempio ogni 1° del mese, aggiungerai una voce.",
+    "entryApplies": "Una voce si applica a tutti i tuoi conti bancari e investimenti.",
+    "entryUsage": "Una volta inseriti i dati per una voce, verranno utilizzati per fare la tua contabilità, potrai vederla in",
+    "addEntry": "Aggiungi Voce"
+  },
+  "onboardingAddAccountsStep": {
+    "fiatDescription": {
+      "part1": "Qualsiasi conto in cui, a differenza dei conti d'investimento,",
+      "part2": "non ti aspetti che il valore fluttui",
+      "part3": " a meno che non aggiungi/spendi/rimuovi denaro.",
+      "part4": "Ad esempio: conti bancari, contanti, persino prestiti o debiti che hai con qualcuno (usando valori negativi)"
+    },
+    "investmentDescription": {
+      "part1": "A differenza dei conti bancari, i conti di investimento sono conti",
+      "part2": "in cui ti aspetti che il valore fluttui",
+      "part3": " anche se non aggiungi o rimuovi denaro.",
+      "part4": "Ad esempio: azioni, crypto, obbligazioni. Inizialmente investi una somma, potresti aggiungere/rimuovere ogni mese ma il loro valore fluttua anche."
+    },
+    "fiatAccounts": {
+      "bank": "Banca",
+      "cash": "Contanti",
+      "creditCard": "Carta di Credito"
+    },
+    "investmentAccounts": {
+      "stocks": "Azioni",
+      "crypto": "Crypto",
+      "ethereum": "Ethereum",
+      "bitcoin": "Bitcoin",
+      "bonds": "Obbligazioni",
+      "house": "Casa"
+    },
+    "accountNamePlaceholder": "Nome del conto",
+    "create": "Crea"
+  },
+  "onboardingFillAccountingEntriesStep": {
+    "emptyMessage": "Hai bisogno di almeno un conto e una voce per inserire i dati. Torna indietro per aggiungerli!",
+    "introText": "Ora che hai una voce per",
+    "fillInstructions": "puoi inserire i dati nelle tabelle per ogni conto o successivamente puoi connettere i tuoi conti a fornitori esterni per compilarli automaticamente.",
+    "glowingCellsInstruction": "Compila le celle rosse lampeggianti e poi hai finito per quella voce.",
+    "tip": "SUGGERIMENTO:",
+    "hoverInstruction": "Puoi passare il mouse sulle intestazioni della tabella per maggiori informazioni!",
+    "bankAccounts": "Conti Bancari"
+  },
+  "onboarding": {
+    "steps": {
+      "importCsv": "Importa i tuoi dati",
+      "addBankAccounts": "Aggiungi Conti Bancari",
+      "addInvestmentAccounts": "Aggiungi Conti di Investimento",
+      "addEntries": "Aggiungi Voci",
+      "fillEntries": "Compila Voci",
+      "connectAccounts": "Connetti Conti"
+    }
+  },
+  "onboardingAppPreview": {
+    "account": "Conto",
+    "dateHeader": "Data",
+    "totalHeader": "Totale"
+  },
+  "loginPage": {
+    "errorMessage": "Qualcosa è andato storto, riprova",
+    "googleSignInError": "Errore nell'accesso con Google:",
+    "emailPlaceholder": "Email",
+    "emailSentMessage": "Email inviata, controlla la tua casella di posta e clicca sul link per accedere.",
+    "retrySendEmail": "Riprova a inviare l'email",
+    "signInWithGoogle": "Accedi con Google",
+    "signInWithEmailLink": "Accedi con Link Email",
+    "signInWithPassword": "Accedi con Password",
+    "signInAnonymously": "Accedi in Modo Anonimo"
+  },
+  "passwordSignIn": {
+    "anonValidationError": "Il nome utente può contenere solo lettere, numeri e underscore. Almeno 4 caratteri.",
+    "username": "Nome utente",
+    "invalidEmail": "Email non valida",
+    "email": "Email",
+    "weakPassword": "La password è troppo debole",
+    "genericErrorSignup": "Qualcosa è andato storto, riprova. Assicurati che le tue credenziali siano corrette",
+    "genericErrorSignin": "Qualcosa è andato storto, riprova. Se non hai un account registrato, registrati invece",
+    "password": "Password",
+    "signUp": "Registrati",
+    "signIn": "Accedi",
+    "haveAccount": "Hai già un account?",
+    "needAccount": "Devi creare un account?",
+    "anonymousWarning": "Questo account è anonimo. Non puoi recuperarlo se dimentichi le credenziali, ma puoi collegare la tua email in seguito se cambi idea."
+  }
+}

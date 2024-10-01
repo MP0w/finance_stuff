@@ -112,9 +112,9 @@ const LandingPage: React.FC<{
         </div>
 
         <main className="flex flex-col md:flex-row justify-center gap-8 max-w-4xl w-full my-8">
-          <section className="w-full md:w-1/2 ">
+          <section className="w-full md:w-1/2 flex flex-col">
             <h2 className="text-center">{t("landingPage.keyFeaturesTitle")}</h2>
-            <div className="bg-white p-6 rounded-lg shadow-lg border">
+            <div className="bg-white p-6 rounded-lg shadow-lg border flex-grow">
               <ul className="space-y-2">
                 {getKeyFeatures().map((feature, index) => (
                   <li key={index} className="flex items-center">
@@ -125,9 +125,9 @@ const LandingPage: React.FC<{
               </ul>
             </div>
           </section>
-          <section className="w-full md:w-1/2">
+          <section className="w-full md:w-1/2 flex flex-col">
             <h2 className="text-center">{t("landingPage.aiAssistant")}</h2>
-            <div className="space-y-4 bg-white p-6 rounded-lg shadow-lg border text-sm">
+            <div className="space-y-4 bg-white p-6 rounded-lg shadow-lg border text-sm flex-grow flex flex-col justify-center">
               {[
                 {
                   content: t("landingPage.aiChat.userMessage"),

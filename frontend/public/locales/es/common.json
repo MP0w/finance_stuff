@@ -1,3 +1,386 @@
 {
-  "welcome": "hola"
+  "brandHeader": {
+    "currency": "Moneda",
+    "exportData": "Exportar datos (CSV)",
+    "importFromSheet": "Importar desde hoja",
+    "privacyPolicy": "Política de Privacidad",
+    "logout": "Cerrar sesión"
+  },
+  "feedbackButton": {
+    "sendFeedback": "Enviar comentarios"
+  },
+  "accountsTable": {
+    "total": "Total",
+    "totalTip": "La suma de los valores de todas las cuentas"
+  },
+  "fiatAccountsTab": {
+    "addBankAccount": "Añadir Cuenta Bancaria",
+    "accountPlaceholder": "Efectivo, Banco, etc.",
+    "create": "Crear",
+    "description": {
+      "part1": "Cualquier cuenta donde, a diferencia de las cuentas de inversión,",
+      "part2": "no esperas que el valor fluctúe",
+      "part3": " a menos que añadas/gastes/retires dinero de ella.",
+      "part4": "Por ejemplo: cuentas bancarias, efectivo, incluso préstamos o deudas que tengas con alguien (usando valores negativos)"
+    }
+  },
+  "chatTab": {
+    "clearChat": "Limpiar chat",
+    "reply": "Responder",
+    "send": "Enviar",
+    "defaultMessages": {
+      "1": "Puedo ayudarte con tus finanzas personales, presupuestos o temas de contabilidad.",
+      "2": "¿Qué estás buscando?"
+    }
+  },
+  "connectorsTab": {
+    "connections": "Conexiones",
+    "errorLoadingConnections": "Error al cargar conexiones: {{error}}",
+    "onboardingMessage": "Conecta tus cuentas a servicios externos para llenar tus datos automáticamente y ver datos en vivo.",
+    "noConnections": "Aún no tienes conexiones.",
+    "addNewConnector": "Añadir Nuevo Conector",
+    "errorLoadingConnectorsSettings": "Error al cargar ajustes de conectores: {{error}}",
+    "selectAccount": "Selecciona una cuenta:",
+    "chooseAccount": "Elige una cuenta",
+    "accountInstructions": "Tu última entrada para la cuenta seleccionada se autocompletará si está vacía y es reciente. De lo contrario, cuando crees una nueva entrada con fecha reciente, se autocompletará. También comenzarás a ver datos en vivo en el Resumen. Consejo: puedes añadir múltiples conexiones a una sola cuenta, se sumarán",
+    "selectConnector": "Selecciona un conector:",
+    "connectorSettings": "Ajustes del Conector",
+    "securityNote": "Todos los ajustes de los conectores están encriptados y almacenados de forma segura.",
+    "connect": "Conectar",
+    "missingProviderMessage": "Si no ves tu proveedor favorito en la lista, puedes enviarnos comentarios o un correo y consideraremos añadirlo.",
+    "contributeMessage": "También puedes contribuir, ¡es fácil!",
+    "confirmDeletion": "Confirmar Eliminación",
+    "deleteConfirmationMessage": "¿Estás seguro de que quieres eliminar la conexión a {{connectorId}} para la cuenta {{accountName}}? Esta acción no se puede deshacer.",
+    "deleting": "Eliminando..."
+  },
+  "common": {
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "summary": "Resumen",
+    "together": "junto con",
+    "graphs": "gráficos",
+    "statistics": "estadísticas",
+    "and": "y",
+    "projections": "proyecciones",
+    "next": "Siguiente",
+    "skip": "Saltar"
+  },
+  "importData": {
+    "newLabel": " (nuevo)",
+    "date": "Fecha",
+    "invested": "Invertido",
+    "investmentValue": "Valor de Inversión",
+    "value": "Valor"
+  },
+  "importTab": {
+    "creatingProposal": "Creando una propuesta de importación...",
+    "importingData": "Importando datos...",
+    "introText": "Si ya llevas un registro de tus finanzas usando una hoja de cálculo o cualquier herramienta que pueda exportar a CSV, puedes importarla en finance_stuff. Crearemos las cuentas y entradas necesarias junto con todos los valores que has estado registrando en el pasado.",
+    "exportInstructions": "Exporta tus datos como CSV y súbelos aquí. Por ejemplo, en Google Sheets: > Archivo > Descargar > Valores separados por comas (CSV)",
+    "dragDropInstruction": "Arrastra y suelta un archivo CSV aquí, o haz clic para seleccionar uno",
+    "emptyProposalMessage": "No se generó ninguna propuesta, eso podría significar que no hay nada que importar de tu hoja de cálculo porque ya tienes todos los datos. De lo contrario, intenta con otro CSV.",
+    "reviewInstructions": "Revisa la propuesta y haz clic en Importar si todo parece correcto, de lo contrario, indica qué cambios te gustaría hacer para intentar de nuevo",
+    "confirmImport": "Confirmar Importación",
+    "changeProposalInstructions": "Si necesitas hacer cambios en la propuesta, explica qué está mal y qué cambios te gustaría para que nuestra IA pueda intentar una nueva propuesta.",
+    "newProposalPlaceholder": "Ingresa mensaje para nueva propuesta",
+    "requestNewProposal": "Solicitar Nueva Propuesta"
+  },
+  "investmentsAccountsTab": {
+    "addInvestmentAccount": "Añadir Cuenta de Inversión",
+    "accountPlaceholder": "Cripto, Acciones, Bonos, etc.",
+    "add": "Añadir",
+    "description": {
+      "part1": "A diferencia de las cuentas bancarias, las cuentas de inversión son cuentas",
+      "part2": "donde esperas que el valor fluctúe",
+      "part3": " incluso si no añades o retiras dinero.",
+      "part4": "Por ejemplo: acciones, criptomonedas, bonos. Inicialmente inviertes una cantidad, podrías añadir/retirar cada mes pero su valor también fluctúa."
+    },
+    "connectInstructions": "Después de crear una cuenta, puedes conectarla a cuentas externas (por ejemplo, bancos, exchanges de criptomonedas, corredores de bolsa, etc.) para autocompletar las cantidades cada vez que crees una entrada y ver datos en vivo.",
+    "connectExternalAccounts": "Conectar cuentas externas",
+    "investmentsTotal": "Total de Inversiones"
+  },
+  "investmentTable": {
+    "initialInvestment": "Inversión Inicial",
+    "initialInvestmentTip": "La cantidad total que has invertido en este activo hasta la fecha, excluyendo ganancias o pérdidas",
+    "investmentValue": "Valor de la Inversión",
+    "investmentValueTip": "El valor de tu inversión hasta la fecha incluyendo ganancias o pérdidas"
+  },
+  "graphsTab": {
+    "liquid": "Liquidez",
+    "totalNetWorth": "Patrimonio neto total",
+    "liquidAssets": "Activos líquidos",
+    "investments": "Inversiones"
+  },
+  "projectionsTab": {
+    "dataWarning": "Tus datos cubren {{months}} meses, las estadísticas y proyecciones serán más precisas cuantos más datos tengas. También puedes ingresar datos de meses anteriores.",
+    "averageSavings": "Ahorro Promedio",
+    "averageTotal": "Total Promedio",
+    "averageMonthlyProfits": "Ganancias Mensuales Promedio",
+    "projection": "Proyección",
+    "insufficientData": "Solo podemos hacer proyecciones si tienes al menos 6 meses de datos. Actualmente tienes {{months}} meses de datos.",
+    "totalNetWorth": "Patrimonio neto total"
+  },
+  "summaryTab": {
+    "addAccountsMessage": "Añade tus cuentas y entradas para ver el resumen"
+  },
+  "totalTable": {
+    "liquid": "Liquidez",
+    "liquidTip": "Total de todas las cuentas bancarias",
+    "invested": "Invertido",
+    "investedTip": "Total de todas tus inversiones excluyendo ganancias o pérdidas",
+    "investmentsValue": "Valor de Inversiones",
+    "investmentsValueTip": "Valor total de tus inversiones incluyendo ganancias o pérdidas",
+    "savings": "Ahorros",
+    "savingsTip": "Ahorros excluyendo ganancias o pérdidas de inversiones desde la entrada anterior. Básicamente el cambio en tu patrimonio neto si las inversiones se mantuvieran planas.",
+    "total": "Total",
+    "totalTip": "Tu patrimonio neto total, la suma de tu liquidez y el valor de las inversiones",
+    "liveData": "Datos en Vivo",
+    "missingValuesWarning": "🚨 Faltan algunos valores en tus cuentas para esta entrada, revisa las celdas rojas brillantes en Cuentas Bancarias e Inversiones para esta fecha"
+  },
+  "tabs": {
+    "bankAccounts": "Cuentas Bancarias",
+    "investments": "Inversiones",
+    "expenses": "Gastos",
+    "summary": "Resumen",
+    "connectors": "Conectores",
+    "ai": "✨IA🔮"
+  },
+  "homeContent": {
+    "expensesWorkInProgress": "Aún estamos trabajando en Gastos.",
+    "comingSoon": "Próximamente™️",
+    "confirmDeletion": "Confirmar Eliminación",
+    "deleteAccountConfirmation": "¿Estás seguro de que quieres eliminar la cuenta <b>{{accountName}}</b>? Esta acción no se puede deshacer y todas las entradas para esa cuenta también se eliminarán.",
+    "deleteEntryFromAllAccounts": "Eliminar fecha de todas las cuentas",
+    "deleteEntryWarning": "Se eliminarán todos los valores para esa fecha en cada cuenta. Esta acción no se puede deshacer y",
+    "errorLoadingData": "Error al cargar datos",
+    "retry": "Reintentar"
+  },
+  "homePage": {
+    "accountCreated": "Cuenta creada",
+    "accountCreationFailed": "No se pudo crear la cuenta. Por favor, inténtalo de nuevo.",
+    "newEntryCreated": "Nueva entrada creada",
+    "failedConnections": "No se pudo obtener un valor de: {{connectors}}.",
+    "accountingEntryCreationFailed": "No se pudo crear la entrada contable. {{error}}",
+    "accountNotFound": "Cuenta no encontrada. Reintentar",
+    "entryNotFound": "Entrada no encontrada. Reintentar",
+    "accountDeletedSuccess": "Cuenta eliminada con éxito",
+    "accountDeletionFailed": "No se pudo eliminar la cuenta. Por favor, inténtalo de nuevo.",
+    "entryDeletedSuccess": "Entrada eliminada con éxito",
+    "entryDeletionFailed": "No se pudo eliminar la entrada. Por favor, inténtalo de nuevo."
+  },
+  "onboardingTips": {
+    "addInvestmentAccounts": "¡Añade tus cuentas de inversión!",
+    "investmentExamples": "Por ejemplo, tus acciones, bonos, criptomonedas, bienes raíces, etc.",
+    "addBankAccounts": "¡Añade tus cuentas bancarias!",
+    "bankAccountExplanation": "Aquí puedes añadir todos tus bancos o incluso efectivo, cualquier cosa que no sea una inversión."
+  },
+  "table": {
+    "addEntry": "Añadir Entrada",
+    "dateHeader": {
+      "title": "Fecha",
+      "tip": "La fecha de la entrada contable, sugerimos hacerlo mensualmente, por ejemplo al final de cada mes, pero puedes hacerlo semanalmente o como prefieras. Cuando estés listo para añadir una nueva entrada, haz clic en el botón Añadir entrada y elige la fecha."
+    },
+    "profitsHeader": {
+      "title": "Ganancias",
+      "tip": "Ganancias o pérdidas de inversiones basadas en la cantidad invertida"
+    },
+    "percentageHeader": {
+      "title": "%",
+      "tip": "El porcentaje de tus ganancias de inversiones contra la cantidad invertida"
+    },
+    "differenceHeader": {
+      "title": "Diferencia",
+      "tip": "La diferencia comparada con la entrada anterior"
+    },
+    "failedToUpdateValue": "No se pudo actualizar el valor. Por favor, inténtalo de nuevo."
+  },
+  "landingPage": {
+    "subtitle": "Controla y haz Crecer tus Finanzas Sin Esfuerzo\nen solo 10 minutos al mes",
+    "freeOffer": "¡Gratis por\ntiempo limitado!",
+    "getStarted": "Comenzar",
+    "login": "Iniciar Sesión",
+    "keyFeatures": {
+      "expenses": {
+        "1": "Gastos, cuentas e inversiones",
+        "2": "Insights Impulsados por IA para Decisiones más Inteligentes",
+        "3": "Importa Gastos Automágicamente",
+        "4": "Visualiza Tu Crecimiento",
+        "5": "Planificación Futura y Proyecciones Fáciles",
+        "6": "Conecta tus cuentas para automatizar tu seguimiento"
+      },
+      "budgeting": {
+        "1": "Gastos, cuentas e inversiones",
+        "2": "Insights Impulsados por IA para ayudarte a presupuestar",
+        "3": "Importa Gastos Automágicamente",
+        "4": "Visualiza Tu Crecimiento",
+        "5": "Presupuestos y Proyecciones Fáciles",
+        "6": "Conecta tus cuentas para automatizar tu seguimiento"
+      },
+      "savings": {
+        "1": "Todas las Cuentas e Inversiones",
+        "2": "Insights Impulsados por IA para ayudarte a ahorrar",
+        "3": "Importa Hojas de Cálculo Automágicamente",
+        "4": "Visualiza Tus Ahorros",
+        "5": "Metas de Ahorro y Proyecciones Fáciles",
+        "6": "Conecta tus cuentas para automatizar tu seguimiento"
+      },
+      "spreadsheet": {
+        "1": "Importa Hojas de Cálculo Automágicamente",
+        "2": "Todas las Cuentas e Inversiones",
+        "3": "Impulsado por IA, más potente que una hoja de cálculo",
+        "4": "Visualiza Tu Crecimiento",
+        "5": "Planificación Futura y Proyecciones Fáciles",
+        "6": "Conecta tus cuentas para automatizar tu seguimiento"
+      },
+      "default": {
+        "1": "Todas las Cuentas e Inversiones",
+        "2": "Insights Impulsados por IA para Decisiones más Inteligentes",
+        "3": "Importa Hojas de Cálculo Automágicamente",
+        "4": "Visualiza Tu Crecimiento",
+        "5": "Planificación Futura y Proyecciones Fáciles",
+        "6": "Conecta tus cuentas para automatizar tu seguimiento"
+      }
+    },
+    "footer": {
+      "companyName": "stuff.finance",
+      "email": "info@stuff.finance",
+      "privacyPolicy": "Política de Privacidad",
+      "termsOfService": "Términos de Servicio"
+    },
+    "keyFeaturesTitle": "Características Principales",
+    "aiAssistant": "Asistente de IA",
+    "quotes": {
+      "default": "Domina tu dinero con un seguimiento simple.\n¡Gestiona gastos, ahorros e inversiones sin esfuerzo!\nEmpieza a construir mejores hábitos financieros hoy.",
+      "expenses": "Controla tus gastos automáticamente usando estados de cuenta bancarios.\nControlar gastos lleva tiempo, déjanos hacerlo por ti.",
+      "savings": "Controla tus ahorros y alcanza tus metas.\n¡Gestiona tus gastos, ahorros e inversiones sin esfuerzo!\nEmpieza a mejorar tus ahorros hoy.",
+      "budgeting": "Te ayudamos a presupuestar y controlar tus ahorros.\n¡Gestiona tus presupuestos, gastos e inversiones sin esfuerzo!",
+      "spreadsheet": "Las hojas de cálculo son geniales y muy potentes. Pero pueden volverse muy complejas.\nDespués de años de sobre-ingeniería en una hoja de cálculo de finanzas personales, decidimos convertirla en una app, para hacerla más simple y potente.\nEstá diseñada para controlar tus finanzas personales y es más fácil de usar."
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "security": {
+        "question": "¿Están seguros mis datos?",
+        "answer": "Tus datos financieros son muy sensibles, en primer lugar ofrecemos una opción de registro anónimo si prefieres usarla. Además de eso, los datos más sensibles están encriptados en la base de datos."
+      },
+      "why": {
+        "question": "¿Por qué debería controlar mis finanzas personales?",
+        "answer": "Controla tus finanzas personales es crucial para lograr estabilidad y crecimiento financiero. Te ayuda a entender tus hábitos de gasto, identificar áreas de mejora, establecer metas financieras realistas y tomar decisiones informadas sobre tu dinero. Al monitorear constantemente tus finanzas, puedes desarrollar mejores hábitos de ahorro, reducir deudas, planificar para el futuro y, en última instancia, ganar tranquilidad sobre tu situación financiera."
+      },
+      "spreadsheet": {
+        "question": "Ya uso una hoja de cálculo, ¿por qué debería cambiar?",
+        "answer": "Aunque las hojas de cálculo son versátiles, pueden volverse muy complejas y poco amigables cuando quieres obtener más datos e insights. finance_stuff ofrece varias ventajas:\n1) La importación y actualización automática de datos ahorra tiempo y reduce errores. Incluso simplemente añadir una nueva cuenta bancaria o inversión en una hoja de cálculo lleva tiempo.\n2) Nuestro asistente impulsado por IA te da información contextual y puede ayudarte a tomar decisiones.\n3) La interfaz amigable hace que sea más fácil controlar y visualizar tus finanzas.\n4) Características avanzadas como estadísticas y proyecciones futuras están integradas.\n5) El almacenamiento seguro en la nube asegura que tus datos estén seguros y accesibles en todos los dispositivos.\n6) Actualizaciones regulares añaden nuevas características sin que tengas que rediseñar tu hoja de cálculo."
+      },
+      "import": {
+        "question": "¿Puedo importar datos de otras aplicaciones?",
+        "answer": "¡Absolutamente! Ofrecemos un importador de archivos CSV, la mayoría de las aplicaciones deberían permitirte exportar tus datos en CSV, por ejemplo, hojas de Google o bases de datos de Notion."
+      },
+      "automation": {
+        "question": "¿Puedo automatizar el seguimiento de mis finanzas personales?",
+        "answer": "Ofrecemos conexiones a algunos servicios populares para obtener automáticamente tus saldos, por ejemplo, los conectores de Binance o blockchains ya están disponibles. ¡Muchos más por venir! No dudes en contactarnos para solicitar un conector."
+      }
+    },
+    "aboutMe": {
+      "title": "Sobre Mí",
+      "content": "Soy Alex Manzella, el creador de <b>finance_stuff</b>. Soy un Ingeniero de Software con 13 años de experiencia, en los últimos años he sido Ingeniero Principal en {{n26Link}}, un banco móvil popular en Europa, y Líder Técnico en {{amieLink}}, una increíble aplicación de productividad.\n\nEstoy muy interesado en finanzas y he trabajado durante muchos años en fintech. Me interesan las blockchains y DeFi.\nDespués de años de sobre-ingeniería en mi hoja de cálculo de finanzas personales, decidí convertirla en una aplicación, para hacerla más simple y potente."
+    },
+    "comingSoon": "Próximamente™️",
+    "comingSoonFeatures": {
+      "mobileApps": "Aplicaciones Móviles",
+      "autoExpenseTracking": "Seguimiento automático de gastos desde estados de cuenta bancarios",
+      "budgeting": "Presupuestos",
+      "moreConnectors": "Más conectores a servicios populares de banca e inversiones",
+      "mortgageSupport": "Mejor soporte para hipotecas y préstamos",
+      "more": "Más..."
+    },
+    "aiChat": {
+      "userMessage": "Estoy pensando en comprar un piso, ¿crees que puedo pagar la hipoteca de forma segura?",
+      "assistantMessage": "Basado en tus ingresos, un pago de hipoteca de hasta 1200€/mes debería ser manejable. Considera propiedades por debajo de 300,000€. Tus ahorros podrían cubrir un 10-15% de entrada inicial. ¡Es factible!"
+    }
+  },
+  "onboardingAddAccountingEntriesStep": {
+    "regularEntry": "Regularmente, por ejemplo cada 1 del mes, añadirás una entrada.",
+    "entryApplies": "Una entrada se aplica a todas tus cuentas bancarias e inversiones.",
+    "entryUsage": "Una vez que llenes los datos para una entrada, se usará para hacer tu contabilidad, podrás verlo en",
+    "addEntry": "Añadir Entrada"
+  },
+  "onboardingAddAccountsStep": {
+    "fiatDescription": {
+      "part1": "Cualquier cuenta donde, a diferencia de las cuentas de inversión,",
+      "part2": "no esperas que el valor fluctúe",
+      "part3": " a menos que añadas/gastes/retires dinero de ella.",
+      "part4": "Por ejemplo: cuentas bancarias, efectivo, incluso préstamos o deudas que tengas con alguien (usando valores negativos)"
+    },
+    "investmentDescription": {
+      "part1": "A diferencia de las cuentas bancarias, las cuentas de inversión son cuentas",
+      "part2": "donde esperas que el valor fluctúe",
+      "part3": " incluso si no añades o retiras dinero.",
+      "part4": "Por ejemplo: acciones, criptomonedas, bonos. Inicialmente inviertes una cantidad, podrías añadir/retirar cada mes pero su valor también fluctúa."
+    },
+    "fiatAccounts": {
+      "bank": "Banco",
+      "cash": "Efectivo",
+      "creditCard": "Tarjeta de Crédito"
+    },
+    "investmentAccounts": {
+      "stocks": "Acciones",
+      "crypto": "Cripto",
+      "ethereum": "Ethereum",
+      "bitcoin": "Bitcoin",
+      "bonds": "Bonos",
+      "house": "Casa"
+    },
+    "accountNamePlaceholder": "Nombre de la cuenta",
+    "create": "Crear"
+  },
+  "onboardingFillAccountingEntriesStep": {
+    "emptyMessage": "Necesitas al menos una cuenta y una entrada para llenar los datos. ¡Vuelve atrás para añadirlas!",
+    "introText": "Ahora que tienes una entrada para",
+    "fillInstructions": "puedes llenar los datos en las tablas para cada cuenta o más adelante puedes conectar tus cuentas a proveedores externos para autocompletarlas.",
+    "glowingCellsInstruction": "Llena las celdas rojas brillantes y luego habrás terminado con esa entrada.",
+    "tip": "CONSEJO:",
+    "hoverInstruction": "¡Puedes pasar el cursor sobre los encabezados de la tabla para más información!",
+    "bankAccounts": "Cuentas Bancarias"
+  },
+  "onboarding": {
+    "steps": {
+      "importCsv": "Importar tus datos",
+      "addBankAccounts": "Añadir Cuentas Bancarias",
+      "addInvestmentAccounts": "Añadir Cuentas de Inversión",
+      "addEntries": "Añadir Entradas",
+      "fillEntries": "Llenar Entradas",
+      "connectAccounts": "Conectar Cuentas"
+    }
+  },
+  "onboardingAppPreview": {
+    "account": "Cuenta",
+    "dateHeader": "Fecha",
+    "totalHeader": "Total"
+  },
+  "loginPage": {
+    "errorMessage": "Algo salió mal, inténtalo de nuevo",
+    "googleSignInError": "Error al iniciar sesión con Google:",
+    "emailPlaceholder": "Correo electrónico",
+    "emailSentMessage": "Correo enviado, revisa tu bandeja de entrada y haz clic en el enlace para iniciar sesión.",
+    "retrySendEmail": "Reintentar envío de correo",
+    "signInWithGoogle": "Iniciar Sesión con Google",
+    "signInWithEmailLink": "Iniciar Sesión con Enlace de Correo",
+    "signInWithPassword": "Iniciar Sesión con Contraseña",
+    "signInAnonymously": "Iniciar Sesión Anónimamente"
+  },
+  "passwordSignIn": {
+    "anonValidationError": "El nombre de usuario solo puede contener letras, números y guiones bajos. Al menos 4 caracteres.",
+    "username": "Nombre de usuario",
+    "invalidEmail": "Correo electrónico inválido",
+    "email": "Correo electrónico",
+    "weakPassword": "La contraseña es demasiado débil",
+    "genericErrorSignup": "Algo salió mal, inténtalo de nuevo. Asegúrate de que tus credenciales sean correctas",
+    "genericErrorSignin": "Algo salió mal, inténtalo de nuevo. Si no tienes una cuenta, regístrate en su lugar",
+    "password": "Contraseña",
+    "signUp": "Registrarse",
+    "signIn": "Iniciar Sesión",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "needAccount": "¿Necesitas crear una cuenta?",
+    "anonymousWarning": "Esta cuenta es anónima. No podrás recuperarla si olvidas las credenciales, pero puedes vincular tu correo electrónico más tarde si cambias de opinión."
+  }
 }

@@ -3,6 +3,7 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import enTranslations from "../public/locales/en/common.json";
 import esTranslations from "../public/locales/es/common.json";
+import itTranslations from "../public/locales/it/common.json";
 
 i18n
   .use(LanguageDetector)
@@ -11,6 +12,7 @@ i18n
     resources: {
       en: { translation: enTranslations },
       es: { translation: esTranslations },
+      it: { translation: itTranslations },
     },
     fallbackLng: "en",
     debug: process.env.NODE_ENV === "development",
