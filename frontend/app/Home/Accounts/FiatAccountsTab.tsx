@@ -8,6 +8,7 @@ import {
   AccountingEntriesDTO,
   Accounts,
 } from "../../../../shared/types";
+import { useTranslation } from "react-i18next";
 
 interface FiatAccountsTabProps {
   expandedAddAccount: boolean;
@@ -45,11 +46,13 @@ const FiatAccountsTab: React.FC<FiatAccountsTabProps> = ({
   handleDeleteAccount,
   handleDeleteAccountingEntry,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
         <AddButton
-          title="Add Bank Account"
+          title={t("fiatAccountsTab.addBankAccount")}
           onClick={() => setExpandedAddAccount(!expandedAddAccount)}
         />
         <AddToCalendar />
@@ -61,7 +64,7 @@ const FiatAccountsTab: React.FC<FiatAccountsTabProps> = ({
             type="text"
             value={newAccountName}
             onChange={(e) => setNewAccountName(e.target.value)}
-            placeholder="Cash, Bank, etc."
+            placeholder={t("fiatAccountsTab.accountPlaceholder")}
             className="border rounded px-2 py-1 mr-2"
           />
           <button
@@ -69,18 +72,17 @@ const FiatAccountsTab: React.FC<FiatAccountsTabProps> = ({
             className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={newAccountName.length === 0}
           >
-            Create
+            {t("fiatAccountsTab.create")}
           </button>
         </div>
       )}
       {expandedAddAccount && (
         <p className="mb-8 max-w-prose">
-          Any account where, unlike investment accounts,{" "}
-          <b>you don&apos;t expect the value to fluctuate</b> unless you
-          add/spend/remove money from it.
+          {t("fiatAccountsTab.description.part1")}{" "}
+          <b>{t("fiatAccountsTab.description.part2")}</b>
+          {t("fiatAccountsTab.description.part3")}
           <br />
-          For example: bank accounts, cash, even loans or debt you have with
-          someone (using negative values)
+          {t("fiatAccountsTab.description.part4")}
         </p>
       )}
 

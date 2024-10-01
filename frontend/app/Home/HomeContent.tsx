@@ -18,14 +18,15 @@ import ImportTab from "./Import/ImportTab";
 import Loading from "../components/Loading";
 import LogScreenView from "../components/LogScreenView";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
-export const tabs = [
-  { id: "fiat", label: "Bank Accounts" },
-  { id: "investments", label: "Investments" },
-  { id: "expenses", label: "Expenses" },
-  { id: "summary", label: "Summary" },
-  { id: "connectors", label: "Connectors" },
-  { id: "chat", label: "✨AI🔮" },
+export const tabs = (t: (str: string) => string) => [
+  { id: "fiat", label: t("tabs.bankAccounts") },
+  { id: "investments", label: t("tabs.investments") },
+  { id: "expenses", label: t("tabs.expenses") },
+  { id: "summary", label: t("tabs.summary") },
+  { id: "connectors", label: t("tabs.connectors") },
+  { id: "chat", label: t("tabs.ai") },
 ];
 
 interface HomeContentProps {
@@ -102,6 +103,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
   },
   apis: { fetchAccountingEntries, reloadData, signOut },
 }) => {
+  const { t } = useTranslation();
   const fiatAccounts =
     accounts?.filter((account) => account.type === "fiat") ?? [];
   const investmentAccounts =
@@ -110,6 +112,9 @@ const HomeContent: React.FC<HomeContentProps> = ({
     (accountsLoading && !accounts) || (entriesLoading && !accountingEntries);
   const [activeTab, setActiveTab] = useState("fiat");
   const { user } = useUserState();
+
+  const toastTitle = t("homeContent.expensesWorkInProgress");
+  const toastDescription = t("homeContent.comingSoon");
 
   const switchTab = (id: string) => {
     if (id === "expenses") {
@@ -122,8 +127,8 @@ const HomeContent: React.FC<HomeContentProps> = ({
             }`}
           >
             <Loading />
-            <p>We are still working on Expenses.</p>
-            <p>Coming Soon™️</p>
+            <p>{toastTitle}</p>
+            <p>{toastDescription}</p>
           </div>
         ),
         { id: "expenses-tab", position: "top-center" }
@@ -233,7 +238,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
           <TabView
             email={user?.email ?? undefined}
             signOut={signOut}
-            tabs={tabs}
+            tabs={tabs(t)}
             activeTab={activeTab}
             setActiveTab={switchTab}
             exportData={exportData}
@@ -241,12 +246,12 @@ const HomeContent: React.FC<HomeContentProps> = ({
             {isLoading && <Loading />}
             {(accountsError || entriesError) && (
               <div className="flex flex-col items-center">
-                <p className="mt-16">Error loading data</p>
+                <p className="mt-16">{t("homeContent.errorLoadingData")}</p>
                 <button
                   onClick={reloadData}
                   className="mt-4 px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  Retry
+                  {t("homeContent.retry")}
                 </button>
               </div>
             )}
@@ -263,25 +268,28 @@ const HomeContent: React.FC<HomeContentProps> = ({
           overlayClassName="overlay"
           appElement={document.getElementById("home-content") as HTMLElement}
         >
-          <h2>Confirm Deletion</h2>
+          <h2>{t("homeContent.confirmDeletion")}</h2>
           <p className="mb-6">
-            Are you sure you want to delete the account
-            <b> {accountToDelete?.name}</b>? <br />
-            This action cannot be undone and all the entries for that account
-            will also be deleted.
+            <span
+              dangerouslySetInnerHTML={{
+                __html: t("homeContent.deleteAccountConfirmation", {
+                  accountName: accountToDelete?.name,
+                }),
+              }}
+            />
           </p>
           <div className="flex justify-end">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
               className="bg-gray-200 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             <button
               onClick={() => confirmDeleteAccount(accountToDelete?.id ?? "")}
               className="bg-red-500 text-white px-4 py-2 pixel-corners-small hover:bg-red-600"
             >
-              Delete
+              {t("common.delete")}
             </button>
           </div>
         </Modal>
@@ -292,23 +300,20 @@ const HomeContent: React.FC<HomeContentProps> = ({
           overlayClassName="overlay"
           appElement={document.getElementById("home-content") as HTMLElement}
         >
-          <h2>Delete date from all accounts</h2>
-          <p className="mb-6">
-            All the values for that date on each account will be removed. This
-            action cannot be undone and
-          </p>
+          <h2>{t("homeContent.deleteEntryFromAllAccounts")}</h2>
+          <p className="mb-6">{t("homeContent.deleteEntryWarning")}</p>
           <div className="flex justify-end">
             <button
               onClick={() => setIsDeleteEntryModalOpen(false)}
               className="bg-gray-200 px-4 py-2 pixel-corners-small mr-2 hover:bg-gray-400"
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             <button
               onClick={confirmDeleteAccountingEntry}
               className="bg-red-500 text-white px-4 py-2 pixel-corners-small hover:bg-red-600"
             >
-              Delete
+              {t("common.delete")}
             </button>
           </div>
         </Modal>

@@ -13,6 +13,7 @@ import OnboardingAppPreview from "./OnboardingAppPreview";
 import { OnboardingAddAccountingEntriesStep } from "./Steps/OnboardingAddAccountingEntriesStep";
 import { OnboardingFillAccountingEntriesStep } from "./Steps/OnboardingFillAccountingEntriesStep";
 import LogScreenView from "../components/LogScreenView";
+import { useTranslation } from "react-i18next";
 
 const onboardingSteps = [
   "import_csv",
@@ -57,6 +58,7 @@ const Onboarding = ({
   props: OnboardingProps;
   setOnboardingCompleted: (completed: boolean) => void;
 }) => {
+  const { t } = useTranslation();
   const stepsMap = onboardingSteps.reduce((acc, step, index) => {
     acc[step] = index;
     return acc;
@@ -97,17 +99,17 @@ const Onboarding = ({
   const stepTitle = (() => {
     switch (currentStep) {
       case "import_csv":
-        return "Import your data";
+        return t("onboarding.steps.importCsv");
       case "add_bank_accounts":
-        return "Add Bank Accounts";
+        return t("onboarding.steps.addBankAccounts");
       case "add_investment_accounts":
-        return "Add Investment Accounts";
+        return t("onboarding.steps.addInvestmentAccounts");
       case "add_accounting_entries":
-        return "Add Entries";
+        return t("onboarding.steps.addEntries");
       case "fill_accounting_entries":
-        return "Fill Entries";
+        return t("onboarding.steps.fillEntries");
       case "connect_accounts":
-        return "Connect Accounts";
+        return t("onboarding.steps.connectAccounts");
     }
 
     return "";
@@ -119,21 +121,21 @@ const Onboarding = ({
         currentStep === "add_investment_accounts") &&
       props.data.accounts.length > 0
     ) {
-      return "Next";
+      return t("common.next");
     }
 
     if (
       currentStep === "add_accounting_entries" &&
       props.data.accountingEntries.length > 0
     ) {
-      return "Next";
+      return t("common.next");
     }
 
     if (currentStep === "fill_accounting_entries") {
-      return "Next";
+      return t("common.next");
     }
 
-    return "Skip";
+    return t("common.skip");
   })();
 
   const stepHasPreview = (() => {

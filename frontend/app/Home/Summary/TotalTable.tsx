@@ -14,7 +14,7 @@ import {
 } from "../Investments/InvestmentTable";
 import { makeSummaryData, Summary } from "../../../../shared/userStats";
 import { DateTime } from "luxon";
-
+import { useTranslation } from "react-i18next";
 export interface TotalTableProps {
   title?: string;
   fiatAccounts: Accounts[];
@@ -26,57 +26,58 @@ export interface TotalTableProps {
 }
 
 function makeHeaders(
+  t: (key: string) => string,
   fiatAccounts: Accounts[],
   investmentAccounts: Accounts[]
 ): TableHeaderContent[] {
   const headers: (TableHeaderContent | undefined)[] = [
-    dateHeader,
+    dateHeader(t),
     fiatAccounts.length
       ? {
-          title: "Liquid",
-          tip: { text: "Total of all bank accounts", id: "total-table-liquid" },
+          title: t("totalTable.liquid"),
+          tip: { text: t("totalTable.liquidTip"), id: "total-table-liquid" },
         }
       : undefined,
     investmentAccounts.length
       ? {
-          title: "Invested",
+          title: t("totalTable.invested"),
           tip: {
-            text: "Total of all your investments excluding profits or losses",
+            text: t("totalTable.investedTip"),
             id: "total-table-invested",
           },
         }
       : undefined,
     investmentAccounts.length
       ? {
-          title: "Investments Value",
+          title: t("totalTable.investmentsValue"),
           tip: {
-            text: "Total value of your investments including profits or losses",
+            text: t("totalTable.investmentsValueTip"),
             id: "total-table-value",
           },
         }
       : undefined,
-    investmentAccounts.length ? profitsHeader : undefined,
-    investmentAccounts.length ? percentageHeader : undefined,
+    investmentAccounts.length ? profitsHeader(t) : undefined,
+    investmentAccounts.length ? percentageHeader(t) : undefined,
     fiatAccounts.length
       ? {
-          title: "Savings",
+          title: t("totalTable.savings"),
           tip: {
-            text: "Savings excluding profits or losses of investments from the previous entry. Basically your net worth change if investments stayed flat.",
+            text: t("totalTable.savingsTip"),
             id: "total-table-savings",
           },
         }
       : undefined,
     fiatAccounts.length && investmentAccounts.length
       ? {
-          title: "Total",
+          title: t("totalTable.total"),
           tip: {
-            text: "Your total net worth, the sum of your liquidity and investments values",
+            text: t("totalTable.totalTip"),
             id: "total-net-worth",
             noIcon: true,
           },
         }
       : undefined,
-    differenceHeader,
+    differenceHeader(t),
   ];
 
   return headers.filter((h) => h !== undefined);
@@ -97,17 +98,19 @@ const TotalTable: React.FC<TotalTableProps> = ({
     liveAccountingEntry,
   });
 
+  const { t } = useTranslation();
+
   const getCells = (summary: Summary): TableRowCell[] => {
     const cells: (TableRowCell | undefined)[] = [
       summary.isLive
         ? {
-            value: "Live Data",
+            value: t("totalTable.liveData"),
             color: "bg-red-100",
           }
         : {
             value: DateTime.fromFormat(summary.date, "yyyy-MM-dd").toJSDate(),
             warningText: summary.isMissingValues
-              ? "🚨 You are missing some values in your accounts for this entry, check the glowing red cells in Bank Accounts & Investments for this date"
+              ? t("totalTable.missingValuesWarning")
               : undefined,
             onDelete: () => {
               onDeleteAccountingEntry(summary.id);
@@ -169,7 +172,7 @@ const TotalTable: React.FC<TotalTableProps> = ({
   return (
     <Table
       title={title}
-      headers={makeHeaders(fiatAccounts, investmentAccounts)}
+      headers={makeHeaders(t, fiatAccounts, investmentAccounts)}
       rows={summaryData.map((entry) => getCells(entry))}
       onAddEntry={undefined}
     />

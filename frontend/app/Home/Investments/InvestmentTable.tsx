@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Table, {
   dateHeader,
   differenceHeader,
@@ -52,25 +53,27 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({
   onDeleteAccount,
   onDeleteAccountingEntry,
 }) => {
+  const { t } = useTranslation();
+
   const headers: TableHeaderContent[] = [
-    dateHeader,
+    dateHeader(t),
     {
-      title: "Initial Investment",
+      title: t("investmentTable.initialInvestment"),
       tip: {
-        text: "The overall amount you invested in this asset to date, excluding profits or losses",
-        id: "investment-talble-initial",
+        text: t("investmentTable.initialInvestmentTip"),
+        id: "investment-table-initial",
       },
     },
     {
-      title: "Investment Value",
+      title: t("investmentTable.investmentValue"),
       tip: {
-        text: "The value of your investment to date including profits or losses",
-        id: "investment-talble-value",
+        text: t("investmentTable.investmentValueTip"),
+        id: "investment-table-value",
       },
     },
-    profitsHeader,
-    differenceHeader,
-    percentageHeader,
+    profitsHeader(t),
+    differenceHeader(t),
+    percentageHeader(t),
   ];
 
   function getLinkedEntries(accountingEntries: AccountingEntriesDTO[]) {

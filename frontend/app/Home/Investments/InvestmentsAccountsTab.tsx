@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   AccountingEntriesDTO,
   Accounts,
@@ -50,11 +51,13 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
   handleDeleteAccountingEntry,
   liveAccountingEntry,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <>
       <div className="flex justify-between items-center">
         <AddButton
-          title="Add Investment Account"
+          title={t("investmentsAccountsTab.addInvestmentAccount")}
           onClick={() => setExpandedAddAccount(!expandedAddAccount)}
         />
         <AddToCalendar />
@@ -66,7 +69,7 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
               type="text"
               value={newAccountName}
               onChange={(e) => setNewAccountName(e.target.value)}
-              placeholder="Crypto, Stocks, Bonds, etc."
+              placeholder={t("investmentsAccountsTab.accountPlaceholder")}
               className="border rounded px-2 py-1 mr-2"
             />
             <button
@@ -74,21 +77,18 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
               className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={newAccountName.length === 0}
             >
-              Add
+              {t("investmentsAccountsTab.add")}
             </button>
           </div>
           <p className="mb-8 max-w-prose">
-            Unlike Bank accounts, Investments accounts are accounts{" "}
-            <b>where you expect value to fluctuate</b> even if you won&apos;t
-            add or remove money.
+            {t("investmentsAccountsTab.description.part1")}{" "}
+            <b>{t("investmentsAccountsTab.description.part2")}</b>{" "}
+            {t("investmentsAccountsTab.description.part3")}
             <br />
-            For example: stocks, crypto, bonds. You initially invest an amount,
-            might add/remove each month but their value also fluctuates.
+            {t("investmentsAccountsTab.description.part4")}
           </p>
           <p className="text-sm max-w-lg">
-            After creating an account you can connect it to external accounts
-            (e.g. banks, crypto exchanges, stock brokers, etc...) to autofill
-            the amounts each time you create an entry and see live data.
+            {t("investmentsAccountsTab.connectInstructions")}
           </p>
           <button
             className="mt-4 px-4 py-2 text-sm bg-purple-200 hover:bg-purple-300 pixel-corners-small"
@@ -96,7 +96,7 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
               switchTab("connectors");
             }}
           >
-            Connect external accounts
+            {t("investmentsAccountsTab.connectExternalAccounts")}
           </button>
         </div>
       )}
@@ -121,7 +121,7 @@ const InvestmentsAccountsTab: React.FC<InvestmentsAccountsTabProps> = ({
       ))}
       {investmentAccounts.length > 0 && (
         <TotalTable
-          title="Investments Total"
+          title={t("investmentsAccountsTab.investmentsTotal")}
           fiatAccounts={[]}
           investmentAccounts={investmentAccounts}
           accountingEntries={accountingEntries}

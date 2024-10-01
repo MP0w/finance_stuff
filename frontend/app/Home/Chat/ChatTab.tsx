@@ -3,6 +3,7 @@ import { useAIChat } from "../../websocketClient";
 import TextareaAutosize from "react-textarea-autosize";
 import DeleteIcon from "../../components/DeleteIcon";
 import Loading from "@/app/components/Loading";
+import { useTranslation } from "react-i18next";
 
 interface ChatMessageProps {
   message: {
@@ -60,6 +61,7 @@ const ChatTab: React.FC = () => {
     useAIChat();
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -85,7 +87,7 @@ const ChatTab: React.FC = () => {
             ))}
             <div className="flex justify-end">
               <button className="flex items-center space-x-2" onClick={clear}>
-                <div>Clear chat</div>
+                <div>{t("chatTab.clearChat")}</div>
                 <DeleteIcon />
               </button>
             </div>
@@ -104,7 +106,7 @@ const ChatTab: React.FC = () => {
                   handleSendMessage();
                 }
               }}
-              placeholder="Reply"
+              placeholder={t("chatTab.reply")}
               className="flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100"
               minRows={1}
               maxRows={5}
@@ -114,7 +116,7 @@ const ChatTab: React.FC = () => {
               disabled={isConnecting}
               className="px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             >
-              Send
+              {t("chatTab.send")}
             </button>
           </div>
         </div>

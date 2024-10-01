@@ -2,6 +2,7 @@ import { LineChart } from "@mui/x-charts";
 import { getUserCurrencySymbol } from "@/app/UserState";
 import { makeStatistics, Summary } from "../../../../shared/userStats";
 import { DateTime } from "luxon";
+import { useTranslation } from "react-i18next";
 
 export interface ProjectionsTabProps {
   summaryCells: Summary[];
@@ -10,6 +11,7 @@ export interface ProjectionsTabProps {
 export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
   summaryCells,
 }) => {
+  const { t } = useTranslation();
   const {
     lastDate,
     lastSummary,
@@ -51,15 +53,15 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
     <div>
       {distanceBetweenEntries < 6 && (
         <blockquote className="border-l-4 border-gray-600 pl-4">
-          Your data covers {distanceBetweenEntries} months, statistics and
-          projections will be more accurate the more data you will have. You can
-          also enter data of previous months.
+          {t("projectionsTab.dataWarning", {
+            months: distanceBetweenEntries.toFixed(0),
+          })}
         </blockquote>
       )}
       <div className="w-full mt-8 flex gap-16 flex-wrap items-center justify-center">
         {isFinite(averageSavings) && (
           <div className="flex flex-col items-center justify-center">
-            <h3>Average Savings</h3>
+            <h3>{t("projectionsTab.averageSavings")}</h3>
             <p className="text-md">
               {getUserCurrencySymbol()} {averageSavings.toFixed(0)}
             </p>
@@ -67,7 +69,7 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
         )}
         {isFinite(averageProfits) && (
           <div className="flex flex-col items-center justify-center">
-            <h3>Average Total</h3>
+            <h3>{t("projectionsTab.averageTotal")}</h3>
             <p className="text-md">
               {getUserCurrencySymbol()} {averageTotal.toFixed(0)}
             </p>
@@ -75,7 +77,7 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
         )}
         {isFinite(averageProfits) && averageProfits > 0 && (
           <div className="flex flex-col items-center justify-center">
-            <h3>Average Monthly Profits</h3>
+            <h3>{t("projectionsTab.averageMonthlyProfits")}</h3>
             <p className="text-md">
               {getUserCurrencySymbol()} {averageProfits.toFixed(0)}
             </p>
@@ -83,11 +85,14 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
         )}
       </div>
 
-      <h2 className="mt-16 mb-0 text-center">Projection</h2>
+      <h2 className="mt-16 mb-0 text-center">
+        {t("projectionsTab.projection")}
+      </h2>
       {distanceBetweenEntries < 6 ? (
         <blockquote className="border-l-4 border-gray-600 pl-4">
-          We can only do projections if you have at least 6 months of data. You
-          currently have {distanceBetweenEntries} months of data.
+          {t("projectionsTab.insufficientData", {
+            months: distanceBetweenEntries.toFixed(0),
+          })}
         </blockquote>
       ) : (
         <div className="flex justify-center items-center">
@@ -108,7 +113,7 @@ export const ProjectionsTab: React.FC<ProjectionsTabProps> = ({
             ]}
             series={[
               {
-                label: "Total net worth",
+                label: t("projectionsTab.totalNetWorth"),
                 data: projectionValues.map((p) => p.value),
                 color: "#3852d6",
               },

@@ -3,6 +3,7 @@ import { OnboardingProps } from "../Onboarding";
 import DatePicker from "react-datepicker";
 import { DateTime } from "luxon";
 import { getFirstDaysOfMonth } from "../OnboardingAppPreview";
+import { useTranslation } from "react-i18next";
 
 export function OnboardingAddAccountingEntriesStep({
   props,
@@ -11,19 +12,21 @@ export function OnboardingAddAccountingEntriesStep({
   props: OnboardingProps;
   nextStep: () => void;
 }) {
+  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(
     getFirstDaysOfMonth(new Date(), 1)[0]
   );
 
   return (
     <div className="mb-8 max-w-prose">
-      Regularly, for example each 1st of the month, you will add an entry.
+      {t("onboardingAddAccountingEntriesStep.regularEntry")}
       <br />
-      An entry applies to all your bank accounts and investments.
+      {t("onboardingAddAccountingEntriesStep.entryApplies")}
       <br />
-      Once you fill in the data for an entry, it will be used to do your
-      accounting, you will be able to see it in <b>Summary</b> together with{" "}
-      <b>graphs</b>, <b>statistics</b> and <b>projections</b>.
+      {t("onboardingAddAccountingEntriesStep.entryUsage")}
+      <b>{t("common.summary")}</b> {t("common.together")}{" "}
+      <b>{t("common.graphs")}</b>, <b>{t("common.statistics")}</b>{" "}
+      {t("common.and")} <b>{t("common.projections")}</b>.
       <div className="flex flex-col items-center mt-8">
         <DatePicker
           selected={selectedDate}
@@ -44,7 +47,7 @@ export function OnboardingAddAccountingEntriesStep({
             nextStep();
           }}
         >
-          Add Entry
+          {t("onboardingAddAccountingEntriesStep.addEntry")}
         </button>
       </div>
     </div>

@@ -1,3 +1,385 @@
 {
-  "welcome": "Hello"
+  "brandHeader": {
+    "currency": "Currency",
+    "exportData": "Export data (CSV)",
+    "importFromSheet": "Import from sheet",
+    "privacyPolicy": "Privacy Policy",
+    "logout": "Logout"
+  },
+  "feedbackButton": {
+    "sendFeedback": "Send feedback"
+  },
+  "accountsTable": {
+    "total": "Total",
+    "totalTip": "The sum of all the accounts values"
+  },
+  "fiatAccountsTab": {
+    "addBankAccount": "Add Bank Account",
+    "accountPlaceholder": "Cash, Bank, etc.",
+    "create": "Create",
+    "description": {
+      "part1": "Any account where, unlike investment accounts,",
+      "part2": "you don't expect the value to fluctuate",
+      "part3": " unless you add/spend/remove money from it.",
+      "part4": "For example: bank accounts, cash, even loans or debt you have with someone (using negative values)"
+    }
+  },
+  "chatTab": {
+    "clearChat": "Clear chat",
+    "reply": "Reply",
+    "send": "Send",
+    "defaultMessages": {
+      "1": "I can help you with your personal finances, budgeting or accounting topics.",
+      "2": "What are you looking for?"
+    }
+  },
+  "connectorsTab": {
+    "connections": "Connections",
+    "errorLoadingConnections": "Error loading connections: {{error}}",
+    "onboardingMessage": "Connect your accounts to external services to fill your data automatically and see live data.",
+    "noConnections": "You don't have any connections yet.",
+    "addNewConnector": "Add New Connector",
+    "errorLoadingConnectorsSettings": "Error loading connectors settings: {{error}}",
+    "selectAccount": "Select an account:",
+    "chooseAccount": "Choose an account",
+    "accountInstructions": "Your last entry for the selected account will be auto-filled if empty and recent. Otherwise, when you create a new entry, with a recent date, it will be auto-filled. You will also start seeing live data in the Summary. Tip: you can add multiple connections to a single account, they will be summed up",
+    "selectConnector": "Select a connector:",
+    "connectorSettings": "Connector Settings",
+    "securityNote": "All connectors settings are encrypted and stored securely.",
+    "connect": "Connect",
+    "missingProviderMessage": "If you don't see your favorite provider in the list, you can send a feedback or email to us and we will consider adding it!",
+    "contributeMessage": "You can also contribute, it's easy!",
+    "confirmDeletion": "Confirm Deletion",
+    "deleteConfirmationMessage": "Are you sure you want to delete the connection to {{connectorId}} for account {{accountName}}? This action cannot be undone.",
+    "deleting": "Deleting..."
+  },
+  "common": {
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "summary": "Summary",
+    "together": "together with",
+    "graphs": "graphs",
+    "statistics": "statistics",
+    "and": "and",
+    "projections": "projections",
+    "next": "Next",
+    "skip": "Skip"
+  },
+  "importData": {
+    "newLabel": " (new)",
+    "date": "Date",
+    "invested": "Invested",
+    "investmentValue": "Investment Value",
+    "value": "Value"
+  },
+  "importTab": {
+    "creatingProposal": "Creating an import proposal...",
+    "importingData": "Importing data...",
+    "introText": "If you already track your finances using a spreadsheet or any tool that can export to CSV, you can import it in finance_stuff. We will create the necessary accounts and entries together with all the values you have been tracking in past.",
+    "exportInstructions": "Export your data as CSV and upload it here. For example in Google sheets: > File > Download > Comma-separated values (CSV)",
+    "dragDropInstruction": "Drag & drop a CSV file here, or click to select one",
+    "emptyProposalMessage": "No proposal was generated, that might mean there is nothing to import from your spreadsheet because you already have all data. Otherwise try with another CSV.",
+    "reviewInstructions": "Review the proposal and click Import if all looks good otherwise prompt which changes you would like to make to try again",
+    "confirmImport": "Confirm Import",
+    "changeProposalInstructions": "If you need to make changes to the proposal, explain what is wrong and what changes you would like so that our AI can attempt a new proposal.",
+    "newProposalPlaceholder": "Enter message for new proposal",
+    "requestNewProposal": "Request New Proposal"
+  },
+  "investmentsAccountsTab": {
+    "addInvestmentAccount": "Add Investment Account",
+    "accountPlaceholder": "Crypto, Stocks, Bonds, etc.",
+    "add": "Add",
+    "description": {
+      "part1": "Unlike Bank accounts, Investments accounts are accounts",
+      "part2": "where you expect value to fluctuate",
+      "part3": " even if you won't add or remove money.",
+      "part4": "For example: stocks, crypto, bonds. You initially invest an amount, might add/remove each month but their value also fluctuates."
+    },
+    "connectInstructions": "After creating an account you can connect it to external accounts (e.g. banks, crypto exchanges, stock brokers, etc...) to autofill the amounts each time you create an entry and see live data.",
+    "connectExternalAccounts": "Connect external accounts",
+    "investmentsTotal": "Investments Total"
+  },
+  "investmentTable": {
+    "initialInvestment": "Initial Investment",
+    "initialInvestmentTip": "The overall amount you invested in this asset to date, excluding profits or losses",
+    "investmentValue": "Investment Value",
+    "investmentValueTip": "The value of your investment to date including profits or losses"
+  },
+  "graphsTab": {
+    "liquid": "Liquid",
+    "totalNetWorth": "Total net worth",
+    "liquidAssets": "Liquid assets",
+    "investments": "Investments"
+  },
+  "projectionsTab": {
+    "dataWarning": "Your data covers {{months}} months, statistics and projections will be more accurate the more data you will have. You can also enter data of previous months.",
+    "averageSavings": "Average Savings",
+    "averageTotal": "Average Total",
+    "averageMonthlyProfits": "Average Monthly Profits",
+    "projection": "Projection",
+    "insufficientData": "We can only do projections if you have at least 6 months of data. You currently have {{months}} months of data.",
+    "totalNetWorth": "Total net worth"
+  },
+  "summaryTab": {
+    "addAccountsMessage": "Add your accounts and entries to see the summary"
+  },
+  "totalTable": {
+    "liquid": "Liquid",
+    "liquidTip": "Total of all bank accounts",
+    "invested": "Invested",
+    "investedTip": "Total of all your investments excluding profits or losses",
+    "investmentsValue": "Investments Value",
+    "investmentsValueTip": "Total value of your investments including profits or losses",
+    "savings": "Savings",
+    "savingsTip": "Savings excluding profits or losses of investments from the previous entry. Basically your net worth change if investments stayed flat.",
+    "total": "Total",
+    "totalTip": "Your total net worth, the sum of your liquidity and investments values",
+    "liveData": "Live Data",
+    "missingValuesWarning": "🚨 You are missing some values in your accounts for this entry, check the glowing red cells in Bank Accounts & Investments for this date"
+  },
+  "tabs": {
+    "bankAccounts": "Bank Accounts",
+    "investments": "Investments",
+    "expenses": "Expenses",
+    "summary": "Summary",
+    "connectors": "Connectors",
+    "ai": "✨AI🔮"
+  },
+  "homeContent": {
+    "expensesWorkInProgress": "We are still working on Expenses.",
+    "comingSoon": "Coming Soon™️",
+    "confirmDeletion": "Confirm Deletion",
+    "deleteAccountConfirmation": "Are you sure you want to delete the account <b>{{accountName}}</b>? This action cannot be undone and all the entries for that account will also be deleted.",
+    "deleteEntryFromAllAccounts": "Delete date from all accounts",
+    "deleteEntryWarning": "All the values for that date on each account will be removed. This action cannot be undone and",
+    "errorLoadingData": "Error loading data",
+    "retry": "Retry"
+  },
+  "homePage": {
+    "accountCreated": "Account created",
+    "accountCreationFailed": "Failed to create account. Please try again.",
+    "newEntryCreated": "New entry created",
+    "failedConnections": "Failed to get a value from: {{connectors}}.",
+    "accountingEntryCreationFailed": "Failed to create accounting entry. {{error}}",
+    "accountNotFound": "Account not found. Retry",
+    "entryNotFound": "Entry not found. Retry",
+    "accountDeletedSuccess": "Account deleted successfully",
+    "accountDeletionFailed": "Failed to delete account. Please try again.",
+    "entryDeletedSuccess": "Entry deleted successfully",
+    "entryDeletionFailed": "Failed to delete entry. Please try again."
+  },
+  "onboardingTips": {
+    "addInvestmentAccounts": "Add your investment accounts!",
+    "investmentExamples": "For example your stocks, bonds, cryptos, real estate, etc.",
+    "addBankAccounts": "Add your bank accounts!",
+    "bankAccountExplanation": "Here you can add all your banks or even cash, anything that is not an investment."
+  },
+  "table": {
+    "addEntry": "Add Entry",
+    "dateHeader": {
+      "title": "Date",
+      "tip": "The date of the accounting entry, we suggest to do it monthly, for example at the end of each month, but you can do it weekly or as you like. When you are ready to add a new entry, click the Add entry button and choose the date."
+    },
+    "profitsHeader": {
+      "title": "Profits",
+      "tip": "Profits or losses of investments based on the amount invested"
+    },
+    "percentageHeader": {
+      "title": "%",
+      "tip": "The percentage of your investments profits against the amount invested"
+    },
+    "differenceHeader": {
+      "title": "Difference",
+      "tip": "The difference compared to the previous entry"
+    },
+    "failedToUpdateValue": "Failed to update value. Please try again."
+  },
+  "landingPage": {
+    "subtitle": "Effortlessly Track & Grow your Finances\nin just 10 minutes a month",
+    "freeOffer": "Free for\nlimited time!",
+    "getStarted": "Get Started",
+    "login": "Login",
+    "keyFeatures": {
+      "expenses": {
+        "1": "Track expenses, accounts and investments",
+        "2": "AI Powered Insights for Smarter Decisions",
+        "3": "Automagically Import Expenses",
+        "4": "Visualize Your Growth",
+        "5": "Easy Future Planning & Projections",
+        "6": "Connect your accounts to automate your tracking"
+      },
+      "budgeting": {
+        "1": "Track expenses, accounts and investments",
+        "2": "AI Powered Insights to help you budget",
+        "3": "Automagically Import Expenses",
+        "4": "Visualize Your Growth",
+        "5": "Easy Budgeting & Projections",
+        "6": "Connect your accounts to automate your tracking"
+      },
+      "savings": {
+        "1": "Track All Accounts and Investments",
+        "2": "AI Powered Insights to help you save",
+        "3": "Automagically Import Spreadsheets",
+        "4": "Visualize Your Savings",
+        "5": "Easy Saving Goals & Projections",
+        "6": "Connect your accounts to automate your tracking"
+      },
+      "spreadsheet": {
+        "1": "Automagically Import Spreadsheets",
+        "2": "Track All Accounts and Investments",
+        "3": "AI Powered, more powerful than a spreadsheet",
+        "4": "Visualize Your Growth",
+        "5": "Easy Future Planning & Projections",
+        "6": "Connect your accounts to automate your tracking"
+      },
+      "default": {
+        "1": "Track All Accounts and Investments",
+        "2": "AI Powered Insights for Smarter Decisions",
+        "3": "Automagically Import Spreadsheets",
+        "4": "Visualize Your Growth",
+        "5": "Easy Future Planning & Projections",
+        "6": "Connect your accounts to automate your tracking"
+      }
+    },
+    "footer": {
+      "companyName": "stuff.finance",
+      "email": "info@stuff.finance",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service"
+    },
+    "keyFeaturesTitle": "Key Features",
+    "aiAssistant": "AI Assistant",
+    "quotes": {
+      "default": "Master your money with simple tracking.\nManage spending, savings, and investments effortlessly!\nStart building better financial habits today.",
+      "expenses": "Track your expenses automatically using bank statements.\nTracking expense is time consuming, let us do it for you.",
+      "savings": "Track your savings and achieve your goals.\nManage your spending, savings, and investments effortlessly!\nStart improving your savings today.",
+      "budgeting": "We help you budget and track your savings.\nManage your budgets, spending, and investments effortlessly!",
+      "spreadsheet": "Spreadsheets are great and very powerful. But they can get very complex.\nAfter years of over-engineering a personal finance spreadsheet we decided to turn it into an app, to make it simpler and more powerful.\nIt's tailored to tracking personal finances and easier to use."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "security": {
+        "question": "Is my data secure?",
+        "answer": "Your financial data is very sensitive, first of all we offer an anonymous sign up option if you prefer to use it. Other than that the most sensitive data is encrypted in the database."
+      },
+      "why": {
+        "question": "Why should I track my personal finances?",
+        "answer": "Tracking your personal finances is crucial for achieving financial stability and growth. It helps you understand your spending habits, identify areas for improvement, set realistic financial goals, and make informed decisions about your money. By consistently monitoring your finances, you can build better saving habits, reduce debt, plan for the future, and ultimately gain peace of mind about your financial situation."
+      },
+      "spreadsheet": {
+        "question": "I already use a spreadsheet, why should I switch over?",
+        "answer": "While spreadsheets are versatile but can get very complex and not user friendly when you want to get more data and insights out of them. finance_stuff offers several advantages:\n1) Automated data import and updates save time and reduce errors. Even simply adding a new bank account or investement in a spreadsheet is time consuming.\n2) Our AI-powered assistant gives you contextual information and can help you make decisions.\n3) User-friendly interface makes tracking and visualizing your finances easier.\n4) Advanced features like statistics and future projections are built-in.\n5) Secure cloud storage ensures your data is safe and accessible across devices.\n6) Regular updates add new features without you having to redesign your spreadsheet."
+      },
+      "import": {
+        "question": "Can I import data from other apps?",
+        "answer": "Absolutely! We offer an importer from CSV files, most apps should allow you to export your data in CSV, for example google sheets or notion databases."
+      },
+      "automation": {
+        "question": "Can I automate my personal finance tracking?",
+        "answer": "We offer connections to some popular services to automatically get your balances, for example binance or blockchains connectors are already available. Many more to come! Feel free to hit us up to request a connector."
+      }
+    },
+    "aboutMe": {
+      "title": "About Me",
+      "content": "I'm Alex Manzella, the creator of <b>finance_stuff</b>. I'm a Software Engineer with 13 years of experience, in the recent years I have been a Principal Engineer at {{n26Link}} a popular mobile bank in Europe and a Tech Lead at {{amieLink}} an amazing productivity app.\n\nI'm very interested in finance and worked for many years in fintech. I am interested in blockchains and DeFi.\nAfter years of over-engineering my personal finance spreadsheet I decided to turn it into an app, to make it simpler and more powerful."
+    },
+    "comingSoon": "Coming Soon™️",
+    "comingSoonFeatures": {
+      "mobileApps": "Mobile Apps",
+      "autoExpenseTracking": "Automatic expense tracking from bank statements",
+      "budgeting": "Budgeting",
+      "moreConnectors": "More connectors to popular banking and investments services",
+      "mortgageSupport": "Better mortgages & loans support",
+      "more": "More..."
+    },
+    "aiChat": {
+      "userMessage": "I'm thinking of buying a flat, do you think I can pay off the mortgage safely?",
+      "assistantMessage": "Based on your income, a mortgage payment of up to 1200€/month should be manageable. Consider properties below 300,000€. Your savings could cover a 10-15% down payment. It's feasible!"
+    }
+  },
+  "onboardingAddAccountingEntriesStep": {
+    "regularEntry": "Regularly, for example each 1st of the month, you will add an entry.",
+    "entryApplies": "An entry applies to all your bank accounts and investments.",
+    "entryUsage": "Once you fill in the data for an entry, it will be used to do your accounting, you will be able to see it in",
+    "addEntry": "Add Entry"
+  },
+  "onboardingAddAccountsStep": {
+    "fiatDescription": {
+      "part1": "Any account where, unlike investment accounts,",
+      "part2": "you don't expect the value to fluctuate",
+      "part3": " unless you add/spend/remove money from it.",
+      "part4": "For example: bank accounts, cash, even loans or debt you have with someone (using negative values)"
+    },
+    "investmentDescription": {
+      "part1": "Unlike Bank accounts, Investments accounts are accounts",
+      "part2": "where you expect value to fluctuate",
+      "part3": " even if you won't add or remove money.",
+      "part4": "For example: stocks, crypto, bonds. You initially invest an amount, might add/remove each month but their value also fluctuates."
+    },
+    "fiatAccounts": {
+      "bank": "Bank",
+      "cash": "Cash",
+      "creditCard": "Credit Card"
+    },
+    "investmentAccounts": {
+      "stocks": "Stocks",
+      "crypto": "Crypto",
+      "ethereum": "Ethereum",
+      "bitcoin": "Bitcoin",
+      "bonds": "Bonds",
+      "house": "House"
+    },
+    "accountNamePlaceholder": "Account name",
+    "create": "Create"
+  },
+  "onboardingFillAccountingEntriesStep": {
+    "emptyMessage": "You need at least one account and one entry to fill in the data. Go back to add them!",
+    "introText": "Now that you have an entry for",
+    "fillInstructions": "you can fill in the data in the tables for each account or later on you can connect your accounts to external providers to auto-fill them.",
+    "glowingCellsInstruction": "Fill in the glowing red cells and then you are done for that entry.",
+    "tip": "TIP:",
+    "hoverInstruction": "You can hover the table headers for more info!",
+    "bankAccounts": "Bank Accounts"
+  },
+  "onboarding": {
+    "steps": {
+      "importCsv": "Import your data",
+      "addBankAccounts": "Add Bank Accounts",
+      "addInvestmentAccounts": "Add Investment Accounts",
+      "addEntries": "Add Entries",
+      "fillEntries": "Fill Entries",
+      "connectAccounts": "Connect Accounts"
+    }
+  },
+  "onboardingAppPreview": {
+    "account": "Account",
+    "dateHeader": "Date",
+    "totalHeader": "Total"
+  },
+  "loginPage": {
+    "errorMessage": "Something went wrong, retry",
+    "googleSignInError": "Error signing in with Google:",
+    "emailPlaceholder": "Email",
+    "emailSentMessage": "Email sent, check your inbox and click on the link to sign in.",
+    "retrySendEmail": "Retry sending email",
+    "signInWithGoogle": "Sign In with Google",
+    "signInWithEmailLink": "Sign In with Email Link",
+    "signInWithPassword": "Sign In with Password",
+    "signInAnonymously": "Sign In Anonymously"
+  },
+  "passwordSignIn": {
+    "anonValidationError": "Username can only contain letters, numbers, and underscores. At least 4 characters.",
+    "username": "Username",
+    "invalidEmail": "Invalid email",
+    "email": "Email",
+    "weakPassword": "Password is too weak",
+    "genericError": "Something went wrong, retry.{{isSignUp ? ' Make sure your credentials are correct' : ' If you do not have an account sign up instead'}}",
+    "password": "Password",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "haveAccount": "Already have an account?",
+    "needAccount": "Need to create an account?",
+    "anonymousWarning": "This account is anonymous. You can't recover it if you forget the credentials, but you can link your email later if you change your mind."
+  }
 }

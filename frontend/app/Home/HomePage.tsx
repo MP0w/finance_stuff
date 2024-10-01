@@ -17,6 +17,7 @@ import { AccountType } from "../../../shared/types";
 import { logAnalyticsEvent } from "../firebase";
 import HomeContent from "./HomeContent";
 import Onboarding, { didCompleteOnboarding } from "../Onboarding/Onboarding";
+import { useTranslation } from "react-i18next";
 
 interface HomePageProps {
   signOut: () => void;
@@ -24,6 +25,7 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
   const { user } = useUserState();
+  const { t } = useTranslation();
   // UI states
   const [expandedAddAccount, setExpandedAddAccount] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
@@ -110,15 +112,15 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
           await createAccount(name, type, user?.currency ?? "USD");
           fetchAccounts();
           setNewAccountName("");
-          toast.success("Account created");
+          toast.success(t("homePage.accountCreated"));
           setExpandedAddAccount(false);
           logAnalyticsEvent("create_account_success");
         } catch (error) {
-          toast.error("Failed to create account. Please try again.");
+          toast.error(t("homePage.accountCreationFailed"));
         }
       }
     },
-    [createAccount, fetchAccounts, user]
+    [createAccount, fetchAccounts, user, t]
   );
 
   const handleCreateAccountingEntry = useCallback(
@@ -126,13 +128,15 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       try {
         const response = await createAccountingEntry(date);
         fetchAccountingEntries();
-        toast.success("new entry created");
+        toast.success(t("homePage.newEntryCreated"));
         const failedConnections = response?.failedConnections ?? [];
         if (failedConnections.length > 0) {
           toast.error(
-            `Failed to get a value from: ${failedConnections
-              .map((c) => c.connectorId)
-              .join(", ")}.`,
+            t("homePage.failedConnections", {
+              connectors: failedConnections
+                .map((c) => c.connectorId)
+                .join(", "),
+            }),
             {
               duration: 20000,
             }
@@ -142,11 +146,13 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
         logAnalyticsEvent("create_accounting_entry_success");
       } catch (error) {
         toast.error(
-          "Failed to create accounting entry. " + (error as Error).message
+          t("homePage.accountingEntryCreationFailed", {
+            error: (error as Error).message,
+          })
         );
       }
     },
-    [createAccountingEntry, fetchAccountingEntries]
+    [createAccountingEntry, fetchAccountingEntries, t]
   );
 
   const handleCellChange = useCallback(
@@ -207,14 +213,14 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
     async (accountId: string) => {
       const account = accounts?.find((a) => a.id === accountId);
       if (!account) {
-        toast.error("Account not found. Retry");
+        toast.error(t("homePage.accountNotFound"));
         return;
       }
 
       setAccountToDelete({ id: accountId, name: account.name });
       setIsDeleteModalOpen(true);
     },
-    [accounts]
+    [accounts, t]
   );
 
   const handleDeleteAccountingEntry = useCallback(
@@ -224,14 +230,14 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       );
 
       if (!accountingEntry) {
-        toast.error("Entry not found. Retry");
+        toast.error(t("homePage.entryNotFound"));
         return;
       }
 
       setAccountingEntryToDelete(accountingEntryId);
       setIsDeleteEntryModalOpen(true);
     },
-    [accountingEntries]
+    [accountingEntries, t]
   );
 
   const confirmDeleteAccount = async (id: string) => {
@@ -239,9 +245,9 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       await deleteAccount(id);
       fetchAccounts();
 
-      toast.success("Account deleted successfully");
+      toast.success(t("homePage.accountDeletedSuccess"));
     } catch (error) {
-      toast.error("Failed to delete account. Please try again.");
+      toast.error(t("homePage.accountDeletionFailed"));
     }
     setIsDeleteModalOpen(false);
     setAccountToDelete(null);
@@ -252,9 +258,9 @@ const HomePage: React.FC<HomePageProps> = ({ signOut }) => {
       try {
         await deleteAccountingEntry(accountingEntryToDelete);
         fetchAccountingEntries();
-        toast.success("Entry deleted successfully");
+        toast.success(t("homePage.entryDeletedSuccess"));
       } catch (error) {
-        toast.error("Failed to delete entry. Please try again.");
+        toast.error(t("homePage.entryDeletionFailed"));
       }
     }
     setIsDeleteEntryModalOpen(false);

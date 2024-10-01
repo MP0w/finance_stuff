@@ -5,6 +5,7 @@ import { OnboardingProps } from "./Onboarding";
 import { AccountType } from "../../../shared/types";
 import { useMemo } from "react";
 import Table from "@/app/Home/Table";
+import { useTranslation } from "react-i18next";
 
 export function OnboardingAppPreview({
   props,
@@ -15,6 +16,8 @@ export function OnboardingAppPreview({
   tab?: AccountType;
   mockEntries: boolean;
 }) {
+  const { t } = useTranslation();
+
   function getBestType() {
     const fiatAccounts = props.data.accounts.filter(
       (account) => account.type === "fiat"
@@ -36,11 +39,11 @@ export function OnboardingAppPreview({
     return accounts.length > 0
       ? accounts
       : [
-          { id: "1", name: "Account 1", type },
-          { id: "2", name: "Account 2", type },
-          { id: "3", name: "Account 3", type },
+          { id: "1", name: t("onboardingAppPreview.account") + " 1", type },
+          { id: "2", name: t("onboardingAppPreview.account") + " 2", type },
+          { id: "3", name: t("onboardingAppPreview.account") + " 3", type },
         ];
-  }, [props.data.accounts, type]);
+  }, [props.data.accounts, type, t]);
 
   const existingEntriesDates = props.data.accountingEntries.map(
     (e) => new Date(e.date)
@@ -66,7 +69,7 @@ export function OnboardingAppPreview({
           <TabView
             email={undefined}
             signOut={() => {}}
-            tabs={tabs}
+            tabs={tabs(t)}
             activeTab={type === "fiat" ? "fiat" : "investments"}
             setActiveTab={() => {}}
             exportData={() => {}}
@@ -81,13 +84,13 @@ export function OnboardingAppPreview({
                 }
                 headers={[
                   {
-                    title: "Date",
+                    title: t("onboardingAppPreview.dateHeader"),
                   },
                   ...accounts.map((account) => ({
                     title: account.name,
                   })),
                   {
-                    title: "Total",
+                    title: t("onboardingAppPreview.totalHeader"),
                   },
                 ]}
                 rows={rows.map((row) => [

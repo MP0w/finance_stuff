@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useUserState } from "./UserState";
-
+import { useTranslation } from "react-i18next";
 
 export type ChatMessage = {
   role: "user" | "assistant" | "error";
@@ -12,21 +12,22 @@ export function useAIChat() {
   return useWebSocket(process.env.NEXT_PUBLIC_WS_URL!);
 }
 
-const defaultMessages: ChatMessage[] = [
-  {
-    role: "assistant",
-    content:
-      "I can help you with your personal finances, budgeting or accounting topics.",
-    default: true,
-  },
-  {
-    role: "assistant",
-    content: "What are you looking for?",
-    default: true,
-  },
-];
-
 function useWebSocket(url: string) {
+  const { t } = useTranslation();
+
+  const defaultMessages: ChatMessage[] = [
+    {
+      role: "assistant",
+      content: t("chatTab.defaultMessages.1"),
+      default: true,
+    },
+    {
+      role: "assistant",
+      content: t("chatTab.defaultMessages.2"),
+      default: true,
+    },
+  ];
+
   const { user } = useUserState();
   const [token, setToken] = useState<string | undefined>(undefined);
   const [liveMessage, setLiveMessage] = useState<ChatMessage | undefined>(

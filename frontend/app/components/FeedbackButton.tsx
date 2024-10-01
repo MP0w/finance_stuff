@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { getFeedback } from "@sentry/nextjs";
+import { useTranslation } from "react-i18next";
 
 export default function FeedbackButton() {
   const [feedback, setFeedback] =
     useState<ReturnType<typeof getFeedback>>(undefined);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setFeedback(getFeedback());
@@ -22,7 +24,7 @@ export default function FeedbackButton() {
         form.open();
       }}
     >
-      Send feedback
+      {t("feedbackButton.sendFeedback")}
     </button>
   );
 }

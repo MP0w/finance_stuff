@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { AccountType } from "../../../../shared/types";
 import { OnboardingProps } from "../Onboarding";
+import { useTranslation } from "react-i18next";
 
 export function OnboardingAddAccountsStep({
   props,
@@ -9,6 +10,7 @@ export function OnboardingAddAccountsStep({
   props: OnboardingProps;
   type: AccountType;
 }) {
+  const { t } = useTranslation();
   const [newAccountName, setNewAccountName] = useState("");
   const { accounts, accountNames } = useMemo(() => {
     const accounts = props.data.accounts.filter(
@@ -22,28 +24,37 @@ export function OnboardingAddAccountsStep({
     <div>
       {type === "fiat" && (
         <p className="mb-4 max-w-prose">
-          Any account where, unlike investment accounts,{" "}
-          <b>you don&apos;t expect the value to fluctuate</b> unless you
-          add/spend/remove money from it.
+          {t("onboardingAddAccountsStep.fiatDescription.part1")}{" "}
+          <b>{t("onboardingAddAccountsStep.fiatDescription.part2")}</b>
+          {t("onboardingAddAccountsStep.fiatDescription.part3")}
           <br />
-          For example: bank accounts, cash, even loans or debt you have with
-          someone (using negative values)
+          {t("onboardingAddAccountsStep.fiatDescription.part4")}
         </p>
       )}
       {type === "investment" && (
         <p className="mb-4 max-w-prose">
-          Unlike Bank accounts, Investments accounts are accounts{" "}
-          <b>where you expect value to fluctuate</b> even if you won&apos;t add
-          or remove money.
+          {t("onboardingAddAccountsStep.investmentDescription.part1")}{" "}
+          <b>{t("onboardingAddAccountsStep.investmentDescription.part2")}</b>
+          {t("onboardingAddAccountsStep.investmentDescription.part3")}
           <br />
-          For example: stocks, crypto, bonds. You initially invest an amount,
-          might add/remove each month but their value also fluctuates.
+          {t("onboardingAddAccountsStep.investmentDescription.part4")}
         </p>
       )}
       <div className="flex flex-wrap gap-4 max-w-xs">
         {(type === "fiat"
-          ? ["Bank", "Cash", "Credit Card"]
-          : ["Stocks", "Crypto", "Ethereum", "Bitcoin", "Bonds", "House"]
+          ? [
+              t("onboardingAddAccountsStep.fiatAccounts.bank"),
+              t("onboardingAddAccountsStep.fiatAccounts.cash"),
+              t("onboardingAddAccountsStep.fiatAccounts.creditCard"),
+            ]
+          : [
+              t("onboardingAddAccountsStep.investmentAccounts.stocks"),
+              t("onboardingAddAccountsStep.investmentAccounts.crypto"),
+              t("onboardingAddAccountsStep.investmentAccounts.ethereum"),
+              t("onboardingAddAccountsStep.investmentAccounts.bitcoin"),
+              t("onboardingAddAccountsStep.investmentAccounts.bonds"),
+              t("onboardingAddAccountsStep.investmentAccounts.house"),
+            ]
         )
           .filter((account) => !accountNames.has(account))
           .map((account) => (
@@ -63,7 +74,7 @@ export function OnboardingAddAccountsStep({
           type="text"
           value={newAccountName}
           onChange={(e) => setNewAccountName(e.target.value)}
-          placeholder={"Account name"}
+          placeholder={t("onboardingAddAccountsStep.accountNamePlaceholder")}
           className="border rounded px-2 py-1 mr-2"
         />
         <button
@@ -74,7 +85,7 @@ export function OnboardingAddAccountsStep({
           className="bg-gray-600 text-white px-4 py-1 pixel-corners-small hover:bg-gray-800 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={newAccountName.length === 0}
         >
-          Create
+          {t("onboardingAddAccountsStep.create")}
         </button>
       </div>
       <div className="flex flex-wrap gap-4 max-w-xs">

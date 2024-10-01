@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 import AddToCalendar from "../../components/AddToCalendar";
 import TotalTable from "./TotalTable";
@@ -21,6 +22,8 @@ export const SummaryTab: React.FC<{
   onAddEntry,
   onDeleteAccountingEntry,
 }) => {
+  const { t } = useTranslation();
+
   const summaryCells = makeSummaryData({
     fiatAccounts,
     investmentAccounts,
@@ -50,7 +53,7 @@ export const SummaryTab: React.FC<{
       <ProjectionsTab summaryCells={summaryCells} />
     </div>
   ) : (
-    <div>Add your accounts and entries to see the summary</div>
+    <div>{t("summaryTab.addAccountsMessage")}</div>
   );
 };
 

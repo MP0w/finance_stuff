@@ -4,6 +4,7 @@ import { LineChart } from "@mui/x-charts/LineChart";
 import { stringForPercentage } from "../Investments/InvestmentTable";
 import { Summary } from "../../../../shared/userStats";
 import { DateTime } from "luxon";
+import { useTranslation } from "react-i18next";
 
 export interface GraphsTabProps {
   investmentAccounts: Accounts[];
@@ -16,6 +17,8 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
   accountingEntries,
   summaryCells,
 }) => {
+  const { t } = useTranslation();
+
   const lastEntry = accountingEntries[accountingEntries.length - 1];
   const investmentAccountsByIds = new Map(
     investmentAccounts.map((account) => [account.id, account])
@@ -35,7 +38,7 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
 
   pieData.push({
     id: "Liquid",
-    label: "Liquid",
+    label: t("graphsTab.liquid"),
     value: summaryCells[summaryCells.length - 1].liquidTotal,
   });
 
@@ -68,17 +71,17 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
         ]}
         series={[
           {
-            label: "Total net worth",
+            label: t("graphsTab.totalNetWorth"),
             data: summaryCells.map((p) => p.total),
             color: "#3852d6",
           },
           {
-            label: "Liquid assets",
+            label: t("graphsTab.liquidAssets"),
             data: summaryCells.map((p) => p.liquidTotal),
             color: "#8ededd",
           },
           {
-            label: "Investments",
+            label: t("graphsTab.investments"),
             data: summaryCells.map((p) => p.investmentsTotal),
             color: "#8e9bde",
           },

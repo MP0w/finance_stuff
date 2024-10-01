@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import {
   useConfirmImport,
   useCreateImport,
@@ -31,6 +32,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
   refresh,
   onComplete,
 }) => {
+  const { t } = useTranslation();
   const [csv, setCsv] = useState<string | undefined>(undefined);
   const [latestProposal, setLatestProposal] = useState<
     ImportProposal | undefined
@@ -50,6 +52,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
       return undefined;
     }
     return importTableData(
+      t,
       { fiatAccounts, investmentAccounts, accountingEntries, refresh },
       latestProposal,
       (id) => {
@@ -61,6 +64,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
       }
     ).filter((table) => !deletedTables.has(table.id));
   }, [
+    t,
     fiatAccounts,
     investmentAccounts,
     accountingEntries,
@@ -183,25 +187,13 @@ export const ImportTab: React.FC<ImportTabProps> = ({
   return (
     <div>
       {(createLoading || updateLoading) && (
-        <Loading message="Creating an import proposal..." />
+        <Loading message={t("importTab.creatingProposal")} />
       )}
-      {confirmLoading && <Loading message="Importing data..." />}
+      {confirmLoading && <Loading message={t("importTab.importingData")} />}
       {!csv && (
         <div>
-          <p className="mb-4 font-semibold">
-            If you already track your finances using a spreadsheet or any tool
-            that can export to CSV, you can import it in finance_stuff
-            <br />
-            we will create the necessary accounts and entries together with all
-            the values you have been tracking in past.
-          </p>
-          <p className="mb-8">
-            Export your data as CSV and upload it here.
-            <br />
-            For example in Google sheets:
-            <br />
-            &gt; File &gt; Download &gt; Comma-separated values (CSV)
-          </p>
+          <p className="mb-4 font-semibold">{t("importTab.introText")}</p>
+          <p className="mb-8">{t("importTab.exportInstructions")}</p>
           <div
             {...getRootProps()}
             style={{
@@ -212,25 +204,18 @@ export const ImportTab: React.FC<ImportTabProps> = ({
             }}
           >
             <input {...getInputProps()} />
-            <p>Drag & drop a CSV file here, or click to select one</p>
+            <p>{t("importTab.dragDropInstruction")}</p>
           </div>
         </div>
       )}
       {emptyProposal && (
         <div>
-          <p>
-            No proposal was generated, that might mean there is nothing to
-            import from your spreadsheet because you already have all data.
-            Otherwise try with another CSV.
-          </p>
+          <p>{t("importTab.emptyProposalMessage")}</p>
         </div>
       )}
       {tables && !isLoading && !emptyProposal && (
         <div>
-          <p>
-            Review the proposal and click Import if all looks good otherwise
-            prompt which changes you would like to make to try again
-          </p>
+          <p>{t("importTab.reviewInstructions")}</p>
           {tables.map((table) => (
             <Table
               title={table.title}
@@ -246,18 +231,16 @@ export const ImportTab: React.FC<ImportTabProps> = ({
               onClick={handleConfirmImport}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600  pixel-corners-small"
             >
-              Confirm Import
+              {t("importTab.confirmImport")}
             </button>
             <div className="mt-4">
               <p className="mb-2">
-                If you need to make changes to the proposal, explain what is
-                wrong and what changes you would like so that our AI can attempt
-                a new proposal.
+                {t("importTab.changeProposalInstructions")}
               </p>
               <textarea
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Enter message for new proposal"
+                placeholder={t("importTab.newProposalPlaceholder")}
                 className="w-full p-2 border border-gray-300 rounded mb-2"
               />
               <button
@@ -265,7 +248,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({
                 disabled={inputMessage.length < 20}
                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 pixel-corners-small disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Request New Proposal
+                {t("importTab.requestNewProposal")}
               </button>
             </div>
           </div>

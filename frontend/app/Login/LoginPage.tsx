@@ -13,10 +13,12 @@ import {
 } from "firebase/auth";
 import LogScreenView from "../components/LogScreenView";
 import Loading from "../components/Loading";
+import { useTranslation } from "react-i18next";
 
 interface LoginPageProps {}
 
 const LoginPage: React.FC<LoginPageProps> = ({}) => {
+  const { t } = useTranslation();
   const { user, loaded, signingIn } = useUserState();
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState<boolean>(false);
@@ -41,7 +43,7 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
         handleCodeInApp: true,
       } as ActionCodeSettings);
     } catch {
-      setError("something went wrong, retry");
+      setError(t("loginPage.errorMessage"));
     }
   };
 
@@ -55,8 +57,8 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
       provider.addScope("email");
       await signInWithPopup(auth, provider);
     } catch (error) {
-      setError("something went wrong, retry");
-      console.error("Error signing in with Google:", error);
+      setError(t("loginPage.errorMessage"));
+      console.error(t("loginPage.googleSignInError"), error);
     }
   };
 
@@ -102,7 +104,7 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
                 {!emailSent && state === "link" && (
                   <input
                     type="email"
-                    placeholder="Email"
+                    placeholder={t("loginPage.emailPlaceholder")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 placeholder-gray-400"
@@ -111,15 +113,12 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
                 )}
                 {emailSent && state === "link" && (
                   <div className="flex flex-col items-center">
-                    <p className="mb-4">
-                      Email sent, check your inbox and click on the link to sign
-                      in.
-                    </p>
+                    <p className="mb-4">{t("loginPage.emailSentMessage")}</p>
                     <button
                       className="w-full py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white pixel-corners-small transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={() => setEmailSent(false)}
                     >
-                      Retry sending email
+                      {t("loginPage.retrySendEmail")}
                     </button>
                   </div>
                 )}
@@ -128,7 +127,8 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
                     onClick={signInWithGoogle}
                     className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white pixel-corners-small transition duration-200 flex items-center justify-center"
                   >
-                    <FaGoogle className="mr-2" /> Sign In with Google
+                    <FaGoogle className="mr-2" />{" "}
+                    {t("loginPage.signInWithGoogle")}
                   </button>
                 )}
                 {!emailSent && (
@@ -136,7 +136,8 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
                     onClick={handleEmailLink}
                     className="w-full py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white pixel-corners-small transition duration-200 flex items-center justify-center"
                   >
-                    <FiMail className="mr-2" /> Sign In with Email Link
+                    <FiMail className="mr-2" />{" "}
+                    {t("loginPage.signInWithEmailLink")}
                   </button>
                 )}
                 {state === undefined && (
@@ -144,7 +145,8 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
                     onClick={() => setState("pass")}
                     className="w-full py-2 px-4 bg-violet-500 hover:bg-violet-700 text-white pixel-corners-small transition duration-200 flex items-center justify-center"
                   >
-                    <FaKey className="mr-2" /> Sign In with Password
+                    <FaKey className="mr-2" />{" "}
+                    {t("loginPage.signInWithPassword")}
                   </button>
                 )}
                 {state === undefined && (
@@ -152,7 +154,8 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
                     onClick={() => setState("anon")}
                     className="w-full py-2 px-4 bg-black hover:bg-gray-800 text-white pixel-corners-small transition duration-200 flex items-center justify-center"
                   >
-                    <FaUserNinja className="mr-2" /> Sign In Anonymously
+                    <FaUserNinja className="mr-2" />{" "}
+                    {t("loginPage.signInAnonymously")}
                   </button>
                 )}
               </div>

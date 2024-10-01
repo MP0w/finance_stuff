@@ -2,6 +2,7 @@ import React from "react";
 import Table, { dateHeader, TableHeaderContent, TableRowCell } from "../Table";
 import { AccountingEntriesDTO, Accounts } from "../../../../shared/types";
 import { DateTime } from "luxon";
+import { useTranslation } from "react-i18next";
 
 interface AccountsTableProps {
   accounts: Accounts[];
@@ -25,22 +26,22 @@ const AccountsTable: React.FC<AccountsTableProps> = ({
   onDeleteAccount,
   onDeleteAccountingEntry,
 }) => {
+  const { t } = useTranslation();
+
   const headers: TableHeaderContent[] = [
-    dateHeader,
-    ...accounts.map((account) => {
-      return {
-        title: account.name,
-        onDelete: onDeleteAccount
-          ? () => {
-              onDeleteAccount(account.id);
-            }
-          : undefined,
-      };
-    }),
+    dateHeader(t),
+    ...accounts.map((account) => ({
+      title: account.name,
+      onDelete: onDeleteAccount
+        ? () => {
+            onDeleteAccount(account.id);
+          }
+        : undefined,
+    })),
     {
-      title: "Total",
+      title: t("accountsTable.total"),
       tip: {
-        text: "The sum of all the accounts values",
+        text: t("accountsTable.totalTip"),
         id: "accounts-table-total",
         noIcon: true,
       },

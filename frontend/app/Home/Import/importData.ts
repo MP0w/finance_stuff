@@ -4,11 +4,12 @@ import { ImportTabProps } from "./ImportTab";
 import { TableHeaderContent, TableRowCell } from "../Table";
 
 export function importTableData(
+  t: (key: string) => string,
   current: ImportTabProps,
   proposal: ImportProposal,
   onDelete: (id: string) => void
 ) {
-  return makeTables(mergedData(current, proposal), onDelete);
+  return makeTables(mergedData(current, proposal), onDelete, t);
 }
 
 function mergedData(current: ImportTabProps, proposal: ImportProposal) {
@@ -87,7 +88,8 @@ function mergedData(current: ImportTabProps, proposal: ImportProposal) {
 
 function makeTables(
   data: ReturnType<typeof mergedData>,
-  onDelete: (id: string) => void
+  onDelete: (id: string) => void,
+  t: (key: string) => string
 ): {
   id: string;
   title: string;
@@ -98,12 +100,12 @@ function makeTables(
   const investmentsTables = data.investmentAccounts.map((account) => {
     return {
       id: account.id,
-      title: account.name + `${account.new ? " (new)" : ""}`,
+      title: account.name + `${account.new ? t("importData.newLabel") : ""}`,
       onDelete: account.new ? () => onDelete(account.id) : undefined,
       headers: [
-        { title: "Date" },
-        { title: "Invested" },
-        { title: "Investment Value" },
+        { title: t("importData.date") },
+        { title: t("importData.invested") },
+        { title: t("importData.investmentValue") },
       ],
       rows: data.accountingEntries.map((aEntry) => {
         const entry = data.entryMapByAccountingEntryId
@@ -130,9 +132,12 @@ function makeTables(
   const accountsTables = data.fiatAccounts.map((account) => {
     return {
       id: account.id,
-      title: account.name + `${account.new ? " (new)" : ""}`,
+      title: account.name + `${account.new ? t("importData.newLabel") : ""}`,
       onDelete: account.new ? () => onDelete(account.id) : undefined,
-      headers: [{ title: "Date" }, { title: "Value" }],
+      headers: [
+        { title: t("importData.date") },
+        { title: t("importData.value") },
+      ],
       rows: data.accountingEntries.map((aEntry) => {
         const entry = data.entryMapByAccountingEntryId
           .get(aEntry.id)

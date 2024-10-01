@@ -14,6 +14,7 @@ import DeleteIcon from "../../components/DeleteIcon";
 import Linkify from "react-linkify";
 import Loading from "@/app/components/Loading";
 import { logAnalyticsEvent } from "@/app/firebase";
+import { useTranslation } from "react-i18next";
 
 export const ConnectorsTab: React.FC<{
   accounts: Accounts[];
@@ -141,19 +142,25 @@ export const ConnectorsTab: React.FC<{
     setConnectionToDelete(null);
   };
 
+  const { t } = useTranslation();
+
   return (
     <div className="max-w-2xl mx-auto">
-      {!isOnboarding && <h2>Connections</h2>}
+      {!isOnboarding && <h2>{t("connectorsTab.connections")}</h2>}
 
       {(isLoading || connectionsLoading) && <Loading />}
       {connectionsError && (
         <div>
-          <p>Error loading connections: {connectionsError.message}</p>
+          <p>
+            {t("connectorsTab.errorLoadingConnections", {
+              error: connectionsError.message,
+            })}
+          </p>
           <button
             onClick={reloadData}
             className="px-8 py-2 bg-blue-500 text-white pixel-corners-small hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Retry
+            {t("common.retry")}
           </button>
         </div>
       )}
@@ -162,12 +169,9 @@ export const ConnectorsTab: React.FC<{
         <>
           {connections.length === 0 ? (
             isOnboarding ? (
-              <p>
-                Connect your accounts to external services to fill your data
-                automatically and see live data.
-              </p>
+              <p>{t("connectorsTab.onboardingMessage")}</p>
             ) : (
-              <p>You don&apos;t have any connections yet.</p>
+              <p>{t("connectorsTab.noConnections")}</p>
             )
           ) : (
             <ul className="mb-6 space-y-4">
@@ -201,8 +205,14 @@ export const ConnectorsTab: React.FC<{
 
       {!isLoading && (
         <div className="mt-8">
-          <h3>Add New Connector</h3>
-          {error && <p>Error loading connectors settings: {error.message}</p>}
+          <h3>{t("connectorsTab.addNewConnector")}</h3>
+          {error && (
+            <p>
+              {t("connectorsTab.errorLoadingConnectorsSettings", {
+                error: error.message,
+              })}
+            </p>
+          )}
           {!isLoading && !error && (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -210,7 +220,7 @@ export const ConnectorsTab: React.FC<{
                   htmlFor="account"
                   className="block text-sm font-semibold mb-2"
                 >
-                  Select an account:
+                  {t("connectorsTab.selectAccount")}
                 </label>
                 <select
                   id="account"
@@ -219,7 +229,7 @@ export const ConnectorsTab: React.FC<{
                   required
                   className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                 >
-                  <option value="">Choose an account</option>
+                  <option value="">{t("connectorsTab.chooseAccount")}</option>
                   {accounts.map((account, index) => (
                     <option key={index} value={account.id}>
                       {account.name}
@@ -228,15 +238,7 @@ export const ConnectorsTab: React.FC<{
                 </select>
                 {!selectedAccount && (
                   <p className="text-sm mt-4">
-                    Your last entry for the selected account will be auto-filled
-                    if empty and recent. Otherwise, when you create a new entry,
-                    with a recent date, it will be <b>auto-filled</b>.
-                    <br />
-                    You will also start seeing <b>live data in the Summary</b>.
-                    <br />
-                    <br />
-                    <b>Tip:</b> you can add multiple connections to a single
-                    account, they will be summed up
+                    {t("connectorsTab.accountInstructions")}
                   </p>
                 )}
               </div>
@@ -244,7 +246,7 @@ export const ConnectorsTab: React.FC<{
                 <>
                   <div>
                     <label className="block text-sm font-semibold mb-2">
-                      {connectorsSettings && "Select a connector:"}
+                      {connectorsSettings && t("connectorsTab.selectConnector")}
                     </label>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -284,7 +286,7 @@ export const ConnectorsTab: React.FC<{
                   </div>
                   {selectedConnector && (
                     <div className="mt-6">
-                      <h3>Connector Settings</h3>
+                      <h3>{t("connectorsTab.connectorSettings")}</h3>
                       {connectorsSettings
                         ?.find((c) => c.id === selectedConnector)
                         ?.settings.map((setting) => (
@@ -329,26 +331,23 @@ export const ConnectorsTab: React.FC<{
                           </div>
                         ))}
                       <p className="text-sm">
-                        All connectors settings are encrypted and stored
-                        securely.
+                        {t("connectorsTab.securityNote")}
                       </p>
                       <button
                         type="submit"
                         disabled={!isFormValid || isCreating}
                         className="w-full mt-8 flex justify-center py-2 px-4 border border-transparent shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 pixel-corners-small disabled:opacity-50"
                       >
-                        {isCreating ? <Loading /> : "Connect"}
+                        {isCreating ? <Loading /> : t("connectorsTab.connect")}
                       </button>
                     </div>
                   )}
                   {!selectedConnector && selectedAccount && (
                     <div className="text-sm font-normal">
                       <p className="mb-8">
-                        If you don&apos;t see your favorite provider in the
-                        list, you can send a feedback or email to us and we will
-                        consider adding it!
+                        {t("connectorsTab.missingProviderMessage")}
                       </p>
-                      You can also contribute, it&apos;s easy!
+                      {t("connectorsTab.contributeMessage")}
                       <Link
                         className="text-blue-600"
                         href="https://github.com/MP0w/finance_stuff_connectors"
@@ -373,26 +372,26 @@ export const ConnectorsTab: React.FC<{
         overlayClassName="overlay"
         appElement={document.getElementById("home-content") as HTMLElement}
       >
-        <h2>Confirm Deletion</h2>
+        <h2>{t("connectorsTab.confirmDeletion")}</h2>
         <p className="mb-6">
-          Are you sure you want to delete the connection to
-          <b> {connectionToDelete?.connector_id}</b> for account
-          <b> {accountName(connectionToDelete?.account_id ?? "")}</b>? This
-          action cannot be undone.
+          {t("connectorsTab.deleteConfirmationMessage", {
+            connectorId: connectionToDelete?.connector_id,
+            accountName: accountName(connectionToDelete?.account_id ?? ""),
+          })}
         </p>
         <div className="flex justify-end">
           <button
             onClick={() => setIsDeleteModalOpen(false)}
             className="bg-gray-200 px-4 py-2 rounded-md mr-2 hover:bg-gray-400"
           >
-            Cancel
+            {t("common.cancel")}
           </button>
           <button
             onClick={confirmDeleteConnection}
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
             disabled={isDeleting}
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? t("connectorsTab.deleting") : t("common.delete")}
           </button>
         </div>
       </Modal>

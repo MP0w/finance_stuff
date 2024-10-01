@@ -2,6 +2,7 @@ import { useState } from "react";
 import FeedbackButton from "./FeedbackButton";
 import SettingsIcon from "./SettingsIcon";
 import { getCurrencySymbol, useUserState } from "../UserState";
+import { useTranslation } from "react-i18next";
 
 interface BrandHeaderProps {
   email?: string;
@@ -22,6 +23,7 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const { user } = useUserState();
+  const { t } = useTranslation();
 
   const handleCurrencyChange = async (currency: string) => {
     user?.updateUserPrefs({ currency });
@@ -48,7 +50,7 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
           >
             <p className="px-4 py-2 font-bold">{email}</p>
             <div className="px-4 py-2">
-              <p className="text-gray-800 mb-2">Currency</p>
+              <p className="text-gray-800 mb-2">{t("brandHeader.currency")}</p>
               <div className="flex rounded-md shadow-sm" role="group">
                 <button
                   type="button"
@@ -74,26 +76,26 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
               className="block w-full text-left px-4 py-2  hover:bg-gray-100"
               onClick={exportData}
             >
-              Export data (CSV)
+              {t("brandHeader.exportData")}
             </button>
             <button
               className="block w-full text-left px-4 py-2  hover:bg-gray-100"
               onClick={importData}
             >
-              Import from sheet
+              {t("brandHeader.importFromSheet")}
             </button>
             <FeedbackButton />
             <button
               className="block w-full text-left px-4 py-2  hover:bg-gray-100"
               onClick={() => window.open("/privacy", "_blank")}
             >
-              Privacy Policy
+              {t("brandHeader.privacyPolicy")}
             </button>
             <button
               className="block w-full text-left px-4 py-2 text-red-700 hover:bg-gray-100"
               onClick={signOut}
             >
-              Logout
+              {t("brandHeader.logout")}
             </button>
           </div>
         )}

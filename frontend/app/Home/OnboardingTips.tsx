@@ -2,6 +2,7 @@ import React from "react";
 import { ArcherElement } from "react-archer";
 import { Accounts } from "../../../shared/types";
 import { LineType } from "react-archer/lib/types";
+import { useTranslation } from "react-i18next";
 
 interface OnboardingTipsProps {
   fiatAccounts: Accounts[];
@@ -50,6 +51,8 @@ const OnboardingTips: React.FC<OnboardingTipsProps> = ({
   expandedAddAccount,
   isInvestments,
 }) => {
+  const { t } = useTranslation();
+
   const style: LineType = {
     strokeWidth: 1,
     strokeColor: "#666",
@@ -59,17 +62,16 @@ const OnboardingTips: React.FC<OnboardingTipsProps> = ({
 
   const investmentTipsElement = (
     <div>
-      Add your investment accounts! <br />
-      For example your stocks, bonds, cryptos, real estate, etc.
+      {t("onboardingTips.addInvestmentAccounts")} <br />
+      {t("onboardingTips.investmentExamples")}
     </div>
   );
 
   const accountTipsElement = (
     <div>
-      Add your bank accounts!
+      {t("onboardingTips.addBankAccounts")}
       <br />
-      Here you can add all your banks or even cash, anything that is not an
-      investment.
+      {t("onboardingTips.bankAccountExplanation")}
     </div>
   );
 

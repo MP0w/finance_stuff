@@ -9,6 +9,7 @@ import { createPortal } from "react-dom";
 import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
 import { getUserCurrencySymbol } from "../UserState";
 import { DateTime } from "luxon";
+import { useTranslation } from "react-i18next";
 
 export type TableHeaderContent = {
   title: string;
@@ -20,41 +21,41 @@ export type TableHeaderContent = {
   onDelete?: () => void;
 };
 
-export const dateHeader = {
-  title: "Date",
+export const dateHeader = (t: (key: string) => string) => ({
+  title: t("table.dateHeader.title"),
   tip: {
-    text: "The date of the accounting entry, we suggest to do it monthly, for example at the end of each month, but you can do it weekly or as you like. When you are ready to add a new entry, click the Add entry button and choose the date.",
+    text: t("table.dateHeader.tip"),
     id: "date-header-tip",
     noIcon: true,
   },
-};
+});
 
-export const profitsHeader = {
-  title: "Profits",
+export const profitsHeader = (t: (key: string) => string) => ({
+  title: t("table.profitsHeader.title"),
   tip: {
-    text: "Profits or losses of investments based on the amount invested",
+    text: t("table.profitsHeader.tip"),
     id: "profits-header-tip",
     noIcon: true,
   },
-};
+});
 
-export const percentageHeader = {
-  title: "%",
+export const percentageHeader = (t: (key: string) => string) => ({
+  title: t("table.percentageHeader.title"),
   tip: {
-    text: "The percentage of your investments profits against the amount invested",
+    text: t("table.percentageHeader.tip"),
     id: "percentage-header-tip",
     noIcon: true,
   },
-};
+});
 
-export const differenceHeader = {
-  title: "Difference",
+export const differenceHeader = (t: (key: string) => string) => ({
+  title: t("table.differenceHeader.title"),
   tip: {
-    text: "The difference compared to the previous entry",
+    text: t("table.differenceHeader.tip"),
     id: "diff-header-tip",
     noIcon: true,
   },
-};
+});
 
 interface TableProps {
   title?: string;
@@ -73,6 +74,7 @@ const Table: React.FC<TableProps> = ({
   onDelete,
   alwaysShowDelete,
 }) => {
+  const { t } = useTranslation();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isHoveringHeader, setIsHoveringHeader] = useState(false);
@@ -130,7 +132,7 @@ const Table: React.FC<TableProps> = ({
                   <div className="ml-4 mt-2 mb-2">
                     {!showDatePicker && (
                       <AddButton
-                        title={"Add entry"}
+                        title={t("table.addEntry")}
                         onClick={() => setShowDatePicker(!showDatePicker)}
                       />
                     )}
@@ -152,7 +154,7 @@ const Table: React.FC<TableProps> = ({
                               className="bg-gray-300 px-4 py-2 pixel-corners-small"
                               onClick={() => setShowDatePicker(false)}
                             >
-                              Cancel
+                              {t("common.cancel")}
                             </button>
                             <button
                               className="bg-blue-500 text-white px-4 py-2 pixel-corners-small ml-4"
@@ -161,7 +163,7 @@ const Table: React.FC<TableProps> = ({
                                 handleAddEntry();
                               }}
                             >
-                              Add Entry
+                              {t("table.addEntry")}
                             </button>
                           </div>
                         </div>
@@ -284,6 +286,7 @@ interface TableRowProps {
 }
 
 export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
+  const { t } = useTranslation();
   const [editingValues, setEditingValues] = useState<(string | undefined)[]>(
     cells.map(() => undefined)
   );
@@ -321,11 +324,11 @@ export const TableRow: React.FC<TableRowProps> = ({ cells }) => {
             return newValues;
           });
           // Show error toast
-          toast.error("Failed to update value. Please try again.");
+          toast.error(t("table.failedToUpdateValue"));
         }
       }
     },
-    [cells, setEditingValues]
+    [cells, setEditingValues, t]
   );
 
   const handleKeyDown = useCallback(
