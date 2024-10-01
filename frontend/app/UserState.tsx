@@ -153,8 +153,6 @@ export const UserStateProvider: React.FC<{ children: ReactNode }> = ({
               fullName: user.displayName,
               email: user.email ?? undefined,
             });
-          } else {
-            clearUser();
           }
         };
 
