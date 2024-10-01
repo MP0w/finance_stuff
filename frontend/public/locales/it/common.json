@@ -64,7 +64,8 @@
     "and": "e",
     "projections": "proiezioni",
     "next": "Avanti",
-    "skip": "Salta"
+    "skip": "Salta",
+    "comingSoon": "Prossimamente™️"
   },
   "importData": {
     "newLabel": " (nuovo)",
@@ -148,7 +149,6 @@
   },
   "homeContent": {
     "expensesWorkInProgress": "Stiamo ancora lavorando sulle Spese.",
-    "comingSoon": "Prossimamente™️",
     "confirmDeletion": "Conferma Eliminazione",
     "deleteAccountConfirmation": "Sei sicuro di voler eliminare il conto <b>{{accountName}}</b>? Questa azione non può essere annullata e tutte le voci per quel conto saranno anche eliminate.",
     "deleteEntryFromAllAccounts": "Elimina data da tutti i conti",
@@ -385,5 +385,27 @@
   },
   "addToCalendar": {
     "label": "Aggiungi Promemoria al calendario"
+  },
+  "expensesTab": {
+    "automagicImport": "Importazione automagica🪄✨",
+    "addTransactionManually": "Aggiungi Transazione Manualmente",
+    "noExpensesIncome": "Nessuna spesa né entrata per questo mese.",
+    "addNewOrImport": "Aggiungine una nuova o importale dal tuo estratto conto!",
+    "income": "Entrate",
+    "expenses": "Spese",
+    "addTransaction": "Aggiungi Transazione",
+    "type": "Tipo",
+    "expense": "Spesa",
+    "date": "Data",
+    "category": "Categoria",
+    "selectCategory": "Seleziona una categoria",
+    "description": "Descrizione",
+    "descriptionPlaceholder": "Inserisci la descrizione",
+    "amount": "Importo",
+    "amountPlaceholder": "Inserisci l'importo",
+    "errorFetchingExpenses": "Errore nel recupero delle spese",
+    "fillAllFields": "Per favore, compila tutti i campi",
+    "transactionAddedSuccess": "Transazione aggiunta con successo",
+    "errorAddingTransaction": "Errore nell'aggiunta della transazione"
   }
 }

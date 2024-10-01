@@ -17,7 +17,7 @@ import { useUserState } from "../UserState";
 import ImportTab from "./Import/ImportTab";
 import Loading from "../components/Loading";
 import LogScreenView from "../components/LogScreenView";
-import toast from "react-hot-toast";
+import ExpensesTab from "./Expenses/ExpensesTab";
 import { useTranslation } from "react-i18next";
 
 export const tabs = (t: (str: string) => string) => [
@@ -113,28 +113,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
   const [activeTab, setActiveTab] = useState("fiat");
   const { user } = useUserState();
 
-  const toastTitle = t("homeContent.expensesWorkInProgress");
-  const toastDescription = t("homeContent.comingSoon");
-
   const switchTab = (id: string) => {
-    if (id === "expenses") {
-      toast.custom(
-        (t) => (
-          <div
-            onClick={() => toast.dismiss(t.id)}
-            className={`mt-16 text-center bg-gray-200 p-8 rounded-lg shadow-lg border border-gray-300 shadow-gray-500 shadow-lg ${
-              t.visible ? "" : "hidden animate-fade-out"
-            }`}
-          >
-            <Loading />
-            <p>{toastTitle}</p>
-            <p>{toastDescription}</p>
-          </div>
-        ),
-        { id: "expenses-tab", position: "top-center" }
-      );
-      return;
-    }
     setActiveTab(id);
     setNewAccountName("");
     setExpandedAddAccount(false);
@@ -225,6 +204,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
         refresh={reloadData}
       />
     ),
+    expenses: <ExpensesTab />,
   };
 
   if (!user) {

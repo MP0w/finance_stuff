@@ -41,8 +41,12 @@ export const useGetExpense = () => {
 // Create a new expense
 export const useCreateExpense = () => {
   return useApiCall(
-    (expenseData: Omit<Expenses, "id" | "user_id" | "updated_at">) =>
-      api.post<void>("/expense", expenseData)
+    (
+      expenseData: Omit<
+        Expenses,
+        "id" | "user_id" | "updated_at" | "created_at"
+      >
+    ) => api.post<void>("/expense", expenseData)
   );
 };
 

@@ -64,7 +64,8 @@
     "and": "and",
     "projections": "projections",
     "next": "Next",
-    "skip": "Skip"
+    "skip": "Skip",
+    "comingSoon": "Coming Soon™️"
   },
   "importData": {
     "newLabel": " (new)",
@@ -385,5 +386,27 @@
   },
   "addToCalendar": {
     "label": "Add Reminder to calendar"
+  },
+  "expensesTab": {
+    "automagicImport": "Automagic import🪄✨",
+    "addTransactionManually": "Add Transaction Manually",
+    "noExpensesIncome": "No expenses nor income for this month.",
+    "addNewOrImport": "Add a new one or import them from your bank statement!",
+    "income": "Income",
+    "expenses": "Expenses",
+    "addTransaction": "Add Transaction",
+    "type": "Type",
+    "expense": "Expense",
+    "date": "Date",
+    "category": "Category",
+    "selectCategory": "Select a category",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter description",
+    "amount": "Amount",
+    "amountPlaceholder": "Enter amount",
+    "errorFetchingExpenses": "Error fetching expenses",
+    "fillAllFields": "Please fill in all fields",
+    "transactionAddedSuccess": "Transaction added successfully",
+    "errorAddingTransaction": "Error adding transaction"
   }
 }

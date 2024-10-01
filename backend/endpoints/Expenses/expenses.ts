@@ -23,7 +23,7 @@ export function expensesRouter(app: Application) {
         .select()
         .where({ user_id: req.userId })
         .whereBetween("date", [startDate, endDate])
-        .orderBy("date", "desc")
+        .orderBy("date", "asc")
         .limit(15_000);
 
       res.send(expenses);
