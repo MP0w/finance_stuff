@@ -8,6 +8,7 @@ import { CategoryMap } from "../../types";
 import PromisePool from "@supercharge/promise-pool";
 import { Document } from "@langchain/core/documents";
 import { getUser, updateUser } from "../Users/users";
+import { generateUUID } from "../../dbConnection";
 
 type Transaction = {
   date: string;
@@ -168,6 +169,7 @@ async function handleDoc(
 
   return {
     transactions: transactions.map((transaction) => ({
+      id: generateUUID(),
       ...transaction,
       amount: Math.abs(transaction.amount),
     })),
@@ -196,7 +198,10 @@ export function expensesImportRouter(app: Application) {
 
       const result = await handleFile(req.file);
 
-      res.json(result);
+      res.json({
+        transactions: result.transactions,
+        failedPages: result.failedPages,
+      });
 
       const aiTokensUsage = {
         used_ai_total_tokens:

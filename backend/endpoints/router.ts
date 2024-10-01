@@ -11,6 +11,7 @@ import expressAsyncHandler from "express-async-handler";
 import { connectorsRouter } from "./Connectors/connectors";
 import { importRouter } from "./Import/import";
 import { expensesImportRouter } from "./Expenses/expensesImport";
+import { expensesRouter } from "./Expenses/expenses";
 
 declare global {
   namespace Express {
@@ -61,4 +62,5 @@ export function router(app: Application) {
   connectorsRouter(app);
   importRouter(app);
   expensesImportRouter(app);
+  expensesRouter(app);
 }
