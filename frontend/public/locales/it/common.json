@@ -382,5 +382,8 @@
     "haveAccount": "Hai già un account?",
     "needAccount": "Devi creare un account?",
     "anonymousWarning": "Questo account è anonimo. Non puoi recuperarlo se dimentichi le credenziali, ma puoi collegare la tua email in seguito se cambi idea."
+  },
+  "addToCalendar": {
+    "label": "Aggiungi Promemoria al calendario"
   }
 }

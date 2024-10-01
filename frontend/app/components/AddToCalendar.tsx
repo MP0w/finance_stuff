@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "add-to-calendar-button";
 import { logAnalyticsEvent } from "../firebase";
+import { useTranslation } from "react-i18next";
 
 const addToCalendarOpenCountKey = "add-to-calendar-open-count";
 const addToCalendarDateKey = "add-to-calendar-open-count-date";
@@ -11,6 +12,7 @@ export function setAddToCalendarOpenCount(number: number) {
 }
 
 const AddToCalendar: React.FC = () => {
+  const { t } = useTranslation();
   const [openCount, setOpenCount] = useState(() =>
     parseInt(localStorage.getItem(addToCalendarOpenCountKey) ?? "0")
   );
@@ -82,7 +84,7 @@ const AddToCalendar: React.FC = () => {
         <add-to-calendar-button
           buttonStyle="date"
           styleLight="--btn-background: transparent; --btn-text: #222; --font: 'Courier New',monospace; --btn-font-weight: 200; --btn-border: none; --btn-shadow: none;"
-          label="Add Reminder to calendar"
+          label={t("addToCalendar.label")}
           size={window.innerWidth < 500 ? "0" : "2"}
           name="Monthly accounting @ finance_stuff"
           trigger="click"

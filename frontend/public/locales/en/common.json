@@ -382,5 +382,8 @@
     "haveAccount": "Already have an account?",
     "needAccount": "Need to create an account?",
     "anonymousWarning": "This account is anonymous. You can't recover it if you forget the credentials, but you can link your email later if you change your mind."
+  },
+  "addToCalendar": {
+    "label": "Add Reminder to calendar"
   }
 }

@@ -382,5 +382,8 @@
     "haveAccount": "¿Ya tienes una cuenta?",
     "needAccount": "¿Necesitas crear una cuenta?",
     "anonymousWarning": "Esta cuenta es anónima. No podrás recuperarla si olvidas las credenciales, pero puedes vincular tu correo electrónico más tarde si cambias de opinión."
+  },
+  "addToCalendar": {
+    "label": "Añadir Recordatorio al Calendario"
   }
 }
