@@ -12,6 +12,8 @@ import { connectorsRouter } from "./Connectors/connectors";
 import { importRouter } from "./Import/import";
 import { expensesImportRouter } from "./Expenses/expensesImport";
 import { expensesRouter } from "./Expenses/expenses";
+import { dbConnection } from "../dbConnection";
+import { Table } from "../types";
 
 declare global {
   namespace Express {
@@ -28,6 +30,29 @@ export function router(app: Application) {
   app.get("/", (_, res) => {
     res.send("finance_stuff");
   });
+
+  app.get(
+    "/stats",
+    expressAsyncHandler(async (_, res) => {
+      const count = await dbConnection<{ count: number }>(Table.Users)
+        .count()
+        .first();
+      const accountsCount = await dbConnection<{ count: number }>(
+        Table.Accounts
+      )
+        .count()
+        .first();
+      const entriesCount = await dbConnection<{ count: number }>(Table.Entries)
+        .count()
+        .first();
+
+      res.send({
+        count: count?.count ?? 0,
+        accountsCount: accountsCount?.count ?? 0,
+        entriesCount: entriesCount?.count ?? 0,
+      });
+    })
+  );
 
   app.use(
     expressAsyncHandler(async (req, res, next) => {
