@@ -7,8 +7,10 @@ import Loading from "@/app/components/Loading";
 import { TransactionsList } from "./TransactionList";
 import { DateTime } from "luxon";
 import { TransactionAction } from "./EditTransactionCell";
+import { useTranslation } from "react-i18next";
 
 export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
+  const { t } = useTranslation();
   const { data, execute, loading: isLoading } = useUploadPDF();
   const [diff, setDiff] = useState<
     Record<string, Expenses & { discarded?: boolean }>
@@ -68,7 +70,7 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles.at(0);
       if (!file) {
-        toast.error("Invalid file, select a PDF file");
+        toast.error(t("expensesImport.invalidFile"));
         return;
       }
 
@@ -76,10 +78,10 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
         await execute(file);
       } catch (error) {
         console.error("Error uploading PDF:", error);
-        toast.error("Error uploading PDF file");
+        toast.error(t("expensesImport.errorUploadingPDF"));
       }
     },
-    [execute]
+    [execute, t]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -94,17 +96,17 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
 
   const importTransactions = async () => {
     if (!all || all.length === 0) {
-      toast.error("No transactions to import");
+      toast.error(t("expensesImport.noTransactionsToImport"));
       return;
     }
 
-    const expesnesToImport = all.filter((tx) => tx.discarded !== true);
+    const expensesToImport = all.filter((tx) => tx.discarded !== true);
     try {
-      await createBulkExpenses(expesnesToImport);
+      await createBulkExpenses(expensesToImport);
       close();
     } catch (error) {
       console.error("Error creating expenses: ", error);
-      toast.error("Error creating expenses");
+      toast.error(t("expensesImport.errorCreatingExpenses"));
     }
   };
 
@@ -153,7 +155,7 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
     <div>
       {!data && !isLoading && (
         <div>
-          <h3>Import transactions from your bank statement</h3>
+          <h3>{t("expensesImport.importTitle")}</h3>
 
           <div
             {...getRootProps()}
@@ -165,29 +167,28 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
             }}
           >
             <input {...getInputProps()} />
-            <p>Drag & drop a PDF file here, or click to select one</p>
+            <p>{t("expensesImport.dragDropInstruction")}</p>
           </div>
         </div>
       )}
       {isLoading && <Loading />}
       {data && data.transactions.length === 0 && (
-        <div>No transactions found</div>
+        <div>{t("expensesImport.noTransactionsFound")}</div>
       )}
       {data && data.transactions.length > 0 && (
         <div className="flex flex-col gap-4">
           <p className="text-lg font-semibold max-w-prose">
-            Here there are all the transactions we found, you can edit them,
-            exclude or include some and then import
+            {t("expensesImport.transactionsFound")}
             {discarded && discarded.length > 0 && (
               <div>
-                We excluded {discarded.length} transactions as they might be
-                internal movements, you can still include them as expenses or
-                income if we were wrong
+                {t("expensesImport.excludedTransactions", {
+                  count: discarded.length,
+                })}
               </div>
             )}
           </p>
           <TransactionsList
-            title="Income"
+            title={t("expensesImport.income")}
             txs={income}
             sum={incomeSum}
             categories={undefined}
@@ -198,7 +199,7 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
             onAction={handleAction}
           />
           <TransactionsList
-            title="Expenses"
+            title={t("expensesImport.expenses")}
             txs={expenses}
             sum={expensesSum}
             categories={undefined}
@@ -209,7 +210,7 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
             onAction={handleAction}
           />
           <TransactionsList
-            title="Excluded"
+            title={t("expensesImport.excluded")}
             txs={discarded}
             sum={discardedSum}
             categories={undefined}
@@ -222,7 +223,7 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
             disabled={isCreatingBulkExpenses}
             className="bg-blue-500 text-white px-4 py-2 pixel-corners-small"
           >
-            Import transactions
+            {t("expensesImport.importTransactions")}
           </button>
         </div>
       )}

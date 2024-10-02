@@ -150,7 +150,7 @@ const ExpensesTab: React.FC<{ openImport: () => void }> = ({ openImport }) => {
       }
       refreshExpenses();
     } catch (error) {
-      toast.error("Failed to perform action, please try again");
+      toast.error(t("expensesTab.errorPerformingAction"));
       console.error("Error performing action:", error);
     }
   };

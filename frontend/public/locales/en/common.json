@@ -407,7 +407,8 @@
     "errorFetchingExpenses": "Error fetching expenses",
     "fillAllFields": "Please fill in all fields",
     "transactionAddedSuccess": "Transaction added successfully",
-    "errorAddingTransaction": "Error adding transaction"
+    "errorAddingTransaction": "Error adding transaction",
+    "errorPerformingAction": "Failed to perform action, please try again"
   },
   "transactionAction": {
     "include": "Include",
@@ -416,5 +417,20 @@
     "move_to_income": "Move to income",
     "move_to_expense": "Move to expense",
     "delete": "Delete"
+  },
+  "expensesImport": {
+    "invalidFile": "Invalid file, select a PDF file",
+    "errorUploadingPDF": "Error uploading PDF file",
+    "noTransactionsToImport": "No transactions to import",
+    "errorCreatingExpenses": "Error creating expenses",
+    "importTitle": "Import transactions from your bank statement",
+    "dragDropInstruction": "Drag & drop a PDF file here, or click to select one",
+    "noTransactionsFound": "No transactions found",
+    "transactionsFound": "Here are all the transactions we found, you can edit them, exclude or include some and then import",
+    "excludedTransactions": "We excluded {{count}} transactions as they might be internal movements, you can still include them as expenses or income if we were wrong",
+    "income": "Income",
+    "expenses": "Expenses",
+    "excluded": "Excluded",
+    "importTransactions": "Import transactions"
   }
 }

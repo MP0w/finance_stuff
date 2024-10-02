@@ -406,7 +406,8 @@
     "errorFetchingExpenses": "Error al obtener los gastos",
     "fillAllFields": "Por favor, rellena todos los campos",
     "transactionAddedSuccess": "Transacción añadida con éxito",
-    "errorAddingTransaction": "Error al añadir la transacción"
+    "errorAddingTransaction": "Error al añadir la transacción",
+    "errorPerformingAction": "No se pudo realizar la acción, por favor intenta de nuevo"
   },
   "transactionAction": {
     "include": "Incluir",
@@ -415,5 +416,20 @@
     "move_to_income": "Mover a ingresos",
     "move_to_expense": "Mover a gastos",
     "delete": "Eliminar"
+  },
+  "expensesImport": {
+    "invalidFile": "Archivo inválido, selecciona un archivo PDF",
+    "errorUploadingPDF": "Error al subir el archivo PDF",
+    "noTransactionsToImport": "No hay transacciones para importar",
+    "errorCreatingExpenses": "Error al crear los gastos",
+    "importTitle": "Importar transacciones desde tu extracto bancario",
+    "dragDropInstruction": "Arrastra y suelta un archivo PDF aquí, o haz clic para seleccionar uno",
+    "noTransactionsFound": "No se encontraron transacciones",
+    "transactionsFound": "Aquí están todas las transacciones que encontramos, puedes editarlas, excluir o incluir algunas y luego importar",
+    "excludedTransactions": "Excluimos {{count}} transacciones ya que podrían ser movimientos internos, aún puedes incluirlas como gastos o ingresos si nos equivocamos",
+    "income": "Ingresos",
+    "expenses": "Gastos",
+    "excluded": "Excluidas",
+    "importTransactions": "Importar transacciones"
   }
 }

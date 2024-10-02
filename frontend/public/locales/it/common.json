@@ -406,7 +406,8 @@
     "errorFetchingExpenses": "Errore nel recupero delle spese",
     "fillAllFields": "Per favore, compila tutti i campi",
     "transactionAddedSuccess": "Transazione aggiunta con successo",
-    "errorAddingTransaction": "Errore nell'aggiunta della transazione"
+    "errorAddingTransaction": "Errore nell'aggiunta della transazione",
+    "errorPerformingAction": "Impossibile eseguire l'azione, per favore riprova"
   },
   "transactionAction": {
     "include": "Includi",
@@ -415,5 +416,20 @@
     "move_to_income": "Sposta a Entrate",
     "move_to_expense": "Sposta a Spese",
     "delete": "Elimina"
+  },
+  "expensesImport": {
+    "invalidFile": "File non valido, seleziona un file PDF",
+    "errorUploadingPDF": "Errore nel caricamento del file PDF",
+    "noTransactionsToImport": "Nessuna transazione da importare",
+    "errorCreatingExpenses": "Errore nella creazione delle spese",
+    "importTitle": "Importa transazioni dal tuo estratto conto",
+    "dragDropInstruction": "Trascina e rilascia un file PDF qui, o clicca per selezionarne uno",
+    "noTransactionsFound": "Nessuna transazione trovata",
+    "transactionsFound": "Ecco tutte le transazioni che abbiamo trovato, puoi modificarle, escludere o includere alcune e poi importare",
+    "excludedTransactions": "Abbiamo escluso {{count}} transazioni poiché potrebbero essere movimenti interni, puoi ancora includerle come spese o entrate se ci siamo sbagliati",
+    "income": "Entrate",
+    "expenses": "Spese",
+    "excluded": "Escluse",
+    "importTransactions": "Importa transazioni"
   }
 }
