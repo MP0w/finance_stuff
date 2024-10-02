@@ -67,9 +67,10 @@ const LandingPage: React.FC<{
       ["💼", t("landingPage.keyFeatures.default.1")],
       ["🔮", t("landingPage.keyFeatures.default.2")],
       ["🪄", t("landingPage.keyFeatures.default.3")],
-      ["📈", t("landingPage.keyFeatures.default.4")],
-      ["🎯", t("landingPage.keyFeatures.default.5")],
-      ["🔗", t("landingPage.keyFeatures.default.6")],
+      ["💰", t("landingPage.keyFeatures.default.4")],
+      ["📈", t("landingPage.keyFeatures.default.5")],
+      ["🎯", t("landingPage.keyFeatures.default.6")],
+      ["🔗", t("landingPage.keyFeatures.default.7")],
     ];
   };
   const mock: TotalTableProps = {
