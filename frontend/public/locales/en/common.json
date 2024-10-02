@@ -53,6 +53,9 @@
     "deleteConfirmationMessage": "Are you sure you want to delete the connection to {{connectorId}} for account {{accountName}}? This action cannot be undone.",
     "deleting": "Deleting..."
   },
+  "errors": {
+    "notEnoughAICredits": "Not enough AI credits, please top up your account!"
+  },
   "common": {
     "retry": "Retry",
     "cancel": "Cancel",

@@ -53,6 +53,9 @@
     "deleteConfirmationMessage": "Sei sicuro di voler eliminare la connessione a {{connectorId}} per il conto {{accountName}}? Questa azione non può essere annullata.",
     "deleting": "Eliminazione in corso..."
   },
+  "errors": {
+    "notEnoughAICredits": "Non hai abbastanza crediti di IA, per favore ricarica il tuo account!"
+  },
   "common": {
     "retry": "Riprova",
     "cancel": "Annulla",

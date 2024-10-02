@@ -91,8 +91,12 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
       try {
         await execute(file);
       } catch (error) {
-        console.error("Error uploading PDF:", error);
-        toast.error(t("expensesImport.errorUploadingPDF"));
+        if ((error as Error).message.includes("not enough AI credits")) {
+          toast.error(t("errors.notEnoughAICredits"));
+        } else {
+          console.error("Error uploading PDF:", error);
+          toast.error(t("expensesImport.errorUploadingPDF"));
+        }
       }
     },
     [execute, t]
@@ -119,8 +123,12 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
       await createBulkExpenses(expensesToImport);
       close();
     } catch (error) {
-      console.error("Error creating expenses: ", error);
-      toast.error(t("expensesImport.errorCreatingExpenses"));
+      if ((error as Error).message.includes("AI credits")) {
+        toast.error(t("errors.notEnoughAICredits"));
+      } else {
+        console.error("Error creating expenses: ", error);
+        toast.error(t("expensesImport.errorCreatingExpenses"));
+      }
     }
   };
 
@@ -175,8 +183,13 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
       toast.success(t("expensesImport.proposalUpdated"));
       setProposalMessage("");
     } catch (error) {
-      console.error("Error updating proposal:", error);
-      toast.error(t("expensesImport.errorUpdatingProposal"));
+
+      if ((error as Error).message.includes("not enough AI credits")) {
+        toast.error(t("errors.notEnoughAICredits"));
+      } else {
+        console.error("Error updating proposal:", error);
+        toast.error(t("expensesImport.errorUpdatingProposal"));
+      }
     }
   };
 
