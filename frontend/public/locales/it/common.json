@@ -65,7 +65,8 @@
     "projections": "proiezioni",
     "next": "Avanti",
     "skip": "Salta",
-    "comingSoon": "Prossimamente™️"
+    "comingSoon": "Prossimamente™️",
+    "done": "Fatto"
   },
   "importData": {
     "newLabel": " (nuovo)",
