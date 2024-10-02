@@ -13,7 +13,7 @@ const getType = (
 ): "expenses" | "budgeting" | "savings" | "spreadsheet" | "default" => {
   const id = slug?.join("/") ?? "";
 
-  if (id.includes("expense")) {
+  if (id.includes("expense") || id.includes("bank-statement")) {
     return "expenses";
   }
 
@@ -39,7 +39,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     ...metadata,
     alternates: {
-      canonical: `https://stuff.finance${type === "default" ? "" : `/${type}`}`,
+      canonical: `https://stuff.finance${
+        type === "default"
+          ? ""
+          : `/${type === "expenses" ? "expenses-tracker" : type}`
+      }`,
     },
     openGraph: {
       type: "website",

@@ -16,3 +16,8 @@ Allow: /savings-spreadsheet
 Allow: /expenses
 Allow: /expenses-app
 Allow: /expenses-tracker
+Allow: /bank-statement-importer
+Allow: /bank-statement-converter
+Allow: /bank-statement-to-csv
+Allow: /bank-statement-to-excel
+Allow: /bank-statement-to-spreadsheet

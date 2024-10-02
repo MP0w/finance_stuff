@@ -28,10 +28,16 @@ export const getMetadata = (
 
   if (type === "expenses") {
     metadata.description =
-      "Track your expenses and get AI insights to manage your finances better.";
+      "Track your expenses automatically using our AI to convert your bank statements, get AI insights to manage your finances better.";
     metadata.keywords = [
       "expenses",
       "expense tracker",
+      "bank statements",
+      "AI expense tracking",
+      "bank statement import",
+      "bank statements to CSV",
+      "bank statements to excel",
+      "bank statements to spreadsheet",
       ...defaultMetadata.keywords,
     ];
   }
