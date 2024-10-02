@@ -26,6 +26,14 @@ export const useUploadPDF = () => {
   });
 };
 
+export const useUpdateProposal = () => {
+  return useApiCall((transactions: Expenses[], prompt: string) =>
+    api.post<{
+      transactions: Transaction[];
+    }>("/expenses/update-proposal", { transactions, prompt })
+  );
+};
+
 // Fetch expenses for a specific year and month
 export const useGetExpenses = () => {
   return useApiCall((year: number, month: number) =>

@@ -2,7 +2,11 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
 import { Expenses, ExpenseType } from "../../../../shared/types";
-import { useCreateBulkExpenses, useUploadPDF } from "../apis/expenses";
+import {
+  useCreateBulkExpenses,
+  useUpdateProposal,
+  useUploadPDF,
+} from "../apis/expenses";
 import Loading from "@/app/components/Loading";
 import { TransactionsList } from "./TransactionList";
 import { DateTime } from "luxon";
@@ -11,10 +15,20 @@ import { useTranslation } from "react-i18next";
 
 export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
   const { t } = useTranslation();
-  const { data, execute, loading: isLoading } = useUploadPDF();
+  const { data: initialProposal, execute, loading: isLoading } = useUploadPDF();
+  const {
+    data: updatedProposal,
+    execute: updateProposal,
+    loading: isUpdatingProposal,
+  } = useUpdateProposal();
+
+  const data = updatedProposal ?? initialProposal;
+
   const [diff, setDiff] = useState<
     Record<string, Expenses & { discarded?: boolean }>
   >({});
+
+  const [proposalMessage, setProposalMessage] = useState("");
 
   const {
     income,
@@ -151,6 +165,21 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
     }
   };
 
+  const handleUpdateProposal = async () => {
+    if (proposalMessage.length < 20) {
+      toast.error(t("expensesImport.messageTooShort"));
+      return;
+    }
+    try {
+      await updateProposal(all ?? [], proposalMessage);
+      toast.success(t("expensesImport.proposalUpdated"));
+      setProposalMessage("");
+    } catch (error) {
+      console.error("Error updating proposal:", error);
+      toast.error(t("expensesImport.errorUpdatingProposal"));
+    }
+  };
+
   return (
     <div>
       {!data && !isLoading && (
@@ -218,13 +247,31 @@ export const ExpensesImport: React.FC<{ close: () => void }> = ({ close }) => {
             actions={new Set<TransactionAction>(["include"])}
             onAction={handleAction}
           />
-          <button
-            onClick={importTransactions}
-            disabled={isCreatingBulkExpenses}
-            className="bg-blue-500 text-white px-4 py-2 pixel-corners-small"
-          >
-            {t("expensesImport.importTransactions")}
-          </button>
+          {isUpdatingProposal && <Loading />}
+          {!isUpdatingProposal && (
+            <div className="flex flex-col gap-2">
+              <textarea
+                value={proposalMessage}
+                onChange={(e) => setProposalMessage(e.target.value)}
+                placeholder={t("expensesImport.proposalMessagePlaceholder")}
+                className="w-full p-2 border border-gray-300 rounded"
+                rows={3}
+              />
+              <button
+                onClick={handleUpdateProposal}
+                className="bg-blue-500 text-white px-4 py-2 pixel-corners-small disabled:opacity-50"
+              >
+                {t("expensesImport.updateProposal")}
+              </button>
+              <button
+                onClick={importTransactions}
+                disabled={isCreatingBulkExpenses}
+                className="bg-green-500 text-white px-4 py-2 pixel-corners-small"
+              >
+                {t("expensesImport.importTransactions")}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

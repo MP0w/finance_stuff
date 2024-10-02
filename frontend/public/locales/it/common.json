@@ -431,6 +431,11 @@
     "income": "Entrate",
     "expenses": "Spese",
     "excluded": "Escluse",
-    "importTransactions": "Importa transazioni"
+    "importTransactions": "Importa transazioni",
+    "messageTooShort": "Il messaggio deve essere di almeno 20 caratteri.",
+    "proposalUpdated": "Proposta aggiornata con successo.",
+    "errorUpdatingProposal": "Errore nell'aggiornamento della proposta. Per favore, riprova.",
+    "proposalMessagePlaceholder": "Cambia le categorie di Uber a Alimentari e rimuovi le transazioni di ottobre.",
+    "updateProposal": "Aggiorna Proposta"
   }
 }

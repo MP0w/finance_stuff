@@ -4,11 +4,12 @@ import { Application } from "express";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import multer from "multer";
 import { z } from "zod";
-import { CategoryMap } from "../../types";
+import { CategoryMap, Expenses, Users } from "../../types";
 import PromisePool from "@supercharge/promise-pool";
 import { Document } from "@langchain/core/documents";
 import { getUser, updateUser } from "../Users/users";
 import { generateUUID } from "../../dbConnection";
+import expressAsyncHandler from "express-async-handler";
 
 type Transaction = {
   date: string;
@@ -179,6 +180,186 @@ async function handleDoc(
 }
 
 export function expensesImportRouter(app: Application) {
+  async function updateUsage(
+    user: Users,
+    result: {
+      usage: LanguageModelUsage;
+    }
+  ) {
+    const aiTokensUsage = {
+      used_ai_total_tokens:
+        user.used_ai_total_tokens + Math.floor(result.usage.totalTokens / 10),
+      used_ai_prompt_tokens:
+        user.used_ai_prompt_tokens + Math.floor(result.usage.promptTokens / 10),
+      available_ai_tokens:
+        user.available_ai_tokens - Math.floor(result.usage.totalTokens / 10),
+    };
+    try {
+      await updateUser(user.id, aiTokensUsage);
+    } catch (error) {
+      console.error("Error updating user", error);
+    }
+  }
+
+  app.post(
+    "/expenses/update-proposal",
+    expressAsyncHandler(async (req, res) => {
+      const expenses = req.body.transactions as (Expenses & {
+        discarded: boolean;
+      })[];
+      const transactions = expenses.map((tx) => {
+        return {
+          id: tx.id,
+          date: tx.date,
+          description: tx.description,
+          amount: Math.abs(tx.amount),
+          currency: tx.currency,
+          type: tx.discarded === true ? "m" : tx.type === "expense" ? "e" : "i",
+          category: tx.category,
+        };
+      });
+
+      const { prompt } = req.body;
+
+      if (
+        !transactions ||
+        transactions.length === 0 ||
+        !prompt ||
+        prompt.length < 20
+      ) {
+        res.status(400).json({ error: "Invalid request" });
+        return;
+      }
+
+      try {
+        const user = await getUser(req.userId);
+        if (!user) {
+          res.status(401).json({ error: "Unauthorized" });
+          return;
+        }
+
+        if (user.available_ai_tokens <= 0) {
+          throw Error("not enough AI credits");
+        }
+
+        const getUpdate = async (txs: typeof transactions) => {
+          return generateObject({
+            model: anthropic("claude-3-haiku-20240307"),
+            schema: z.object({
+              transactions: z.array(
+                z.object({
+                  id: z.string(),
+                  date: z.string(),
+                  description: z.string(),
+                  amount: z.number(),
+                  currency: z.string(),
+                  type: z.enum(["e", "i", "m"]),
+                  category: z.string().nullable(),
+                })
+              ),
+            }),
+            system: `You are an AI assistant that analyzes PDF documents of bank statements. the user uploaded a PDF and you extracted a list of transactions but now wants to make some changes to it.
+            Output an array of transactions with the applied changes, each transaction should have the following properties:
+            - id: string
+            - date: string
+            - description: string
+            - amount: number
+            - currency: string
+            - type: "e" | "i" | "m"
+            - category: string | null
+
+            Legend:
+            - Date format is yyyy-MM-dd
+            - The type can be "e" for expense, "i" for income or "m" are discarded transactions, do not remove transactions, just change their type to m if necessary.
+            - The category should be one of the following codes:
+            ${Object.keys(CategoryMap)
+              .map(
+                (key) =>
+                  `${key}: ${CategoryMap[key as keyof typeof CategoryMap]}`
+              )
+              .join("\n")}
+
+            the resulting json should be valid MINIFIED json and nothing else with format {transactions:[]} returning the same transactions with, if necessary, the user changes.
+            `,
+            messages: [
+              {
+                role: "user",
+                content: [
+                  {
+                    type: "text",
+                    text: `
+                    <transactions>
+                    ${JSON.stringify({
+                      transactions: txs,
+                    })}
+                    </transactions>
+
+                    Make these changes: ${prompt}
+                    `,
+                  },
+                ],
+              },
+            ],
+          });
+        };
+
+        const chunkSize = 50;
+        const chunks = [];
+        for (let i = 0; i < transactions.length; i += chunkSize) {
+          chunks.push(transactions.slice(i, i + chunkSize));
+        }
+
+        const pool = await PromisePool.for(chunks)
+          .withConcurrency(3)
+          .process(async (chunk) => {
+            if (chunk.length === 0) {
+              return {
+                transactions: [],
+                usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+              };
+            }
+
+            try {
+              const result = await getUpdate(chunk);
+              return {
+                transactions: result.object.transactions,
+                usage: result.usage,
+              };
+            } catch (error) {
+              console.error("Error processing chunk", error);
+              return {
+                transactions: chunk,
+                usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+              };
+            }
+          });
+
+        const combinedResult = pool.results
+          .map((result) => result.transactions ?? [])
+          .flat()
+          .sort((a, b) => (a.date < b.date ? -1 : 1));
+
+        const totalUsage = pool.results.reduce(
+          (acc, result) => ({
+            promptTokens: acc.promptTokens + result.usage.promptTokens,
+            completionTokens:
+              acc.completionTokens + result.usage.completionTokens,
+            totalTokens: acc.totalTokens + result.usage.totalTokens,
+          }),
+          { promptTokens: 0, completionTokens: 0, totalTokens: 0 }
+        );
+
+        res.json({
+          transactions: combinedResult,
+        });
+
+        updateUsage(user, { usage: totalUsage });
+      } catch (error) {
+        res.status(500).json({ error: (error as Error).message });
+      }
+    })
+  );
+
   app.post("/expenses/upload", upload.single("pdfFile"), async (req, res) => {
     if (!req.file) {
       res.status(400).json({ error: "No PDF file uploaded" });
@@ -193,7 +374,7 @@ export function expensesImportRouter(app: Application) {
       }
 
       if (user.available_ai_tokens <= 0) {
-        throw Error("not have AI credits");
+        throw Error("not enough AI credits");
       }
 
       const result = await handleFile(req.file);
@@ -203,20 +384,7 @@ export function expensesImportRouter(app: Application) {
         failedPages: result.failedPages,
       });
 
-      const aiTokensUsage = {
-        used_ai_total_tokens:
-          user.used_ai_total_tokens + Math.floor(result.usage.totalTokens / 10),
-        used_ai_prompt_tokens:
-          user.used_ai_prompt_tokens +
-          Math.floor(result.usage.promptTokens / 10),
-        available_ai_tokens:
-          user.available_ai_tokens - Math.floor(result.usage.totalTokens / 10),
-      };
-      try {
-        await updateUser(user.id, aiTokensUsage);
-      } catch (error) {
-        console.error("Error updating user", error);
-      }
+      updateUsage(user, result);
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
     }

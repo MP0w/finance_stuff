@@ -47,7 +47,7 @@ async function getImportProposal(
   }
 
   if (user.available_ai_tokens <= 0) {
-    throw Error("not have AI credits");
+    throw Error("not enough AI credits");
   }
 
   const stateMessages: CoreMessage[] = state.steps.map((step) => ({

@@ -432,6 +432,11 @@
     "income": "Income",
     "expenses": "Expenses",
     "excluded": "Excluded",
-    "importTransactions": "Import transactions"
+    "importTransactions": "Import transactions",
+    "messageTooShort": "Message must be at least 20 characters long.",
+    "proposalUpdated": "Proposal updated successfully.",
+    "errorUpdatingProposal": "Error updating proposal. Please try again.",
+    "proposalMessagePlaceholder": "Change Uber categories to Food, and remove October transactions.",
+    "updateProposal": "Update Proposal"
   }
 }
