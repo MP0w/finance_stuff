@@ -44,9 +44,12 @@ const LandingPage: React.FC<{
       <div className="w-full max-w-4xl flex flex-col items-center">
         <header className="text-center mb-6 w-full">
           <h1 className="text-5xl md:text-6xl mb-2">finance_stuff</h1>
-          <p className="text-xl md:text-2xl mt-8 whitespace-pre-line">
-            {viewModel.subtitle}
-          </p>
+          <p
+            className="text-xl md:text-2xl mt-8 whitespace-pre-line"
+            dangerouslySetInnerHTML={{
+              __html: viewModel.subtitle,
+            }}
+          />
         </header>
 
         <div className="flex flex-col justify-center gap-4 text-center font-semibold w-full max-w-sm text-lg tracking-wide relative">

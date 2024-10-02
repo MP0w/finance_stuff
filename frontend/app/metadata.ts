@@ -1,6 +1,6 @@
 const defaultMetadata = {
   description:
-    "Effortlessly track and grow your finances in just 10 minutes a month. Get AI insights, statistics, and visualizations for smarter financial management.",
+    "Track your finances and expenses in just 10 minutes a month, AI will do the rest. Get AI insights, statistics, and visualizations for smarter financial management.",
   keywords: [
     "personal finance tracker",
     "AI financial insights",
