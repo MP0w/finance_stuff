@@ -1,24 +1,31 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useCreateExpense, useGetExpenses } from "../apis/expenses";
+import {
+  useCreateExpense,
+  useDeleteExpense,
+  useGetExpenses,
+  useUpdateExpense,
+} from "../apis/expenses";
 import toast from "react-hot-toast";
 import Loading from "@/app/components/Loading";
 import { CategoryMap, Expenses } from "../../../../shared/types";
-import { PieChart } from "@mui/x-charts";
-import { stringForPercentage } from "../Investments/InvestmentTable";
 import AddButton from "@/app/components/AddButton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DateTime } from "luxon";
 import { useUserState } from "@/app/UserState";
 import { useTranslation } from "react-i18next";
+import { TransactionsList } from "./TransactionList";
+import { TransactionAction } from "./EditTransactionCell";
 
-const ExpensesTab: React.FC = () => {
+const ExpensesTab: React.FC<{ openImport: () => void }> = ({ openImport }) => {
   const { user } = useUserState();
   const { t } = useTranslation();
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const { data, execute: getExpenses, loading } = useGetExpenses();
   const { execute: createExpense, loading: createExpenseLoading } =
     useCreateExpense();
+  const { execute: deleteExpense } = useDeleteExpense();
+  const { execute: updateExpense } = useUpdateExpense();
 
   const months = useMemo(() => {
     const today = new Date();
@@ -72,91 +79,6 @@ const ExpensesTab: React.FC = () => {
     refreshExpenses();
   }, [refreshExpenses]);
 
-  const transactionsList = (
-    title: string,
-    txs: Expenses[] | undefined,
-    sum: number,
-    categories: Record<string, number> | undefined,
-    multiplier: number = 1
-  ) => {
-    return txs && txs.length > 0 ? (
-      <div>
-        <div className="flex justify-between items-center mb-2">
-          <h2>{title}</h2>
-          <span
-            className={`font-semibold ${
-              multiplier < 0 ? "bg-red-200" : "bg-green-200"
-            } rounded-md border border-gray-400 px-2 py-1`}
-          >
-            {(sum * multiplier).toFixed(2)}
-          </span>
-        </div>
-        {categories && (
-          <div className="mb-8 flex justify-center">
-            <PieChart
-              series={[
-                {
-                  valueFormatter: (value) => {
-                    return `${value.value.toFixed(0)} (${stringForPercentage(
-                      value.value / sum
-                    )})`;
-                  },
-                  data: Object.entries(categories)
-                    .map(([category, value]) => ({
-                      label:
-                        CategoryMap[category as keyof typeof CategoryMap] ??
-                        "Unknown",
-                      value,
-                    }))
-                    .sort((a, b) => b.value - a.value),
-                  highlightScope: { fade: "global", highlight: "item" },
-                  innerRadius: 10,
-                  outerRadius: 100,
-                  paddingAngle: 3,
-                  cornerRadius: 5,
-                },
-              ]}
-              width={200}
-              height={200}
-              slotProps={{
-                legend: {
-                  hidden: true,
-                },
-              }}
-            />
-          </div>
-        )}
-        <ul>
-          {txs.map((tx, index) => (
-            <li
-              key={tx.id}
-              className={`flex justify-between items-center p-3 bg-white shadow ${
-                index === 0 ? "rounded-t-md" : ""
-              } ${index === txs.length - 1 ? "rounded-b-md" : ""}`}
-            >
-              <span className="text-sm text-gray-600">
-                {new Date(tx.date).toLocaleDateString()}
-              </span>
-              <div className="flex-grow mx-4">
-                <div>{tx.description}</div>
-                <div className="text-sm font-semibold text-gray-500">
-                  {tx.category
-                    ? CategoryMap[tx.category as keyof typeof CategoryMap]
-                    : "Unknown"}
-                </div>
-              </div>
-              <span className="font-semibold">
-                {(tx.amount * multiplier).toFixed(2)}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ) : (
-      <></>
-    );
-  };
-
   const [showAddModal, setShowAddModal] = useState(false);
   const [newEntry, setNewEntry] = useState({
     type: "expense",
@@ -196,6 +118,43 @@ const ExpensesTab: React.FC = () => {
     }
   };
 
+  const actions = useMemo(
+    () =>
+      new Set<TransactionAction>([
+        "edit",
+        "move_to_income",
+        "move_to_expense",
+        "delete",
+      ]),
+    []
+  );
+
+  const handleAction = async (action: TransactionAction, tx: Expenses) => {
+    try {
+      if (action === "edit") {
+        await updateExpense(tx.id, {
+          ...tx,
+        });
+      } else if (action === "move_to_income") {
+        await updateExpense(tx.id, {
+          ...tx,
+          type: "income",
+        });
+      } else if (action === "move_to_expense") {
+        await updateExpense(tx.id, {
+          ...tx,
+          type: "expense",
+        });
+      } else if (action === "delete") {
+        await deleteExpense(tx.id);
+      }
+      refreshExpenses();
+    } catch (error) {
+      toast.error("Failed to perform action, please try again");
+      console.error("Error performing action:", error);
+    }
+  };
+
   return (
     <div>
       {!showAddModal && (
@@ -220,9 +179,7 @@ const ExpensesTab: React.FC = () => {
           <div className="flex flex-col gap-4 max-w-3xl mx-auto mb-8">
             <AddButton
               title={t("expensesTab.automagicImport")}
-              onClick={() => {
-                toast.success(t("common.comingSoon"));
-              }}
+              onClick={openImport}
             />
             <AddButton
               title={t("expensesTab.addTransactionManually")}
@@ -239,19 +196,24 @@ const ExpensesTab: React.FC = () => {
                   {t("expensesTab.addNewOrImport")}
                 </div>
               ))}
-            {transactionsList(
-              t("expensesTab.income"),
-              income,
-              incomeSum,
-              undefined
-            )}
-            {transactionsList(
-              t("expensesTab.expenses"),
-              expenses,
-              expensesSum,
-              expenseSumByCategory,
-              -1
-            )}
+            <TransactionsList
+              title={t("expensesTab.income")}
+              txs={income}
+              sum={incomeSum}
+              categories={undefined}
+              multiplier={1}
+              actions={actions}
+              onAction={handleAction}
+            />
+            <TransactionsList
+              title={t("expensesTab.expenses")}
+              txs={expenses}
+              sum={expensesSum}
+              categories={expenseSumByCategory}
+              multiplier={-1}
+              actions={actions}
+              onAction={handleAction}
+            />
           </div>
         </div>
       )}

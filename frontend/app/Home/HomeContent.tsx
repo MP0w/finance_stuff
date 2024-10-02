@@ -19,6 +19,7 @@ import Loading from "../components/Loading";
 import LogScreenView from "../components/LogScreenView";
 import ExpensesTab from "./Expenses/ExpensesTab";
 import { useTranslation } from "react-i18next";
+import ExpensesImport from "./Expenses/ExpensesImport";
 
 export const tabs = (t: (str: string) => string) => [
   { id: "fiat", label: t("tabs.bankAccounts") },
@@ -204,7 +205,8 @@ const HomeContent: React.FC<HomeContentProps> = ({
         refresh={reloadData}
       />
     ),
-    expenses: <ExpensesTab />,
+    expenses: <ExpensesTab openImport={() => switchTab("importExpenses")} />,
+    importExpenses: <ExpensesImport close={() => switchTab("expenses")} />,
   };
 
   if (!user) {

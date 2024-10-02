@@ -407,5 +407,13 @@
     "fillAllFields": "Por favor, rellena todos los campos",
     "transactionAddedSuccess": "Transacción añadida con éxito",
     "errorAddingTransaction": "Error al añadir la transacción"
+  },
+  "transactionAction": {
+    "include": "Incluir",
+    "exclude": "Excluir",
+    "edit": "Editar",
+    "move_to_income": "Mover a ingresos",
+    "move_to_expense": "Mover a gastos",
+    "delete": "Eliminar"
   }
 }

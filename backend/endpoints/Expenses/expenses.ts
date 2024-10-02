@@ -80,6 +80,36 @@ export function expensesRouter(app: Application) {
     })
   );
 
+  app.post(
+    "/expenses/bulk",
+    expressAsyncHandler(async (req, res) => {
+      const expenses = req.body.expenses;
+
+      if (!Array.isArray(expenses) || expenses.length === 0) {
+        res.status(400).send({ error: "Invalid or empty expenses array" });
+        return;
+      }
+
+      const insertData = expenses.map((expense) => ({
+        id: generateUUID(),
+        user_id: req.userId,
+        description: expense.description,
+        date: expense.date,
+        amount: expense.amount,
+        currency: expense.currency,
+        category: expense.category,
+        type: expense.type,
+        updated_at: new Date(),
+      }));
+
+      await dbConnection<Expenses>(Table.Expenses).insert(insertData);
+
+      res.send({
+        count: insertData.length,
+      });
+    })
+  );
+
   app.put(
     "/expense/:id",
     expressAsyncHandler(async (req, res) => {

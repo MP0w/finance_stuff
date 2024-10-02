@@ -50,6 +50,17 @@ export const useCreateExpense = () => {
   );
 };
 
+export const useCreateBulkExpenses = () => {
+  return useApiCall(
+    (
+      expenseData: Omit<
+        Expenses,
+        "id" | "user_id" | "updated_at" | "created_at"
+      >[]
+    ) => api.post<void>("/expenses/bulk", { expenses: expenseData })
+  );
+};
+
 // Update an existing expense
 export const useUpdateExpense = () => {
   return useApiCall(

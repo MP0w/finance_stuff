@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import FeedbackButton from "./FeedbackButton";
 import SettingsIcon from "./SettingsIcon";
 import { getCurrencySymbol, useUserState } from "../UserState";
@@ -24,6 +24,23 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
   const [showSettings, setShowSettings] = useState(false);
   const { user } = useUserState();
   const { t } = useTranslation();
+  const settingsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        settingsRef.current &&
+        !settingsRef.current.contains(event.target as Node)
+      ) {
+        setShowSettings(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleCurrencyChange = async (currency: string) => {
     user?.updateUserPrefs({ currency });
@@ -35,19 +52,16 @@ export const BrandHeader: React.FC<BrandHeaderProps> = ({
         finance_stuff
       </h1>
       <div
+        ref={settingsRef}
         onMouseEnter={() => setShowSettings(true)}
-        onClick={() => setShowSettings(!showSettings)}
+        onClick={() => setShowSettings(true)}
         hidden={hideSettings}
       >
         <button className="py-4 ml-4 transition duration-200">
           <SettingsIcon />
         </button>
         {showSettings && (
-          <div
-            className="absolute right-0 mt-2 bg-white rounded-md shadow-lg px-2 py-1 z-10 text-sm"
-            onMouseLeave={() => setShowSettings(false)}
-            onClick={() => setShowSettings(false)}
-          >
+          <div className="absolute right-0 mt-2 bg-white rounded-md shadow-lg px-2 py-1 z-10 text-sm">
             <p className="px-4 py-2 font-bold">{email}</p>
             <div className="px-4 py-2">
               <p className="text-gray-800 mb-2">{t("brandHeader.currency")}</p>

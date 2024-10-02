@@ -407,5 +407,13 @@
     "fillAllFields": "Per favore, compila tutti i campi",
     "transactionAddedSuccess": "Transazione aggiunta con successo",
     "errorAddingTransaction": "Errore nell'aggiunta della transazione"
+  },
+  "transactionAction": {
+    "include": "Includi",
+    "exclude": "Escludi",
+    "edit": "Modifica",
+    "move_to_income": "Sposta a Entrate",
+    "move_to_expense": "Sposta a Spese",
+    "delete": "Elimina"
   }
 }

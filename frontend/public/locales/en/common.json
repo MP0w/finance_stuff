@@ -408,5 +408,13 @@
     "fillAllFields": "Please fill in all fields",
     "transactionAddedSuccess": "Transaction added successfully",
     "errorAddingTransaction": "Error adding transaction"
+  },
+  "transactionAction": {
+    "include": "Include",
+    "exclude": "Exclude",
+    "edit": "Edit",
+    "move_to_income": "Move to income",
+    "move_to_expense": "Move to expense",
+    "delete": "Delete"
   }
 }
