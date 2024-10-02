@@ -260,6 +260,8 @@ export function expensesImportRouter(app: Application) {
             }),
             system: `You are an AI assistant that analyzes user transactions. The user has a list of transactions as json and wants to make some changes to it.
             Output the same transactions with the requested by the user if necessary.
+            The output format should be a valid MINIFIED JSON object with a single property "transactions" that contains an array of transactions.
+            
             Legend:
             - Date format is yyyy-MM-dd
             - type "e" for expense, "i" for income or "m" are discarded transactions, do NOT remove transactions, just change their type to m if necessary.
@@ -271,7 +273,6 @@ export function expensesImportRouter(app: Application) {
               )
               .join("\n")}
 
-            the resulting json should be valid MINIFIED json respecting the initial format.
             `,
             messages: [
               {
@@ -317,7 +318,7 @@ export function expensesImportRouter(app: Application) {
                 usage: result.usage,
               };
             } catch (error) {
-              console.error("Error processing chunk", index);
+              console.error("Error processing chunk", index, error);
               return {
                 transactions: chunk,
                 usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
