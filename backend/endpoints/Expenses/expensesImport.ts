@@ -258,19 +258,11 @@ export function expensesImportRouter(app: Application) {
                 })
               ),
             }),
-            system: `You are an AI assistant that analyzes PDF documents of bank statements. the user uploaded a PDF and you extracted a list of transactions but now wants to make some changes to it.
-            Output an array of transactions with the applied changes, each transaction should have the following properties:
-            - id: string
-            - date: string
-            - description: string
-            - amount: number
-            - currency: string
-            - type: "e" | "i" | "m"
-            - category: string | null
-
+            system: `You are an AI assistant that analyzes user transactions. The user has a list of transactions as json and wants to make some changes to it.
+            Output the same transactions with the requested by the user if necessary.
             Legend:
             - Date format is yyyy-MM-dd
-            - The type can be "e" for expense, "i" for income or "m" are discarded transactions, do not remove transactions, just change their type to m if necessary.
+            - type "e" for expense, "i" for income or "m" are discarded transactions, do NOT remove transactions, just change their type to m if necessary.
             - The category should be one of the following codes:
             ${Object.keys(CategoryMap)
               .map(
@@ -279,7 +271,7 @@ export function expensesImportRouter(app: Application) {
               )
               .join("\n")}
 
-            the resulting json should be valid MINIFIED json and nothing else with format {transactions:[]} returning the same transactions with, if necessary, the user changes.
+            the resulting json should be valid MINIFIED json respecting the initial format.
             `,
             messages: [
               {
@@ -293,7 +285,6 @@ export function expensesImportRouter(app: Application) {
                       transactions: txs,
                     })}
                     </transactions>
-
                     Make these changes: ${prompt}
                     `,
                   },
@@ -303,15 +294,15 @@ export function expensesImportRouter(app: Application) {
           });
         };
 
-        const chunkSize = 50;
+        const chunkSize = 20;
         const chunks = [];
         for (let i = 0; i < transactions.length; i += chunkSize) {
           chunks.push(transactions.slice(i, i + chunkSize));
         }
 
         const pool = await PromisePool.for(chunks)
-          .withConcurrency(3)
-          .process(async (chunk) => {
+          .withConcurrency(10)
+          .process(async (chunk, index) => {
             if (chunk.length === 0) {
               return {
                 transactions: [],
@@ -326,7 +317,7 @@ export function expensesImportRouter(app: Application) {
                 usage: result.usage,
               };
             } catch (error) {
-              console.error("Error processing chunk", error);
+              console.error("Error processing chunk", index);
               return {
                 transactions: chunk,
                 usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
