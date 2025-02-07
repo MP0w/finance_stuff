@@ -9,6 +9,7 @@ export const mockFiatAccounts: Accounts[] = [
     created_at: new Date(),
     updated_at: new Date(),
     currency: "USD",
+    tag: null,
   },
   {
     id: "2",
@@ -18,6 +19,7 @@ export const mockFiatAccounts: Accounts[] = [
     created_at: new Date(),
     updated_at: new Date(),
     currency: "USD",
+    tag: null,
   },
 ];
 
@@ -30,6 +32,7 @@ export const mockInvestmentsAccounts: Accounts[] = [
     created_at: new Date(),
     updated_at: new Date(),
     currency: "USD",
+    tag: null,
   },
   {
     id: "4",
@@ -39,6 +42,7 @@ export const mockInvestmentsAccounts: Accounts[] = [
     created_at: new Date(),
     updated_at: new Date(),
     currency: "USD",
+    tag: null,
   },
 ];
 
