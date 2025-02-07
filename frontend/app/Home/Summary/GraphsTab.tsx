@@ -32,11 +32,11 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
     investmentEntries.map((entry) => [entry.account_id, entry])
   );
 
-  const allCategories = investmentAccounts.map(
-    (account) => account.tag ?? account.id
+  const allCategories = new Set(
+    investmentAccounts.map((account) => account.tag ?? account.id)
   );
 
-  const pieData: PieValueType[] = allCategories.map((category) => {
+  const pieData: PieValueType[] = Array.from(allCategories).map((category) => {
     const accounts = investmentAccounts.filter(
       (account) => account.tag === category || account.id === category
     );
