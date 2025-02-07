@@ -102,6 +102,7 @@ export type Accounts = {
   created_at: Date;
   updated_at: Date;
   currency: string;
+  tag: string | null;
 };
 
 export type Connections = {

@@ -28,11 +28,28 @@ export const GraphsTab: React.FC<GraphsTabProps> = ({
     investmentAccountsByIds.has(entry.account_id)
   );
 
-  const pieData: PieValueType[] = investmentEntries.map((entry) => {
+  const investmentEntriesByAccountIds = new Map(
+    investmentEntries.map((entry) => [entry.account_id, entry])
+  );
+
+  const allCategories = investmentAccounts.map(
+    (account) => account.tag ?? account.id
+  );
+
+  const pieData: PieValueType[] = allCategories.map((category) => {
+    const accounts = investmentAccounts.filter(
+      (account) => account.tag === category || account.id === category
+    );
+
+    const value = accounts.reduce((acc, curr) => {
+      const account = investmentEntriesByAccountIds.get(curr.id);
+      return acc + (account?.value ?? 0);
+    }, 0);
+
     return {
-      id: entry.account_id,
-      label: investmentAccountsByIds.get(entry.account_id)?.name ?? "",
-      value: entry.value,
+      id: category,
+      label: investmentAccountsByIds.get(category)?.name ?? category,
+      value: value,
     };
   });
 
