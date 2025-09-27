@@ -11,6 +11,7 @@ import LandingPage from "./LandingPage/LangingPage";
 import { usePathname } from "next/navigation";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i8n";
+import Head from "next/head";
 
 export default function Main({
   type,
@@ -52,6 +53,10 @@ export default function Main({
   return (
     <I18nextProvider i18n={i18n}>
       <UserStateProvider>
+        <div>
+          <Head>
+            <link rel="icon" href="/images/favicon.ico" />
+          </Head>
         {!showLogin ? (
           <div className="transition-all duration-1000 ease-out opacity-100">
             <LandingPage
@@ -72,6 +77,7 @@ export default function Main({
           <div className="transition-all duration-800 ease-in-out opacity-0 translate-y-20"></div>
         )}
         <HomePage signOut={signOut} />
+        </div>
       </UserStateProvider>
     </I18nextProvider>
   );
