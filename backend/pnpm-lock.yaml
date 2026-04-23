@@ -23,9 +23,6 @@ importers:
       '@sentry/node':
         specifier: ^8.30.0
         version: 8.55.1
-      '@sentry/profiling-node':
-        specifier: ^8.30.0
-        version: 8.55.1
       '@supercharge/promise-pool':
         specifier: ^3.2.0
         version: 3.3.0
@@ -120,6 +117,10 @@ importers:
       typescript:
         specifier: ^5.5.4
         version: 5.9.3
+    optionalDependencies:
+      '@sentry/profiling-node':
+        specifier: ^8.30.0
+        version: 8.55.1
 
 packages:
 

@@ -1,20 +1,35 @@
 import { configDotenv } from "dotenv";
 import * as Sentry from "@sentry/node";
-import { nodeProfilingIntegration } from "@sentry/profiling-node";
 
 configDotenv({ path: ".env.local" });
+
+function loadProfilingIntegration(): Sentry.Integration | undefined {
+  try {
+    const profiling = require("@sentry/profiling-node") as {
+      nodeProfilingIntegration: () => Sentry.Integration;
+    };
+
+    return profiling.nodeProfilingIntegration();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`Sentry profiling disabled: ${message}`);
+    return undefined;
+  }
+}
+
+const profilingIntegration = loadProfilingIntegration();
 
 Sentry.init({
   dsn: "https://c7970c79b7a58d700737f7a34fc57c8b@o4507960601214976.ingest.de.sentry.io/4507960663670864",
   integrations: [
-    nodeProfilingIntegration(),
+    ...(profilingIntegration ? [profilingIntegration] : []),
     Sentry.captureConsoleIntegration({
       levels: ["error", "warn"],
     }),
   ],
   environment: process.env.NODE_ENV,
   tracesSampleRate: 1.0,
-  profilesSampleRate: 1.0,
+  ...(profilingIntegration ? { profilesSampleRate: 1.0 } : {}),
 });
 
 import express, { NextFunction, Request, Response } from "express";
