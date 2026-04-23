@@ -3,10 +3,12 @@ import * as Sentry from "@sentry/node";
 
 configDotenv({ path: ".env.local" });
 
-function loadProfilingIntegration(): Sentry.Integration | undefined {
+type SentryIntegration = ReturnType<typeof Sentry.captureConsoleIntegration>;
+
+function loadProfilingIntegration(): SentryIntegration | undefined {
   try {
     const profiling = require("@sentry/profiling-node") as {
-      nodeProfilingIntegration: () => Sentry.Integration;
+      nodeProfilingIntegration: () => SentryIntegration;
     };
 
     return profiling.nodeProfilingIntegration();
