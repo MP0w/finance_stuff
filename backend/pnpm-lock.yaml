@@ -2414,9 +2414,6 @@ packages:
     resolution: {integrity: sha512-6u9UwL0HlAl21+agMN3YAMXcKByMqwGx+pq+P76vii5f7hTPtKDp08/H9py6DY+cfDw7kQNTGEj/rly3IgbNQA==}
     engines: {node: '>=10'}
 
-  node-bin-setup@1.1.4:
-    resolution: {integrity: sha512-vWNHOne0ZUavArqPP5LJta50+S8R261Fr5SvGul37HbEDcowvLjwdvd0ZeSr0r2lTSrPxl6okq9QUw8BFGiAxA==}
-
   node-cache@5.1.2:
     resolution: {integrity: sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==}
     engines: {node: '>= 8.0.0'}
@@ -5234,8 +5231,6 @@ snapshots:
   node-abi@3.89.0:
     dependencies:
       semver: 7.7.4
-
-  node-bin-setup@1.1.4: {}
 
   node-cache@5.1.2:
     dependencies:
