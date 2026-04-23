@@ -59,9 +59,6 @@ importers:
       multer:
         specifier: ^1.4.5-lts.1
         version: 1.4.5-lts.2
-      node:
-        specifier: ^22.8.0
-        version: 22.22.2
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
@@ -2444,11 +2441,6 @@ packages:
   node-forge@1.4.0:
     resolution: {integrity: sha512-LarFH0+6VfriEhqMMcLX2F7SwSXeWwnEAJEsYm5QKWchiVYVvJyV9v7UDvUv+w5HO23ZpQTXDv/GxdDdMyOuoQ==}
     engines: {node: '>= 6.13.0'}
-
-  node@22.22.2:
-    resolution: {integrity: sha512-uCQMMuaVCiljJoMqEWAvmErZBtomwJnRA6xXQksO6VbjQhizdjQkLS9Oje57RvbODBm/Kqb0Nt+8fX7Ng4gHFg==}
-    engines: {npm: '>=5.0.0'}
-    hasBin: true
 
   nodemon@3.1.14:
     resolution: {integrity: sha512-jakjZi93UtB3jHMWsXL68FXSAosbLfY0In5gtKq3niLSkrWznrVBzXFNOEMJUfc9+Ke7SHWoAZsiMkNP3vq6Jw==}
@@ -5258,10 +5250,6 @@ snapshots:
       whatwg-url: 5.0.0
 
   node-forge@1.4.0: {}
-
-  node@22.22.2:
-    dependencies:
-      node-bin-setup: 1.1.4
 
   nodemon@3.1.14:
     dependencies:
